@@ -1,4 +1,4 @@
-# 🚀 QuantumForecast
+# 🚀 AlphaFusion
 
 **AI-Powered Multi-Model Forecasting & Autonomous Trading Platform**
 
