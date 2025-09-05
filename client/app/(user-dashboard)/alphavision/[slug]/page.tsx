@@ -9,6 +9,14 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Combobox } from "@/components/ui/combobox"
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Loader2Icon, Bot, Braces } from "lucide-react"
@@ -17,6 +25,7 @@ import Charts from "@/components/charts/charts"
 import { tickers, horizons, timeframes } from "@/data/stocks.parameters"
 import BadgeCards from "@/components/badge-cards/badge-cards"
 import PredsDisplay, { PredictionData } from "@/components/preds-display/preds-display"
+import ReasonsDisplay from "@/components/preds-display/reasons-display"
 interface PageProps {
     params: Promise<{ slug: string }>
 }
@@ -78,6 +87,38 @@ export default async function AlphaVisionPage({ params }: PageProps) {
             "2025-09-08 04:00:00": 218.9,
         },
     };
+
+    const reasons = [
+        "Ensemble expects a fall of -7.51% (from 234.09 \u2192    216.50) \u2014 directional bearish signal (exceeds \u00b11% threshold).",
+        "Predicted candle indicates a strong bullish body \u2014 expected upward  momentum.",
+        "Model ensemble predicts next close 222.87 < current 234.09 (-4.79%) \u2014 supports bearish bias.",
+        "Price is within 0.00 of Fibonacci 0% (swing high 234.09) \u2014 strong resistance; likely rejection.",
+        "Ensemble predicts bearish move of 4.79% (from 234.09 to 222.87).",
+        "Next-candle forecast: O:218.87 H:223.38 L:218.25 C:222.87."
+    ]
+
+    const indicators = [
+      "EMA_12",
+      "EMA_26",
+      "SMA_20",
+      "MACD",
+      "MACD_SIGNAL",
+      "MACD_HIST",
+      "RSI_14",
+      "BB_UPPER",
+      "BB_LOWER",
+      "BB_PCT",
+      "ATR_14",
+      "RETURNS"
+    ]
+
+    const strategiesInfluenced = [
+           "Momentum Analytics",
+      "Candle Analytics",
+      "Trend Analytics",
+      "Fibonacci Tracement",
+      "Scalping Helper"
+    ]
 
     return (
         <>
@@ -202,13 +243,73 @@ export default async function AlphaVisionPage({ params }: PageProps) {
                             <h3 className="text-xl font-semibold tracking-tight">
                                 AlphaVision
                             </h3>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 mt-1">
                                 Predictions of AAPL's OHLC values for the next respective timeframe and horizons.
                             </p>
-                            <div className="w-full border rounded-md overflow-hidden mt-3 max-h-47 overflow-y-auto">
+                            <div className="w-full border rounded-md overflow-hidden mt-5 max-h-47 overflow-y-auto">
                                 <PredsDisplay data={sampleData} />
                             </div>
                         </div>
+                    </div>
+
+                </div>
+
+                {/* Strategies & Model Metrics */}
+                <div className="w-full flex">
+                    <div className="w-7/12 rounded-md h-fit border p-4">
+                        <h3 className="text-xl font-semibold tracking-tight">
+                            Strategies & Indicators
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">
+                            The strategies and indicators calculated, implemented by the model to predict the values and catch the momentum with trade signals.
+                        </p>
+                        <div className="w-full flex space-x-2 mt-2">
+                            <div className="w-6/12 max-h-48 overflow-y-auto border rounded-lg mt-3">
+                                <Table className="min-w-full">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20">
+                                                Influential Strategies
+                                            </TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+
+                                    <TableBody>
+                                        {strategiesInfluenced.map((reason, idx) => (
+                                            <TableRow key={idx}>
+                                                <TableCell className="whitespace-pre-wrap">{reason}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                            <div className="w-6/12 max-h-48 overflow-y-auto border rounded-lg mt-3">
+                                <Table className="min-w-full">
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20">
+                                                Computed Indicators
+                                            </TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+
+                                    <TableBody>
+                                        {indicators.map((reason, idx) => (
+                                            <TableRow key={idx}>
+                                                <TableCell className="whitespace-pre-wrap">{reason}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-semibold tracking-tight mt-6">
+                            Reasoning
+                        </h3>
+                        <p className="text-sm text-gray-600 mt-1">
+                            The reasons analysed and crafted by the model depicting why the respective momentum and trade signal is provided. 
+                        </p>
+                        <ReasonsDisplay reasons={reasons} />
                     </div>
 
                 </div>

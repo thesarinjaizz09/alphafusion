@@ -123,7 +123,7 @@ export default function CryptoChart() {
       {/* Chart container */}
       <div
         className={`w-full bg-white ${
-          isFullscreen ? "h-[calc(100vh-140px)]" : "h-[450px]"
+          isFullscreen ? "h-[calc(100vh-140px)]" : "h-[463px]"
         }`}
       >
         <div
