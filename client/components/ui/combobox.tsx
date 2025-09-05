@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,41 +18,17 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-const tickers = [
-    { value: "next.js", label: "Next.js" },
-    { value: "sveltekit", label: "SvelteKit" },
-    { value: "nuxt.js", label: "Nuxt.js" },
-    { value: "remix", label: "Remix" },
-    { value: "astro", label: "Astro" },
-]
-
-const timeframes = [
-    { value: "1M", label: "1M" },
-    { value: "5M", label: "5M" },
-    { value: "15M", label: "15M" },
-    { value: "30M", label: "30M" },
-    { value: "1H", label: "1H" },
-    { value: "1D", label: "1D" },
-]
-
-const exchanges = [
-    { value: "nasdaq", label: "NASDAQ" },
-    { value: "nyse", label: "NYSE" },
-    { value: "amex", label: "AMEX" },
-    { value: "nse", label: "NSE" },
-    { value: "bse", label: "BSE" },
-]
 
 interface ComboboxProps {
-    mode: "ticker" | "timeframe" | "exchange"
+  mode: "Ticker" | "Timeframe" | "Horizon"
+  items: { value: string; label: string }[],
+  span: "half" | "full"
 }
 
-export function Combobox({ mode }: ComboboxProps) {
+export function Combobox({ mode, items, span }: ComboboxProps) {
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState("")
 
-    const items =
-        mode === "ticker" ? tickers : mode === "timeframe" ? timeframes : exchanges
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -63,26 +38,20 @@ export function Combobox({ mode }: ComboboxProps) {
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                        "justify-between h-[36px] text-black text-xs",
-                        mode === "ticker" && "w-full",
+                        "justify-between h-[36px] font-normal text-black text-xs rounded-sm",
+                        span === "full" && "w-full",
                     )}
-                    style={mode === 'exchange' ? {
+                    style={span === 'half' ? {
                         width: "49%"
-                    } : mode === 'timeframe' ? {
-                        width: '49%'
                     } : {}}
                 >
                     {value
                         ? items.find((item) => item.value === value)?.label
-                        : mode === "ticker"
-                            ? "Ticker"
-                            : mode === "timeframe"
-                                ? "Timeframe"
-                                : "Exchange"}
+                        : mode }
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="p-0 w-[var(--radix-popover-trigger-width)]">
+            <PopoverContent align="start" className="p-0 min-w-[var(--radix-popover-trigger-width)] w-fit">
                 <Command>
                     <CommandInput placeholder="Search..." className="h-9" />
                     <CommandList>

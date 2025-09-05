@@ -11,7 +11,6 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 
 export default function AuthPage({
     className,
-    ...props
 }: React.ComponentProps<"form">) {
     const router = useRouter()
     const [authMode, setAuthMode] = useState("signup")
@@ -21,7 +20,7 @@ export default function AuthPage({
     }
 
     return (
-        <form className={cn("flex flex-col gap-6", className)} {...props}>
+        <form className={cn("flex flex-col gap-6", className)}>
             <div className="flex flex-col items-start gap-1 text-left">
                 {
                     authMode === 'signup' ? <><h1 className="text-3xl font-bold">Create Credentials</h1>

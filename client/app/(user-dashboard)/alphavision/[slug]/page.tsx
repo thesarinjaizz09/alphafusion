@@ -14,13 +14,71 @@ import {
 import { Loader2Icon, Bot, Braces } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Charts from "@/components/charts/charts"
-
+import { tickers, horizons, timeframes } from "@/data/stocks.parameters"
+import BadgeCards from "@/components/badge-cards/badge-cards"
+import PredsDisplay, { PredictionData } from "@/components/preds-display/preds-display"
 interface PageProps {
     params: Promise<{ slug: string }>
 }
 
 export default async function AlphaVisionPage({ params }: PageProps) {
     const { slug } = await params
+
+    const stockGeneralData = [
+        {
+            param: 'Price',
+            value: "₹ 253.21"
+        },
+        {
+            param: 'Market Cap',
+            value: "₹ 100.21B"
+        },
+        {
+            param: 'Volume (24H)',
+            value: "2003d"
+        },
+        {
+            param: '24H Change',
+            value: "₹ 23.21"
+        },
+        {
+            param: 'Bid/Ask',
+            value: "₹ 250.36"
+        },
+
+    ]
+
+    const sampleData: PredictionData = {
+        open: {
+            "2025-09-06 04:00:00": 219.2,
+            "2025-09-07 04:00:00": 220.1,
+            "2025-09-08 04:00:00": 218.7,
+            "2025-09-09 04:00:00": 218.7,
+            "2025-09-10 04:00:00": 218.7,
+        },
+        high: {
+            "2025-09-06 04:00:00": 221.3,
+            "2025-09-07 04:00:00": 222.0,
+            "2025-09-08 04:00:00": 219.5,
+            "2025-09-09 04:00:00": 219.5,
+            "2025-09-10 04:00:00": 219.5,
+        },
+        low: {
+            "2025-09-06 04:00:00": 218.1,
+            "2025-09-07 04:00:00": 219.4,
+            "2025-09-08 04:00:00": 217.6,
+            "2025-09-09 04:00:00": 217.6,
+            "2025-09-10 04:00:00": 217.6,
+        },
+        close: {
+            "2025-09-06 04:00:00": 220.0,
+            "2025-09-07 04:00:00": 221.2,
+            "2025-09-09 04:00:00": 221.2,
+            "2025-09-10 04:00:00": 221.2,
+            "2025-09-08 04:00:00": 218.9,
+        },
+    };
+
     return (
         <>
             <header className="flex h-16 shrink-0 items-center gap-2">
@@ -50,109 +108,56 @@ export default async function AlphaVisionPage({ params }: PageProps) {
                 </div>
             </header>
             <div className="w-full flex flex-1 flex-col gap-4 p-4 pt-0">
+                {/* Top Bar */}
                 <div className="w-full flex items-center justify-between">
                     <div className="w-3/12">
-                        <Combobox mode="ticker" />
+                        <Combobox mode="Ticker" span="full" items={tickers} />
                         <div className="mt-2 flex items-center justify-between">
-                            <Combobox mode="exchange" />
-                            <Combobox mode="timeframe" />
+                            <Combobox mode="Timeframe" span="half" items={timeframes} />
+                            <Combobox mode="Horizon" span="half" items={horizons} />
                         </div>
                     </div>
-                    <div className="ml-2 w-7/12 rounded-lg h-[80px] border flex items-center justify-between px-5">
-                        <div className="">
-                            <p className="font-semibold text-md text-black tracking-tight">Price</p>
-                            <p className="text-xs text-zinc-600">₹ 200.09</p>
-                        </div>
-                        <Separator
-                            orientation="vertical"
-                            className="mr-2 data-[orientation=vertical]:h-4"
-                        />
-                        <div className="">
-                            <p className="font-semibold text-md text-black tracking-tight">Market Cap</p>
-                            <p className="text-xs text-zinc-600">₹ 200.09</p>
-                        </div>
-                        <Separator
-                            orientation="vertical"
-                            className="mr-2 data-[orientation=vertical]:h-4"
-                        />
-                        <div className="">
-                            <p className="font-semibold text-md text-black tracking-tight">Volume (24H)</p>
-                            <p className="text-xs text-zinc-600">₹ 200.09</p>
-                        </div>
-                        <Separator
-                            orientation="vertical"
-                            className="mr-2 data-[orientation=vertical]:h-4"
-                        />
-                        <div className="">
-                            <p className="font-semibold text-md text-black tracking-tight">24h Change</p>
-                            <p className="text-xs text-zinc-600">₹ 200.09</p>
-                        </div>
-                        <Separator
-                            orientation="vertical"
-                            className="mr-2 data-[orientation=vertical]:h-4"
-                        />
-                        <div className="">
-                            <p className="font-semibold text-md text-black tracking-tight">Bid/Ask</p>
-                            <p className="text-xs text-zinc-600">₹ 200.09</p>
-                        </div>
+                    <div className="ml-2 w-7/12 rounded-md h-[81px] border flex items-center justify-between px-5">
+                        {
+                            stockGeneralData.map((data, index) => {
+                                if (index == stockGeneralData.length - 1) {
+                                    return (
+                                        <div key={index}>
+                                            <BadgeCards param={data.param} value={data.value} />
+                                        </div>
+                                    )
+                                }
+                                return (
+                                    <>
+                                        <BadgeCards param={data.param} value={data.value} />
+                                        <Separator orientation="vertical" style={{
+                                            height: 30
+                                        }} />
+                                    </>
+                                )
+                            })
+                        }
                     </div>
-                    <div className="flex flex-col w-2/12 ml-2 text-zinc-700 items-center justify-center">
-                        <Button variant="outline" className="h-[30px] p-4 w-full font-normal cursor-pointer">
+                    <div className="flex flex-col w-2/12 ml-2 text-zinc-900 items-center justify-center">
+                        <Button variant="outline" className="h-[36px] shadow-none w-full font-normal cursor-pointer rounded-sm">
                             {/* <Loader2Icon className="animate-spin" /> */}
-                            <Bot />Run AlphaVision
+                            <Bot />Run Vision-v1
                         </Button>
-                        <Button variant="outline" className="h-[30px] p-4 mt-2 w-full font-normal cursor-pointer">
+                        <Button variant="outline" className="h-[36px] shadow-none mt-2 w-full font-normal cursor-pointer rounded-sm">
                             {/* <Loader2Icon className="animate-spin" /> */}
-                            <Braces />Run Datafetcher
+                            <Braces />Run Vision-v2
                         </Button>
                     </div>
                 </div>
+
+                {/* Charts & Predictions */}
                 <div className="w-full flex">
                     <Charts />
-
                     <div className="w-5/12 ml-2">
-                        <div className="w-full rounded-lg h-fit border flex flex-col items-start justify-center p-3">
-                            <h3 className="text-xl font-semibold tracking-tight">
-                                AlphaVision
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                                The predictions of the stock's next OHLC values for the next respective timeframe.
-                            </p>
-                            <div className="w-full flex items-center justify-between mt-3">
-                                <div className="">
-                                    <p className="font-semibold text-md text-slate-600">Open</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <Separator
-                                    orientation="vertical"
-                                    className="mr-2 data-[orientation=vertical]:h-4"
-                                />
-                                <div className="">
-                                    <p className="font-semibold text-md text-slate-600">High</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <Separator
-                                    orientation="vertical"
-                                    className="mr-2 data-[orientation=vertical]:h-4"
-                                />
-                                <div className="">
-                                    <p className="font-semibold text-md text-slate-600">Low</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <Separator
-                                    orientation="vertical"
-                                    className="mr-2 data-[orientation=vertical]:h-4"
-                                />
-                                <div className="">
-                                    <p className="font-semibold text-md text-slate-600">Close</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full h-fit flex mt-2 items-center justify-between">
+                        <div className="w-full h-fit flex items-center justify-between">
                             <div style={{
                                 width: '49%'
-                            }} className="w-6/12 border rounded-lg p-3">
+                            }} className="w-6/12 border rounded-md p-3">
                                 <h3 className="text-md font-semibold tracking-tight">
                                     Generated At
                                 </h3>
@@ -162,76 +167,51 @@ export default async function AlphaVisionPage({ params }: PageProps) {
                             </div>
                             <div style={{
                                 width: '49%'
-                            }} className="w-6/12 border rounded-lg p-3">
+                            }} className="w-6/12 border rounded-md p-3">
                                 <h3 className="text-md font-semibold tracking-tight">
                                     Generated For
                                 </h3>
                                 <p className="text-sm text-gray-600">
-                                    2025-09-01 16:40:12.45
+                                    AAPL_1D_+5CN
                                 </p>
                             </div>
                         </div>
-                        <div className="w-full rounded-lg h-fit border flex flex-col items-start justify-center p-3 mt-2">
+                        <div className="w-full h-fit mt-2 flex items-center justify-between">
+                            <div style={{
+                                width: '49%'
+                            }} className="w-6/12 border rounded-md p-3">
+                                <h3 className="text-md font-semibold tracking-tight">
+                                    Momentum at
+                                </h3>
+                                <p className="text-sm text-gray-600">
+                                    BEARISH - PLUNGING
+                                </p>
+                            </div>
+                            <div style={{
+                                width: '49%'
+                            }} className="w-6/12 border rounded-md p-3">
+                                <h3 className="text-md font-semibold tracking-tight">
+                                    Momentum to
+                                </h3>
+                                <p className="text-sm text-gray-600">
+                                    STRONG_SELL
+                                </p>
+                            </div>
+                        </div>
+                        <div className="w-full rounded-md mt-2 h-fit border flex flex-col items-start justify-center p-3">
                             <h3 className="text-xl font-semibold tracking-tight">
-                                Indicators
+                                AlphaVision
                             </h3>
                             <p className="text-sm text-gray-600">
-                                The indicators derived from the stock's historical data of the respective timeframe.
+                                Predictions of AAPL's OHLC values for the next respective timeframe and horizons.
                             </p>
-                            <div className="w-full flex items-center justify-between mt-3">
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">EMA_12</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">EMA_16</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">SMA_20</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">MACD</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">RSI_14</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                            </div>
-                            <div className="w-full flex items-center justify-between mt-3">
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">BB</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">BB_PCT</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">ATR_14</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">OBV</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
-                                <div className="border p-2 rounded-md">
-                                    <p className="font-semibold text-sm text-slate-600">RETR</p>
-                                    <p className="text-xs text-zinc-600">₹ 200.09</p>
-                                </div>
+                            <div className="w-full border rounded-md overflow-hidden mt-3 max-h-47 overflow-y-auto">
+                                <PredsDisplay data={sampleData} />
                             </div>
                         </div>
                     </div>
 
                 </div>
-                {/* <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="bg-muted/50 aspect-video rounded-xl" />
-                    <div className="bg-muted/50 aspect-video rounded-xl" />
-                    <div className="bg-muted/50 aspect-video rounded-xl" />
-                </div>
-                <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" /> */}
             </div>
         </>
     )

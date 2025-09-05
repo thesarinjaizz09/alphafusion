@@ -123,13 +123,13 @@ export default function CryptoChart() {
       {/* Chart container */}
       <div
         className={`w-full bg-white ${
-          isFullscreen ? "h-[calc(100vh-140px)]" : "h-[458px]"
+          isFullscreen ? "h-[calc(100vh-140px)]" : "h-[450px]"
         }`}
       >
         <div
           ref={chartContainerRef}
           id="tradingview-chart"
-          className="w-full h-full rounded-lg overflow-hidden border"
+          className="w-full h-full rounded-md overflow-hidden border"
         />
       </div>
     </div>
