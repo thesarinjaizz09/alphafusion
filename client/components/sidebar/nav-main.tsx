@@ -37,14 +37,14 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
+      <SidebarMenu >
         {items.map((item) => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
                 <a href={item.url}>
                   <item.icon />
-                  <span>{item.title}</span>
+                  <span className="text-xs">{item.title}</span>
                 </a>
               </SidebarMenuButton>
               {item.items?.length ? (
@@ -61,7 +61,7 @@ export function NavMain({
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild isActive={subItem.isActive}>
                             <a href={subItem.url}>
-                              <span>{subItem.title}</span>
+                              <span className="text-xs">{subItem.title}</span>
                             </a>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>

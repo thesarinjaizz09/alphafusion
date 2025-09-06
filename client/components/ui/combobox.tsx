@@ -20,9 +20,9 @@ import {
 
 
 interface ComboboxProps {
-  mode: "Ticker" | "Timeframe" | "Horizon"
+  mode: "Ticker" | "Timeframe" | "Cn"
   items: { value: string; label: string }[],
-  span: "half" | "full"
+  span: "half" | "full" | 'third' | 'oneth'
 }
 
 export function Combobox({ mode, items, span }: ComboboxProps) {
@@ -38,11 +38,15 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                        "justify-between h-[36px] font-normal text-black text-xs rounded-sm",
+                        "bg-white border border-gray-200 shadow-lg hover:bg-violet-100 justify-between h-[36px] font-normal text-black text-xs rounded-sm",
                         span === "full" && "w-full",
                     )}
                     style={span === 'half' ? {
                         width: "49%"
+                    } : span === 'third' ? {
+                        width: '65%'
+                    } : span === 'oneth' ? {
+                        width: '33%'
                     } : {}}
                 >
                     {value

@@ -14,20 +14,25 @@ interface ReasonsDisplayProps {
 
 const ReasonsDisplay: React.FC<ReasonsDisplayProps> = ({ reasons }) => {
   return (
-    <div className="max-h-64 overflow-y-auto border rounded-lg mt-5">
-      <Table className="min-w-full">
+    <div className="max-h-64 overflow-y-auto border rounded-sm shadow-sm mt-4">
+      <Table className="min-w-full border border-gray-200 text-xs">
         <TableHeader>
-          <TableRow>
-            <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20">
-              Reasons
+          <TableRow className="bg-violet-200 sticky top-0 z-20">
+            <TableHead className="px-4 py-2 text-gray-900 text-left">
+              Influential Reasons
             </TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {reasons.map((reason, idx) => (
-            <TableRow key={idx}>
-              <TableCell className="whitespace-pre-wrap">{reason}</TableCell>
+            <TableRow
+              key={idx}
+              className={`text-gray-800 ${
+                idx % 2 === 0 ? "bg-white" : "bg-violet-50"
+              } hover:bg-violet-100 transition-colors`}
+            >
+              <TableCell className="px-4 py-2 whitespace-pre-wrap">{reason}</TableCell>
             </TableRow>
           ))}
         </TableBody>

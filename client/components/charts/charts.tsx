@@ -115,21 +115,19 @@ export default function CryptoChart() {
 
   return (
     <div
-      className={` ${
-        isFullscreen ? "fixed inset-0 z-50 rounded-none" : "w-7/12 relative"
-      }`}
+      className={` ${isFullscreen ? "fixed inset-0 z-50 rounded-none" : "w-7/12 relative"
+        }`}
     >
 
       {/* Chart container */}
       <div
-        className={`w-full bg-white ${
-          isFullscreen ? "h-[calc(100vh-140px)]" : "h-[463px]"
-        }`}
+        className={`w-full ${isFullscreen ? "h-[calc(100vh-140px)]" : "h-full"
+          } bg-white rounded-sm shadow-lg`}
       >
         <div
           ref={chartContainerRef}
           id="tradingview-chart"
-          className="w-full h-full rounded-md overflow-hidden border"
+          className="w-full h-full overflow-hidden rounded-sm"
         />
       </div>
     </div>

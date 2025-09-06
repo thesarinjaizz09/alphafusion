@@ -8,7 +8,6 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-// ✅ Define a generic type for date → number mapping
 type TimeSeries = Record<string, number>;
 
 export interface PredictionData {
@@ -26,29 +25,46 @@ const PredsDisplay: React.FC<PredsDisplayProps> = ({ data }) => {
     const dates = Object.keys(data.open);
 
     return (
-        <Table>
-            <TableHeader className="sticky top-0 bg-white z-10">
-                <TableRow>
-                    {/* Apply sticky/top/bg/z to each TableHead (th) */}
-                    <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20">Date</TableHead>
-                    <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 text-right">Open</TableHead>
-                    <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 text-right">High</TableHead>
-                    <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 text-right">Low</TableHead>
-                    <TableHead className="sticky top-0 bg-white/95 backdrop-blur-sm z-20 text-right">Close</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {dates.map((date) => (
-                    <TableRow key={date}>
-                        <TableCell>{date}</TableCell>
-                        <TableCell>{data.open[date]}</TableCell>
-                        <TableCell>{data.high[date]}</TableCell>
-                        <TableCell>{data.low[date]}</TableCell>
-                        <TableCell>{data.close[date]}</TableCell>
+        <div className="overflow-x-auto shadow-sm">
+            <Table className="min-w-full border border-gray-200 text-xs">
+                <TableHeader>
+                    <TableRow className="bg-violet-200 sticky top-0 z-20">
+                        <TableHead className="text-left text-gray-900 px-4 py-2">
+                            Date
+                        </TableHead>
+                        <TableHead className="text-left text-gray-900 px-4 py-2">
+                            Open
+                        </TableHead>
+                        <TableHead className="text-left text-gray-900 px-4 py-2">
+                            High
+                        </TableHead>
+                        <TableHead className="text-left text-gray-900 px-4 py-2">
+                            Low
+                        </TableHead>
+                        <TableHead className="text-left text-gray-900 px-4 py-2">
+                            Close
+                        </TableHead>
                     </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                </TableHeader>
+
+                <TableBody>
+                    {dates.map((date, idx) => (
+                        <TableRow
+                            key={date}
+                            className={`text-gray-800 text-xs ${
+                                idx % 2 === 0 ? "bg-gray-100" : "bg-violet-100"
+                            } hover:bg-violet-100 transition-colors`}
+                        >
+                            <TableCell className="px-4 py-2">{date}</TableCell>
+                            <TableCell className="px-4 py-2">{data.open[date]}</TableCell>
+                            <TableCell className="px-4 py-2">{data.high[date]}</TableCell>
+                            <TableCell className="px-4 py-2">{data.low[date]}</TableCell>
+                            <TableCell className="px-4 py-2">{data.close[date]}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     );
 };
 
