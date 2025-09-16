@@ -7,15 +7,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { PredictionData } from "@/types/vision.types";
 
 type TimeSeries = Record<string, number>;
-
-export interface PredictionData {
-    open: TimeSeries;
-    high: TimeSeries;
-    low: TimeSeries;
-    close: TimeSeries;
-}
 
 interface PredsDisplayProps {
     data: PredictionData;

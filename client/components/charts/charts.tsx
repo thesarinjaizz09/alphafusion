@@ -127,7 +127,7 @@ export default function CryptoChart() {
         <div
           ref={chartContainerRef}
           id="tradingview-chart"
-          className="w-full h-full overflow-hidden rounded-sm"
+          className="w-full h-full overflow-hidden rounded-sm border"
         />
       </div>
     </div>

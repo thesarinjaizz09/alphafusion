@@ -10,7 +10,7 @@ const SmallCard = ({title, value, width = '49%'}: SmallCardProps) => {
     return (
         <div style={{
             width: width
-        }} className="rounded-sm p-2 bg-gray-100 shadow-sm hover:bg-blue-200">
+        }} className="rounded-sm p-2 bg-gray-100 shadow-sm hover:bg-violet-100">
             <h3 className="text-xs font-semibold tracking-tight">
                 {title}
             </h3>
