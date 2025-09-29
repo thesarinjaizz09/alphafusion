@@ -6,13 +6,11 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
-
 import {
     SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-import PredsDisplay from "@/components/preds-display/preds-display"
+import { Separator } from "@/components/ui/separator"
 import AlphaVisionPage from "@/pages-section/alphavision/AlphaVision"
 
 interface PageProps {
