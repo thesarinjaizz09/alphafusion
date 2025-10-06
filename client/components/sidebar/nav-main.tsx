@@ -1,7 +1,7 @@
 "use client"
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
-
+import { AppWindow, ChevronRight, type LucideIcon } from "lucide-react"
+import Link from "next/link"
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,6 +18,12 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
 
 export function NavMain({
   items,
@@ -58,13 +64,27 @@ export function NavMain({
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild isActive={subItem.isActive}>
-                            <a href={subItem.url}>
-                              <span className="text-xs">{subItem.title}</span>
-                            </a>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
+                        <ContextMenu key={subItem.url}>
+
+                          <ContextMenuContent>
+                            <ContextMenuItem>Widget</ContextMenuItem>
+                            <ContextMenuItem>Subscribe</ContextMenuItem>
+                            <ContextMenuItem>Create Window</ContextMenuItem>
+                            <ContextMenuItem>Merge Window</ContextMenuItem>
+                          </ContextMenuContent>
+                          <SidebarMenuSubItem key={subItem.title}>
+                            <Link href={subItem.url} className="w-full">
+                              <SidebarMenuSubButton asChild isActive={subItem.isActive}>
+                                <ContextMenuTrigger className="w-full">
+
+                                  <span className="w-full flex items-center justify-between text-xs">{subItem.title}
+                                    <AppWindow className="w-3" />
+                                  </span>
+                                </ContextMenuTrigger>
+                              </SidebarMenuSubButton>
+                            </Link>
+                          </SidebarMenuSubItem>
+                        </ContextMenu>
                       ))}
                     </SidebarMenuSub>
                   </CollapsibleContent>
