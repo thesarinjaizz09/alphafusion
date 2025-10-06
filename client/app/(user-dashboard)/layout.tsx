@@ -8,9 +8,9 @@ import {
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 
 export const metadata: Metadata = {
-  title: "Dashboard - AlphaFusion",
+  title: "AlphaFusion Terminal",
   description:
-    "AlphaFusion Dashboard – Your all-in-one trading hub for stocks and crypto. Track live market data, analyze AI-powered forecasts, manage your portfolio, and execute trades seamlessly in one place.",
+    "AlphaFusion Terminal – Your all-in-one trading hub for stocks and crypto. Track live market data, analyze AI-powered forecasts, manage your portfolio, and execute trades seamlessly in one place.",
 };
 
 export default function UserDashboardLayout({
