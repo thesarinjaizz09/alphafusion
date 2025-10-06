@@ -16,7 +16,7 @@ export default function AuthPage({
     const [authMode, setAuthMode] = useState("signup")
 
     const handleAuthSuccess = () => {
-        router.push('/dashboard')
+        router.push('/fusionboards/fusionone')
     }
 
     return (
