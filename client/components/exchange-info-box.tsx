@@ -105,12 +105,6 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
                         className="cursor-pointer w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600"
                         onClick={() => setIsMinimized(!isMinimized)}
                     />
-                    {/* Maximize */}
-                    {/* <button
-                        className="cursor-pointer w-3 h-3 rounded-full bg-green-500 hover:bg-green-600"
-                        onClick={() => setIsMinimized(false)}
-                    /> */}
-                    {/* Close */}
                     <button
                         className="cursor-pointer w-3 h-3 rounded-full bg-red-500 hover:bg-red-600"
                         onClick={() => setIsVisible(false)}
