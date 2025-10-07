@@ -8,7 +8,10 @@ import {
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 
 export const metadata: Metadata = {
-  title: "AlphaFusion Terminal",
+  title: {
+    default: "AlphaFusion Terminal",
+    template: "%s - AlphaFusion Terminal",
+  },
   description:
     "AlphaFusion Terminal – Your all-in-one trading hub for stocks and crypto. Track live market data, analyze AI-powered forecasts, manage your portfolio, and execute trades seamlessly in one place.",
 };
