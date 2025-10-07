@@ -24,7 +24,7 @@ export default function UserDashboardLayout({
   return (
     <div className="w-full h-screen">
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar className="font-mono" />
         <SidebarInset>
           {children}
         </SidebarInset>

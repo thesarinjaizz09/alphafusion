@@ -9,6 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { EquiFusionPage } from "@/pages-section";
+import LocalClock from "@/components/local-clock";
 
 export const metadata = {
   title: "EquiFusion",
@@ -18,7 +19,7 @@ export const metadata = {
 
 export default function EquiFusionBoard() {
   return (
-    <div className="rounded-lg overflow-hidden">
+    <div className="rounded-lg overflow-hidden font-mono">
       {/* HEADER */}
       <header className="flex h-16 shrink-0 items-center gap-2 bg-[#0A0F1C]/95 border-b border-[#E3B341]/30 shadow-md shadow-[#E3B341]/10 backdrop-blur-sm">
         <div className="flex items-center gap-2 px-4 text-[#F5F6FA]">
@@ -40,10 +41,11 @@ export default function EquiFusionBoard() {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
+        <LocalClock />
       </header>
 
       {/* MAIN CONTENT */}
       <EquiFusionPage />
-    </div>
+    </div >
   );
 }
