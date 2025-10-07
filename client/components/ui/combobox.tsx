@@ -20,9 +20,9 @@ import {
 
 
 interface ComboboxProps {
-  mode: "Ticker" | "Timeframe" | "Cn"
-  items: { value: string; label: string }[],
-  span: "half" | "full" | 'third' | 'oneth'
+    mode: string,
+    items: { value: string; label: string }[],
+    span: "half" | "full" | 'third' | 'oneth'
 }
 
 export function Combobox({ mode, items, span }: ComboboxProps) {
@@ -38,7 +38,7 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                        "bg-white border border-gray-200 shadow-lg hover:bg-violet-100 justify-between h-[36px] font-normal text-black text-xs rounded-sm",
+                        "bg-[#16223B]/80 shadow-lg text-accent justify-between h-[36px] font-normal text-xs rounded-lg transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20",
                         span === "full" && "w-full",
                     )}
                     style={span === 'half' ? {
@@ -51,15 +51,18 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                 >
                     {value
                         ? items.find((item) => item.value === value)?.label
-                        : mode }
+                        : mode}
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="p-0 min-w-[var(--radix-popover-trigger-width)] w-fit">
                 <Command>
-                    <CommandInput placeholder="Search..." className="h-9" />
+                    <CommandInput placeholder="Search..." className="h-9 text-xs" />
                     <CommandList>
-                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandEmpty><span className="text-xs">
+                            No results found.
+                        </span>
+                        </CommandEmpty>
                         <CommandGroup>
                             {items.map((item) => (
                                 <CommandItem

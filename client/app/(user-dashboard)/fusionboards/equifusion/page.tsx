@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { EquiFusionPage } from "@/pages-section";
 
 export const metadata = {
   title: "EquiFusion",
@@ -15,7 +16,7 @@ export const metadata = {
 };
 
 
-export default function EquiFusionPage() {
+export default function EquiFusionBoard() {
   return (
     <div className="rounded-lg overflow-hidden">
       {/* HEADER */}
@@ -42,23 +43,7 @@ export default function EquiFusionPage() {
       </header>
 
       {/* MAIN CONTENT */}
-      <div className="flex flex-1 flex-col gap-4 p-4 bg-[#050914] text-[#F5F6FA] min-h-screen">
-        {/* TOP SUMMARY BOX */}
-        <div className="bg-[#10182A]/80 rounded-2xl h-28 transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 hover:border hover:border-[#E3B341]/30" />
-
-        {/* GRID SECTION */}
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="bg-[#16223B]/80 aspect-video rounded-2xl transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 hover:border hover:border-[#E3B341]/30"
-            />
-          ))}
-        </div>
-
-        {/* LARGE CONTENT SECTION */}
-        <div className="bg-[#0D1426]/90 min-h-[100vh] flex-1 rounded-2xl md:min-h-min transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 hover:border hover:border-[#E3B341]/30" />
-      </div>
+      <EquiFusionPage />
     </div>
   );
 }

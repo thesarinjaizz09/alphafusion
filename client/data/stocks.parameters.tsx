@@ -1,3 +1,115 @@
+import { ExchangeInfoType } from "@/types/fusion.types";
+
+const exchanges = [
+    { value: "NASDAQ", label: "NASDAQ - National Association of Securities Dealers Automated Quotations" },
+    { value: "NYSE", label: "NYSE - New York Stock Exchange" },
+    { value: "AMEX", label: "AMEX - American Stock Exchange" },
+    { value: "TSX", label: "TSX - Toronto Stock Exchange" },
+    { value: "LSE", label: "LSE - London Stock Exchange" },
+    { value: "SSE", label: "SSE - Shanghai Stock Exchange" },
+    { value: "BSE", label: "BSE - Bombay Stock Exchange" },
+    { value: "NSE", label: "NSE - National Stock Exchange of India" },
+];
+
+const exchangeData: Record<string, ExchangeInfoType> = {
+    NASDAQ: {
+        name: "NASDAQ - National Association of Securities Dealers Automated Quotations",
+        country: "United States",
+        flag: "https://flagcdn.com/us.svg",
+        timezone: "America/New_York", // 🕒 Eastern Time (EST/EDT)
+        currency: "USD ($)",
+        marketStatus: "🟢 Open – Closes in 5h 21m",
+        listedCompanies: "3,448",
+        marketCap: "$25.1 Trillion",
+        dailyVolume: "$210 Billion",
+        topSector: "Technology (+1.2%)",
+        topStocks: ["AAPL", "MSFT", "NVDA"],
+        mainIndices: ["NASDAQ 100", "NASDAQ Composite"],
+        regulator: "U.S. Securities and Exchange Commission (SEC)",
+        exchangeType: "Equities & ETFs",
+        tradingHours: "09:30 AM – 04:00 PM EST",
+        website: "https://www.nasdaq.com",
+        dataReliability: "✅ Institutional Grade (98%)",
+    },
+    NYSE: {
+        name: "NYSE - New York Stock Exchange",
+        country: "United States",
+        flag: "https://flagcdn.com/us.svg",
+        timezone: "America/New_York", // 🕒 Eastern Time (EST/EDT)
+        currency: "USD ($)",
+        marketStatus: "🟢 Open – Closes in 5h 21m",
+        listedCompanies: "2,385",
+        marketCap: "$28.5 Trillion",
+        dailyVolume: "$145 Billion",
+        topSector: "Financials (+0.9%)",
+        topStocks: ["JPM", "XOM", "V"],
+        mainIndices: ["Dow Jones", "S&P 500"],
+        regulator: "U.S. Securities and Exchange Commission (SEC)",
+        exchangeType: "Equities & Derivatives",
+        tradingHours: "09:30 AM – 04:00 PM EST",
+        website: "https://www.nyse.com",
+        dataReliability: "✅ Institutional Grade (98%)",
+    },
+    LSE: {
+        name: "LSE - London Stock Exchange",
+        country: "United Kingdom",
+        flag: "https://flagcdn.com/gb.svg",
+        timezone: "Europe/London", // 🕒 GMT / BST
+        currency: "GBP (£)",
+        marketStatus: "🔴 Closed – Opens in 8h 11m",
+        listedCompanies: "1,982",
+        marketCap: "$4.3 Trillion",
+        dailyVolume: "$9.8 Billion",
+        topSector: "Energy (+0.5%)",
+        topStocks: ["BP", "HSBA", "ULVR"],
+        mainIndices: ["FTSE 100", "FTSE 250"],
+        regulator: "Financial Conduct Authority (FCA)",
+        exchangeType: "Equities, Bonds & ETFs",
+        tradingHours: "08:00 AM – 04:30 PM BST",
+        website: "https://www.londonstockexchange.com",
+        dataReliability: "✅ Professional Verified (95%)",
+    },
+    NSE: {
+        name: "NSE - National Stock Exchange of India",
+        country: "India",
+        flag: "https://flagcdn.com/in.svg",
+        timezone: "Asia/Kolkata", // 🕒 IST (GMT+5:30)
+        currency: "INR (₹)",
+        marketStatus: "🟢 Open – Closes in 3h 12m",
+        listedCompanies: "2,048",
+        marketCap: "$3.7 Trillion",
+        dailyVolume: "₹89,000 Cr (~$10.7B)",
+        topSector: "IT (+2.1%)",
+        topStocks: ["RELIANCE", "TCS", "HDFCBANK"],
+        mainIndices: ["Nifty 50", "Nifty Bank", "Nifty Next 50"],
+        regulator: "Securities and Exchange Board of India (SEBI)",
+        exchangeType: "Equities, Derivatives & Commodities",
+        tradingHours: "09:15 AM – 03:30 PM IST",
+        website: "https://www.nseindia.com",
+        dataReliability: "✅ Institutional Grade (97%)",
+    },
+    BSE: {
+        name: "BSE - Bombay Stock Exchange",
+        country: "India",
+        flag: "https://flagcdn.com/in.svg",
+        timezone: "Asia/Kolkata", // 🕒 IST (GMT+5:30)
+        currency: "INR (₹)",
+        marketStatus: "🟢 Open – Closes in 3h 12m",
+        listedCompanies: "5,565",
+        marketCap: "$3.9 Trillion",
+        dailyVolume: "₹68,000 Cr (~$8.2B)",
+        topSector: "Energy (+1.7%)",
+        topStocks: ["RELIANCE", "INFY", "HDFCBANK"],
+        mainIndices: ["SENSEX", "BSE 500"],
+        regulator: "Securities and Exchange Board of India (SEBI)",
+        exchangeType: "Equities & Derivatives",
+        tradingHours: "09:15 AM – 03:30 PM IST",
+        website: "https://www.bseindia.com",
+        dataReliability: "✅ Institutional Grade (97%)",
+    },
+};
+
+
 const tickers = [
     { value: "next.js", label: "Next.js" },
     { value: "sveltekit", label: "SvelteKit" },
@@ -48,5 +160,7 @@ const horizons = [
 export {
     tickers,
     timeframes,
-    horizons
+    horizons,
+    exchanges,
+    exchangeData
 }
