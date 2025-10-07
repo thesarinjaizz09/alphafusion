@@ -24,7 +24,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ headers, data, rowKey }) =>
                         {headers.map((header) => (
                             <TableHead
                                 key={header}
-                                className="text-left text-white-900 px-4 py-2"
+                                className="text-left text-white-900 px-2 py-2"
                             >
                                 {header}
                             </TableHead>
@@ -46,7 +46,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ headers, data, rowKey }) =>
                                 } hover:bg-sidebar-accent transition-colors`}
                         >
                             {headers.map((header) => (
-                                <TableCell key={header} className="px-4 py-2">
+                                <TableCell key={header} className="px-2 py-2">
                                     {row[header]}
                                 </TableCell>
                             ))}
