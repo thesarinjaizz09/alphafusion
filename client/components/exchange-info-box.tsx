@@ -75,6 +75,7 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
         );
     }
 
+
     // Left and Right Table Data
     const leftTableData = [
         { Attribute: "Country", Value: info.country },
@@ -100,13 +101,12 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
 
 
     return (
-        <div className="bg-[#0A0F1C] border border-gray-800 rounded-2xl p-3 py-4 w-full text-xs text-gray-200 transition-all duration-300 shadow-lg">
+        <div className="bg-[#0A0F1C] border border-gray-800 rounded-2xl p-3 py-4 w-full text-xs text-gray-200 transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
                 <Combobox mode="Select Exchange" span="full" items={exchanges} />
                 <Combobox mode="Select Sector" span="full" items={exchanges} />
             </div>
-            <div className="bg-[#16223B]/80 rounded-lg p-2 py-3 mb-4">
-
+            <div className="bg-[#16223B]/80 rounded-lg p-2 mb-4 shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
                 <h2 className="font-semibold text-white mb-1"><a
                     href={info.website}
                     target="_blank"

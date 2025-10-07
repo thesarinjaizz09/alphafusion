@@ -1,8 +1,19 @@
 'use client'
 import { Badge } from "./ui/badge";
 import { useEffect, useState } from "react";
+import cn from "clsx"; // optional but convenient for merging classes
 
-const LocalClock = () => {
+interface LocalClockProps {
+  className?: string;        // for the outer div
+  badgeClassName?: string;   // for the Badge
+  timeClassName?: string;    // optional for the time text
+}
+
+const LocalClock: React.FC<LocalClockProps> = ({
+  className,
+  badgeClassName,
+  timeClassName,
+}) => {
   const [localTime, setLocalTime] = useState<string>("");
 
   useEffect(() => {
@@ -14,16 +25,13 @@ const LocalClock = () => {
 
     updateClock(); // show immediately
     const timer = setInterval(updateClock, 1000); // update every second
-
-    return () => clearInterval(timer); // cleanup on unmount
+    return () => clearInterval(timer); // cleanup
   }, []);
 
   return (
-    <div className="text-xs text-gray-300 font-mono">
-      <Badge variant="secondary"
-        className={`text-xs font-medium`}
-      >
-        🕒 {localTime}
+    <div className={cn("text-xs text-gray-300 font-mono", className)}>
+      <Badge variant="secondary" className={cn("text-xs font-medium", badgeClassName)}>
+        🕒 <span className={timeClassName}>{localTime}</span>
       </Badge>
     </div>
   );

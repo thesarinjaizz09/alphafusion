@@ -17,14 +17,14 @@ interface DynamicTableProps {
 
 const DynamicTable: React.FC<DynamicTableProps> = ({ headers, data, rowKey }) => {
     return (
-        <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200">
+        <div className="overflow-x-auto rounded-lg backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
             <Table className="min-w-full text-xs">
                 <TableHeader>
-                    <TableRow className="bg-violet-200 sticky top-0 z-20">
+                    <TableRow className="bg-primary sticky top-0 z-20">
                         {headers.map((header) => (
                             <TableHead
                                 key={header}
-                                className="text-left text-gray-900 px-4 py-2"
+                                className="text-left text-white-900 px-4 py-2"
                             >
                                 {header}
                             </TableHead>
@@ -42,9 +42,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ headers, data, rowKey }) =>
                                         : row[rowKey] ?? idx
                                     : idx
                             }
-                            className={`text-gray-800 text-xs ${
-                                idx % 2 === 0 ? "bg-gray-100" : "bg-violet-100"
-                            } hover:bg-violet-100 transition-colors`}
+                            className={`text-white-800 text-xs ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
+                                } hover:bg-sidebar-accent transition-colors`}
                         >
                             {headers.map((header) => (
                                 <TableCell key={header} className="px-4 py-2">
