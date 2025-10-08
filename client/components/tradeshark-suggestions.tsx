@@ -68,7 +68,7 @@ const TradesharkSuggestions = ({ selectedExchange }: { selectedExchange: string 
                         </div>
                         <SentimentMeter value={82} />
                     </div>
-                    <DynamicTable headers={["Ticker", "Action", "Target", "Horizon", "Score"]} data={tableData} />
+                    <DynamicTable title="Tradeshark's Suggestions" headers={["Ticker", "Action", "Target", "Horizon", "Score"]} data={tableData} />
                 </>
 
             )}
