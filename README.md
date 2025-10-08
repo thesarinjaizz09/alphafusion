@@ -1,4 +1,4 @@
-# ![AlphaFusion Logo](images/Storx.final.png) AlphaFusion™ – Professional Market Intelligence Platform
+# AlphaFusion™ – Professional Market Intelligence Platform
 
 ![License](https://img.shields.io/badge/License-Proprietary-red) ![Status](https://img.shields.io/badge/Status-Active-brightgreen) ![Users](https://img.shields.io/badge/Users-Professional-blue)
 
