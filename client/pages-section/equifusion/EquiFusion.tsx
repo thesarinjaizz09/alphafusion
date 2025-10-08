@@ -6,7 +6,6 @@ import ExchangeInfoBox from '@/components/exchange-info-box'
 import GlobalIndicesSummary from '@/components/global-indices-summary'
 import TradesharkSuggestions from '@/components/tradeshark-suggestions'
 import MoversLosersBox from '@/components/movers-losers'
-import MarketBubbleCloud from '@/components/market-bubble-cloud'
 import MarketOrbitCloud from '@/components/market-orbit-cloud'
 
 const EquiFusionPage = () => {
