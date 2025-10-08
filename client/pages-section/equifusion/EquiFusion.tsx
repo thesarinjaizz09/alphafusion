@@ -6,6 +6,8 @@ import ExchangeInfoBox from '@/components/exchange-info-box'
 import GlobalIndicesSummary from '@/components/global-indices-summary'
 import TradesharkSuggestions from '@/components/tradeshark-suggestions'
 import MoversLosersBox from '@/components/movers-losers'
+import MarketBubbleCloud from '@/components/market-bubble-cloud'
+import MarketOrbitCloud from '@/components/market-orbit-cloud'
 
 const EquiFusionPage = () => {
     return (
@@ -24,7 +26,7 @@ const EquiFusionPage = () => {
             {/* ROW 2 MARKET MOVERS & HEATMAP */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <MoversLosersBox selectedExchange='NASDAQ' />
-                <TradesharkSuggestions selectedExchange="NASDAQ" />
+                <MarketOrbitCloud />
             </div>
 
 
@@ -40,7 +42,7 @@ const EquiFusionPage = () => {
 
             {/* LARGE CONTENT SECTION */}
             {/* <div className="bg-[#0D1426]/90 min-h-[100vh] flex-1 rounded-2xl md:min-h-min transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 hover:border hover:border-[#E3B341]/30" /> */}
-        </div>
+        </div >
     )
 }
 
