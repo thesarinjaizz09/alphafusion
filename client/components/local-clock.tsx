@@ -56,7 +56,7 @@ const LocalClock: React.FC<LocalClockProps> = ({
           width={25} height={25} className="rounded-xs border border-[#E3B341]"
         />
       )}
-      <Badge variant="secondary" className={cn("text-[11px] font-medium flex items-center gap-1", badgeClassName)}>
+      <Badge variant="secondary" className={cn("text-[10px] font-medium flex items-center gap-1", badgeClassName)}>
         🕒 <span className={timeClassName}>{localTime}</span>
       </Badge>
     </div>

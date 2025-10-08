@@ -89,10 +89,14 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
     ];
 
     return (
-        <div className={`col-span-2 bg-[#0A0F1C] border border-gray-800 rounded-2xl p-3 w-full  text-gray-200 text-[10px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative`}>
+        <div
+            className={`${isMinimized ? "h-fit p-2" : "p-3"
+                } col-span-2 bg-[#0A0F1C] border border-gray-800 rounded-2xl w-full text-gray-200 text-[10px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative overflow-hidden ${isMinimized ? "opacity-90" : "scale-100 opacity-100"}`}
+        >
+
 
             {/* Top-right Mac-style buttons */}
-            <div className={`flex ${isMinimized ? "justify-between" : "justify-between"} items-center ${isMinimized ? "mb-0" : "mb-3"} border-b pb-2 border-accent`}>
+            <div className={`flex ${isMinimized ? "justify-between" : "justify-between"} items-center ${isMinimized ? "mb-0" : "mb-3"} ${!isMinimized ? "border-b pb-2 border-accent" : "border-none pb-0"}`}>
                 {/* Component name when minimized */}
                 <div className="text-accent flex items-center gap-2">
                     <Landmark className="w-3 inline" /> <span className="text-accent font-semibold">
@@ -134,14 +138,14 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
                         <p className="text-gray-400 flex items-center gap-2">
                             <Image
                                 src={info.flag}
-                                alt={`${info.name} flag`}
+                                alt={`${ info.name } flag`}
                                 width={28}
                                 height={28}
                                 className="rounded-xs border border-[#E3B341]"
                             />
                             <Badge
                                 variant="secondary"
-                                className={`text-[10px] font-medium ${isOpen ? "bg-green-900" : "bg-red-900"}`}
+                                className={`text-[10px] font-medium ${ isOpen ? "bg-green-900" : "bg-red-900" } `}
                             >
                                 {isOpen ? "🟢 Market Open" : "🔴 Market Closed"} - 🕒 {localTime}
                             </Badge>

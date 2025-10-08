@@ -26,7 +26,7 @@ export default function EquiFusionBoard() {
           <SidebarTrigger className="-ml-1 text-[#E3B341] hover:text-[#F5F6FA] transition-colors" />
           <Separator orientation="vertical" className="mr-2 h-4 bg-[#E3B341]/40" />
           <Breadcrumb className="">
-            <BreadcrumbList className="text-[#E3B341]/90 font-medium text-[11px] ">
+            <BreadcrumbList className="text-[#E3B341]/90 font-medium text-[10px] ">
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-[#E3B341]/90 font-medium">
                   Boards
