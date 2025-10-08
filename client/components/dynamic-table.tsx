@@ -18,13 +18,13 @@ interface DynamicTableProps {
 const DynamicTable: React.FC<DynamicTableProps> = ({ headers, data, rowKey }) => {
     return (
         <div className="overflow-x-auto rounded-lg backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
-            <Table className="min-w-full text-xs">
+            <Table className="min-w-full text-[10px]">
                 <TableHeader>
                     <TableRow className="bg-primary sticky top-0 z-20">
                         {headers.map((header) => (
                             <TableHead
                                 key={header}
-                                className="text-left text-white-900 px-2 py-2"
+                                className="text-left text-white-900"
                             >
                                 {header}
                             </TableHead>
@@ -42,12 +42,26 @@ const DynamicTable: React.FC<DynamicTableProps> = ({ headers, data, rowKey }) =>
                                         : row[rowKey] ?? idx
                                     : idx
                             }
-                            className={`text-white-800 text-xs ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
+                            className={`text-white-800 text-[10px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
                                 } hover:bg-sidebar-accent transition-colors`}
                         >
                             {headers.map((header) => (
-                                <TableCell key={header} className="px-2 py-2">
-                                    {row[header]}
+                                <TableCell key={header}>
+                                    {typeof row[header] === "string" && ["BUY", "HOLD", "SELL"].includes(row[header].toUpperCase()) ? (
+                                        <span
+                                            className={
+                                                row[header].toUpperCase() === "BUY"
+                                                    ? "text-green-400 font-semibold"
+                                                    : row[header].toUpperCase() === "SELL"
+                                                        ? "text-red-400 font-semibold"
+                                                        : "text-yellow-400 font-semibold"
+                                            }
+                                        >
+                                            {row[header]}
+                                        </span>
+                                    ) : (
+                                        row[header]
+                                    )}
                                 </TableCell>
                             ))}
                         </TableRow>

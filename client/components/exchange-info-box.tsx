@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { Combobox } from "@/components/ui/combobox"
 import { exchanges } from '@/data/stocks.parameters'
-import { MoveRight } from "lucide-react";
+import { Landmark, MoveRight } from "lucide-react";
 import { ExchangeInfoType } from "@/types/fusion.types";
 import { exchangeData } from "@/data/stocks.parameters";
 import { formatInTimeZone } from "date-fns-tz";
@@ -89,24 +89,24 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
     ];
 
     return (
-        <div className={`bg-[#0A0F1C] border border-gray-800 rounded-2xl p-3 py-4 w-full text-xs text-gray-200 transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative`}>
+        <div className={`col-span-2 bg-[#0A0F1C] border border-gray-800 rounded-2xl p-3 w-full  text-gray-200 text-[10px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative`}>
 
             {/* Top-right Mac-style buttons */}
-            <div className={`flex ${isMinimized ? "justify-between": "justify-end"} items-center ${isMinimized ? "mb-0" : "mb-4"}`}>
+            <div className={`flex ${isMinimized ? "justify-between" : "justify-between"} items-center ${isMinimized ? "mb-0" : "mb-3"} border-b pb-2 border-accent`}>
                 {/* Component name when minimized */}
-                {isMinimized && (
-                    <div className="text-gray-200 font-semibold text-xs">
-                        Exchanges
-                    </div>
-                )}
+                <div className="text-accent flex items-center gap-2">
+                    <Landmark className="w-3 inline" /> <span className="text-accent font-semibold">
+                        Exchange Insights
+                    </span>
+                </div>
                 <div className="flex gap-2">
                     {/* Minimize */}
                     <button
-                        className="cursor-pointer w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-600"
+                        className="cursor-pointer w-2 h-2 rounded-full bg-yellow-500 hover:bg-yellow-600"
                         onClick={() => setIsMinimized(!isMinimized)}
                     />
                     <button
-                        className="cursor-pointer w-3 h-3 rounded-full bg-red-500 hover:bg-red-600"
+                        className="cursor-pointer w-2 h-2 rounded-full bg-red-500 hover:bg-red-600"
                         onClick={() => setIsVisible(false)}
                     />
                 </div>
@@ -126,22 +126,22 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
                                 href={info.website}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="hover:underline"
+                                className="hover:underline flex items-center gap-2"
                             >
-                                {info.name} <MoveRight className="w-3 inline" />
+                                <Landmark className="w-3 inline" /> {info.name} <MoveRight className="w-3 inline" />
                             </a>
                         </h2>
                         <p className="text-gray-400 flex items-center gap-2">
                             <Image
                                 src={info.flag}
                                 alt={`${info.name} flag`}
-                                width={30}
-                                height={30}
+                                width={28}
+                                height={28}
                                 className="rounded-xs border border-[#E3B341]"
                             />
                             <Badge
                                 variant="secondary"
-                                className={`text-xs font-medium ${isOpen ? "bg-green-900" : "bg-red-900"}`}
+                                className={`text-[10px] font-medium ${isOpen ? "bg-green-900" : "bg-red-900"}`}
                             >
                                 {isOpen ? "🟢 Market Open" : "🔴 Market Closed"} - 🕒 {localTime}
                             </Badge>

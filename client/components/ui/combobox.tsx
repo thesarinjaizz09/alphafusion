@@ -38,7 +38,7 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                        "bg-[#16223B]/80 shadow-lg text-accent justify-between h-[36px] font-normal text-xs rounded-lg transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20",
+                        "bg-[#16223B]/80 shadow-lg text-accent justify-between h-[36px] font-normal text-[10px] rounded-lg transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 overflow-hidden text-ellipsis",
                         span === "full" && "w-full",
                     )}
                     style={span === 'half' ? {
@@ -57,9 +57,9 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
             </PopoverTrigger>
             <PopoverContent align="start" className="p-0 min-w-[var(--radix-popover-trigger-width)] w-fit">
                 <Command>
-                    <CommandInput placeholder="Search..." className="h-9 text-xs" />
+                    <CommandInput placeholder="Search..." className="h-9 text-[10px]" />
                     <CommandList>
-                        <CommandEmpty><span className="text-xs">
+                        <CommandEmpty><span className="text-[10px]">
                             No results found.
                         </span>
                         </CommandEmpty>
