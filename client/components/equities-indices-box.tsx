@@ -1,52 +1,67 @@
-'use client'
-import DynamicTable from "./dynamic-table";
-import { Shapes, SquarePercent } from "lucide-react";
+"use client";
+
+import { Shapes } from "lucide-react";
 import WindowLayout from "./window-layout";
-
-const topGainersData = [
-    { Symbol: "INFY", Price: "₹1,543.20", "Change %": "+3.42%", Volume: "1.2M", sparkline: [1480, 1495, 1505, 1520, 1543] },
-    { Symbol: "TCS", Price: "₹3,545.50", "Change %": "+2.81%", Volume: "1.8M", sparkline: [3400, 3445, 3470, 3525, 3545] },
-    { Symbol: "HDFCBANK", Price: "₹1,570.80", "Change %": "+1.92%", Volume: "2.3M", sparkline: [1540, 1560, 1570, 1575, 1570] },
-    { Symbol: "RELIANCE", Price: "₹2,765.30", "Change %": "+1.35%", Volume: "3.1M", sparkline: [2720, 2730, 2740, 2755, 2765] },
-    { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", sparkline: [490, 492, 495, 496, 498] },
-    { Symbol: "LT", Price: "₹2,040.50", "Change %": "+0.95%", Volume: "1.6M", sparkline: [2030, 2035, 2038, 2040, 2040.5] },
-    { Symbol: "ICICIBANK", Price: "₹930.40", "Change %": "+0.88%", Volume: "2.2M", sparkline: [922, 925, 927, 929, 930.4] },
-    { Symbol: "HCLTECH", Price: "₹1,025.60", "Change %": "+0.75%", Volume: "1.4M", sparkline: [1015, 1018, 1020, 1023, 1025.6] },
-    { Symbol: "AXISBANK", Price: "₹940.10", "Change %": "+0.68%", Volume: "2.1M", sparkline: [932, 935, 937, 939, 940.1] },
-    { Symbol: "SBIN", Price: "₹558.20", "Change %": "+0.55%", Volume: "3.3M", sparkline: [550, 552, 554, 556, 558.2] },
-    { Symbol: "MARUTI", Price: "₹8,320.50", "Change %": "+0.50%", Volume: "0.7M", sparkline: [8300, 8310, 8315, 8320, 8320.5] },
-    { Symbol: "TITAN", Price: "₹3,400.20", "Change %": "+0.45%", Volume: "1.1M", sparkline: [3380, 3390, 3395, 3400, 3400.2] },
-    { Symbol: "TECHM", Price: "₹1,010.10", "Change %": "+0.40%", Volume: "0.9M", sparkline: [1000, 1005, 1007, 1009, 1010.1] },
-    { Symbol: "BRITANNIA", Price: "₹4,420.30", "Change %": "+0.35%", Volume: "0.6M", sparkline: [4400, 4410, 4415, 4420, 4420.3] },
-    { Symbol: "ADANIENT", Price: "₹1,675.50", "Change %": "+0.30%", Volume: "1.5M", sparkline: [1660, 1665, 1670, 1672, 1675.5] },
-];
-
-const topLosersData = [
-    { Symbol: "ONGC", Price: "₹185.60", "Change %": "-2.91%", Volume: "3.5M", sparkline: [192, 189, 188, 186, 185] },
-    { Symbol: "COALINDIA", Price: "₹440.80", "Change %": "-1.72%", Volume: "2.4M", sparkline: [450, 448, 446, 442, 440] },
-    { Symbol: "ITC", Price: "₹447.10", "Change %": "-1.20%", Volume: "4.2M", sparkline: [455, 452, 450, 448, 447] },
-    { Symbol: "BPCL", Price: "₹520.40", "Change %": "-0.95%", Volume: "1.5M", sparkline: [525, 523, 522, 521, 520] },
-    { Symbol: "HINDALCO", Price: "₹426.70", "Change %": "-0.85%", Volume: "2.0M", sparkline: [430, 428, 427, 426, 426.7] },
-    { Symbol: "ZEEL", Price: "₹380.50", "Change %": "-0.75%", Volume: "1.8M", sparkline: [385, 383, 382, 381, 380.5] },
-    { Symbol: "VEDL", Price: "₹250.20", "Change %": "-0.70%", Volume: "2.6M", sparkline: [253, 252, 251, 250.5, 250.2] },
-    { Symbol: "GAIL", Price: "₹140.80", "Change %": "-0.65%", Volume: "1.2M", sparkline: [142, 141, 141, 140.9, 140.8] },
-    { Symbol: "NTPC", Price: "₹180.10", "Change %": "-0.60%", Volume: "2.1M", sparkline: [182, 181, 180.5, 180.2, 180.1] },
-    { Symbol: "JSWSTEEL", Price: "₹720.50", "Change %": "-0.55%", Volume: "1.7M", sparkline: [725, 723, 722, 721, 720.5] },
-    { Symbol: "TATASTEEL", Price: "₹1,190.40", "Change %": "-0.50%", Volume: "1.3M", sparkline: [1200, 1198, 1195, 1192, 1190.4] },
-    { Symbol: "BPCL", Price: "₹520.00", "Change %": "-0.45%", Volume: "1.5M", sparkline: [525, 523, 521, 520.5, 520] },
-    { Symbol: "ADANIPORTS", Price: "₹775.30", "Change %": "-0.40%", Volume: "2.0M", sparkline: [780, 778, 777, 776, 775.3] },
-    { Symbol: "CIPLA", Price: "₹950.20", "Change %": "-0.35%", Volume: "1.1M", sparkline: [955, 953, 952, 951, 950.2] },
-    { Symbol: "HDFC", Price: "₹2,450.50", "Change %": "-0.30%", Volume: "0.9M", sparkline: [2460, 2455, 2452, 2450.8, 2450.5] },
-];
-
+import DynamicTable from "./dynamic-table";
 
 const EquitiesIndicesBox = () => {
+    // --- Data ---
+    const topGainersData = [
+        { Symbol: "INFY", Price: "₹1,543.20", "Change %": "+3.42%", Volume: "1.2M", "52W High/Low": "₹1650 / ₹1210", "P/E": "27.4", "Dividend Yield": "2.1%" },
+        { Symbol: "TCS", Price: "₹3,545.50", "Change %": "+2.81%", Volume: "1.8M", "52W High/Low": "₹3670 / ₹3120", "P/E": "29.2", "Dividend Yield": "1.4%" },
+        { Symbol: "HDFCBANK", Price: "₹1,570.80", "Change %": "+1.92%", Volume: "2.3M", "52W High/Low": "₹1750 / ₹1400", "P/E": "22.8", "Dividend Yield": "1.1%" },
+        { Symbol: "RELIANCE", Price: "₹2,765.30", "Change %": "+1.35%", Volume: "3.1M", "52W High/Low": "₹2920 / ₹2310", "P/E": "23.1", "Dividend Yield": "0.9%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+        { Symbol: "WIPRO", Price: "₹498.20", "Change %": "+1.12%", Volume: "1.9M", "52W High/Low": "₹530 / ₹395", "P/E": "18.4", "Dividend Yield": "2.3%" },
+    ];
+
+    const headers = [
+        "Symbol",
+        "Price",
+        "Change %",
+        "Volume",
+        "52W High/Low",
+        "P/E",
+        "Dividend Yield",
+    ];
+
     return (
-        <WindowLayout title="Equities & Indices" icon={Shapes} >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <DynamicTable title="Exchange's Top Gainers" headers={["Symbol", "Price", "Change %", "Volume"]} data={topGainersData} />
-                <DynamicTable title="Exchange's Top Losers" headers={["Symbol", "Price", "Change %", "Volume"]} data={topLosersData} />
-            </div>
+        <WindowLayout title="Equities & Indices" icon={Shapes} fit={true}>
+            <DynamicTable
+                headers={headers}
+                data={topGainersData}
+                title="Exchange's Equities & Indices"
+                rowsPerPage={10}
+            />
         </WindowLayout>
     );
 };

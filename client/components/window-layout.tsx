@@ -5,9 +5,11 @@ interface WindowLayoutProps {
     title: string;
     icon?: React.ElementType; // ✅ any Lucide or custom icon component
     children: ReactNode;
+    height?: string; // optional height prop
+    fit?: boolean; // if true, height fits content
 }
 
-export default function WindowLayout({ title, icon: Icon, children }: WindowLayoutProps) {
+export default function WindowLayout({ title, icon: Icon, children, height='400px', fit=false }: WindowLayoutProps) {
     const [isMinimized, setIsMinimized] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
 
@@ -17,7 +19,7 @@ export default function WindowLayout({ title, icon: Icon, children }: WindowLayo
 
     return (
         <div
-            className={`${isMinimized ? "h-fit p-2" : "max-h-[400px] overflow-scroll p-3"
+            className={`${isMinimized ? "h-fit p-2" : `${fit ? "h-fit" : `max-h-[${height}]`} overflow-scroll p-3`
                 } col-span-2 bg-[#0A0F1C] border border-gray-800 rounded-2xl w-full text-gray-200 text-[11px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative overflow-hidden ${isMinimized ? "opacity-90" : "scale-100 opacity-100"}`}
         >
 

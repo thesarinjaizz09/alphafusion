@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import {
     Table,
     TableBody,
@@ -8,13 +8,16 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
 
 interface DynamicTableProps {
-    headers: string[];                  // Column headers
-    data: Record<string, any>[];        // Array of row objects
+    headers: string[];
+    data: Record<string, any>[];
     rowKey?: string | ((row: Record<string, any>, idx: number) => string | number);
-    title?: string;                     // Optional table title
-    titlePosition?: "top" | "bottom";   // Optional title position
+    title?: string;
+    titlePosition?: "top" | "bottom";
+    rowsPerPage?: number;
+    enableGlobalSearch?: boolean; // ✅ optional
 }
 
 const DynamicTable: React.FC<DynamicTableProps> = ({
@@ -23,39 +26,149 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     rowKey,
     title,
     titlePosition = "bottom",
+    rowsPerPage = 6,
+    enableGlobalSearch = true,
 }) => {
+    const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
+    const [filters, setFilters] = useState<Record<string, string>>({});
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [search, setSearch] = useState<string>(""); // ✅ global search
+
+    // --- Derived Data: Sorting + Filtering + Search ---
+    const processedData = useMemo(() => {
+        // 1️⃣ Start with a shallow copy
+        let tempData = [...data];
+
+        // 2️⃣ Global search
+        if (search) {
+            const lowerSearch = search.toLowerCase();
+            tempData = tempData.filter((row) =>
+                Object.values(row).some((val) => String(val).toLowerCase().includes(lowerSearch))
+            );
+        }
+
+        // 3️⃣ Column-specific filters
+        tempData = tempData.filter((row) =>
+            headers.every((header) => {
+                const filterValue = filters[header]?.toLowerCase() || "";
+                if (!filterValue) return true;
+                const cellValue = String(row[header]).toLowerCase();
+                return cellValue.includes(filterValue);
+            })
+        );
+
+        // 4️⃣ Sorting
+        if (sortConfig) {
+            const { key, direction } = sortConfig;
+            tempData.sort((a, b) => {
+                const aVal = a[key];
+                const bVal = b[key];
+                const aNum = parseFloat(String(aVal).replace(/[^\d.-]/g, ""));
+                const bNum = parseFloat(String(bVal).replace(/[^\d.-]/g, ""));
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return direction === "asc" ? aNum - bNum : bNum - aNum;
+                }
+                return direction === "asc"
+                    ? String(aVal).localeCompare(String(bVal))
+                    : String(bVal).localeCompare(String(aVal));
+            });
+        }
+
+        return tempData;
+    }, [data, filters, headers, sortConfig, search]);
+
+    // --- Pagination ---
+    const totalPages = Math.ceil(processedData.length / rowsPerPage);
+    const paginatedData = useMemo(() => {
+        const start = (currentPage - 1) * rowsPerPage;
+        return processedData.slice(start, start + rowsPerPage);
+    }, [processedData, currentPage, rowsPerPage]);
+
+    // --- Handlers ---
+    const handleSort = (header: string) => {
+        setSortConfig((prev) =>
+            prev?.key === header
+                ? prev.direction === "asc"
+                    ? { key: header, direction: "desc" }
+                    : null
+                : { key: header, direction: "asc" }
+        );
+    };
+
+    const handleFilterChange = (header: string, value: string) => {
+        setFilters((prev) => ({ ...prev, [header]: value }));
+        setCurrentPage(1);
+    };
+
     const TitleComponent = (
-        <div className="text-center text-accent text-[9px] tracking-wide p-2 font-semibold bg-[#0A0F1C]/60 rounded-t-md">
-            {title}
-        </div>
+        <div className="text-center text-accent text-[9px] p-2 font-medium">{title}</div>
     );
 
-    // Limit rows to max 6, dynamic height calculation
-    const visibleRows = data.slice(0, 6);
+    const rowHeight = 42;
+    const tableHeight = rowsPerPage * rowHeight;
 
     return (
-        <div className="overflow-hidden rounded-lg bg-[#0A0F1C]/80 border border-[#1E293B]/60 backdrop-blur-lg shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 transition-all duration-300 flex flex-col">
-            {/* Title above table if position is top */}
+        <div className="overflow-x-auto rounded-lg backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 flex flex-col w-full border border-gray-800">
             {title && titlePosition === "top" && TitleComponent}
 
-            {/* Scrollable table body */}
-            <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-[#E3B341]/30 scrollbar-track-transparent max-h-[260px]">
-                <Table className="min-w-full text-[10px] table-fixed h-full">
+            {/* ✅ Global Search */}
+            {enableGlobalSearch && (
+                <div className="flex items-center justify-start px-3 py-2">
+                    <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-1 w-full max-w-xs border border-gray-700">
+                        <Search className="w-3 h-3 text-gray-400 mr-2" />
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={search}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                setCurrentPage(1); // reset to first page on search
+                            }}
+                            className="bg-transparent text-gray-200 text-[10px] outline-none w-full"
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* TABLE */}
+            <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: tableHeight + 60 }}>
+                <Table className="min-w-full text-[10px] h-full border-separate border-spacing-0 table-auto">
                     <TableHeader>
-                        <TableRow className="bg-primary border-b border-[#E3B341]/20">
+                        <TableRow className="bg-[#121A2E] sticky top-0 z-30">
                             {headers.map((header) => (
                                 <TableHead
                                     key={header}
-                                    className="text-left text-gray-300 font-semibold text-[10px] tracking-wider"
+                                    className="text-left text-white font-semibold cursor-pointer select-none hover:text-accent transition-all p-2"
                                 >
-                                    {header}
+                                    <div
+                                        onClick={() => handleSort(header)}
+                                        className="flex items-center justify-between w-full whitespace-nowrap"
+                                    >
+                                        <span className="truncate">{header}</span>
+                                        <ArrowUpDown
+                                            className={`w-3 h-3 ml-1 shrink-0 transition-transform ${
+                                                sortConfig?.key === header
+                                                    ? sortConfig.direction === "asc"
+                                                        ? "rotate-180 text-accent"
+                                                        : "text-accent"
+                                                    : "text-gray-500"
+                                            }`}
+                                        />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={filters[header] || ""}
+                                        onChange={(e) => handleFilterChange(header, e.target.value)}
+                                        placeholder="filter..."
+                                        className="w-full text-[9px] mt-1 bg-transparent border-b border-gray-700 focus:border-accent outline-none text-gray-300 placeholder-gray-500"
+                                    />
                                 </TableHead>
                             ))}
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
-                        {data.map((row, idx) => (
+                        {paginatedData.map((row, idx) => (
                             <TableRow
                                 key={
                                     rowKey
@@ -64,40 +177,34 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                             : row[rowKey] ?? idx
                                         : idx
                                 }
-                                className={`text-white-800 text-[10px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
-                                    } hover:bg-sidebar-accent transition-colors`}
+                                className={`text-white text-[10px] ${
+                                    idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
+                                } hover:bg-[#1B2B47] transition-colors`}
                             >
                                 {headers.map((header) => {
                                     const value = row[header];
-                                    let colorClass = "text-gray-300";
+                                    let colorClass = "";
+                                    const isNumber = /\d/.test(String(value));
 
-                                    // Auto color for + / - values
                                     if (typeof value === "string" && (value.startsWith("+") || value.startsWith("-"))) {
-                                        colorClass = value.startsWith("+") ? "text-green-400 font-semibold" : "text-red-400 font-semibold";
+                                        colorClass = value.startsWith("+")
+                                            ? "text-green-400 font-semibold"
+                                            : "text-red-400 font-semibold";
                                     }
 
-                                    // Keep existing BUY/HOLD/SELL coloring logic
                                     if (typeof value === "string" && ["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
-                                        colorClass = value.toUpperCase() === "BUY"
-                                            ? "text-green-400 font-semibold"
-                                            : value.toUpperCase() === "SELL"
+                                        colorClass =
+                                            value.toUpperCase() === "BUY"
+                                                ? "text-green-400 font-semibold"
+                                                : value.toUpperCase() === "SELL"
                                                 ? "text-red-400 font-semibold"
                                                 : "text-yellow-400 font-semibold";
                                     }
 
-                                    // const alignRight =
-                                    //     typeof value === "number" ||
-                                    //     (typeof value === "string" && /\d/.test(value));
-
-                                    const alignRight =
-                                        typeof value === "number" ||
-                                        /^\d+(\.\d+)?%?$/.test(value);
-
                                     return (
                                         <TableCell
                                             key={header}
-                                            className={`${colorClass} ${alignRight ? "text-right" : "text-left"
-                                                }`}
+                                            className={`${colorClass} ${isNumber ? "text-right" : "text-left"} px-2 py-2 max-w-[200px] truncate`}
                                         >
                                             {value}
                                         </TableCell>
@@ -109,7 +216,29 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 </Table>
             </div>
 
-            {/* Title below table if position is bottom */}
+            {/* PAGINATION */}
+            <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
+                <button
+                    className="flex items-center gap-1 text-accent disabled:text-gray-600"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                >
+                    <ChevronLeft className="w-3 h-3" /> Prev
+                </button>
+
+                <div className="text-gray-400">
+                    Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
+                </div>
+
+                <button
+                    className="flex items-center gap-1 text-accent disabled:text-gray-600"
+                    disabled={currentPage === totalPages || totalPages === 0}
+                    onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                >
+                    Next <ChevronRight className="w-3 h-3" />
+                </button>
+            </div>
+
             {title && titlePosition === "bottom" && TitleComponent}
         </div>
     );

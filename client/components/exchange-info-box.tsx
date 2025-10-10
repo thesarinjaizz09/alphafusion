@@ -122,9 +122,9 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <DynamicTable title="Exchange Insights" headers={["Attribute", "Value"]} data={leftTableData} />
-                <DynamicTable title="Exchange Insights" headers={["Attribute", "Value"]} data={rightTableData} />
-                <DynamicTable title="Exchange Insights" headers={["Attribute", "Value"]} data={bottomTableData} />
+                <DynamicTable title="Exchange's Insights" headers={["Attribute", "Value"]} data={leftTableData} />
+                <DynamicTable title="Exchange's Insights" headers={["Attribute", "Value"]} data={rightTableData} />
+                <DynamicTable title="Exchange's Insights" headers={["Attribute", "Value"]} data={bottomTableData} />
             </div>
         </WindowLayout>
     );

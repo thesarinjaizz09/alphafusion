@@ -50,7 +50,7 @@ export function NavMain({
               <SidebarMenuButton asChild tooltip={item.title}>
                 <a href={item.url}>
                   <item.icon />
-                  <span className="text-[11px] ">{item.title}</span>
+                  <span className="text-[12px] ">{item.title}</span>
                 </a>
               </SidebarMenuButton>
               {item.items?.length ? (
@@ -77,7 +77,7 @@ export function NavMain({
                               <SidebarMenuSubButton asChild isActive={subItem.isActive}>
                                 <ContextMenuTrigger className="w-full">
 
-                                  <span className="w-full flex items-center justify-between text-[10px]">{subItem.title}
+                                  <span className="w-full flex items-center justify-between text-[11px]">{subItem.title}
                                     <AppWindow className="w-3" />
                                   </span>
                                 </ContextMenuTrigger>
