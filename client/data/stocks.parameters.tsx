@@ -1,6 +1,7 @@
 import { ExchangeInfoType } from "@/types/fusion.types";
 
 const exchanges = [
+    { value: "Global", label: "Global - All Markets" },
     { value: "NASDAQ", label: "NASDAQ - National Association of Securities Dealers Automated Quotations" },
     { value: "NYSE", label: "NYSE - New York Stock Exchange" },
     { value: "LSE", label: "LSE - London Stock Exchange" },

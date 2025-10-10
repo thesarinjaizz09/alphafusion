@@ -9,7 +9,7 @@ import MoversLosersBox from '@/components/movers-losers'
 import WatchlistBox from '@/components/watchlist-box'
 import EquitiesIndicesBox from '@/components/equities-indices-box'
 import NewsBox from '@/components/news-box'
-import SocialSentimentBoard from '@/components/social-sentiment-board'
+import GlobalMarketMap from '@/components/global-market-map'
 import CandlestickPanel from '@/components/candlestick-panel'
 
 const EquiFusionPage = () => {
@@ -33,6 +33,7 @@ const EquiFusionPage = () => {
                     <TradesharkSuggestions />
                     <WatchlistBox />
                     <NewsBox />
+                    <GlobalMarketMap />
                 </div>
             </div>
 
