@@ -1,4 +1,4 @@
-# ![AlphaFusion Logo](images/Storx.final.png) AlphaFusion™ – Professional Market Intelligence Platform
+# AlphaFusion™ – Professional Market Intelligence Platform
 
 ![License](https://img.shields.io/badge/License-Proprietary-red) ![Status](https://img.shields.io/badge/Status-Active-brightgreen) ![Users](https://img.shields.io/badge/Users-Professional-blue)
 
@@ -153,8 +153,8 @@ AlphaFusion™ is a professional-grade market intelligence and trading platform 
 
 > Below are some screenshots of AlphaFusion™ dashboards and modules. The path `x` is used as the root folder for images.
 
-<p align="center">
-  <img src="images/equities.png" alt="FusionOne Dashboard" width="600"/>
+<p align="left">
+  <img src="images/equities.jpg" alt="FusionOne Dashboard" width="600"/>
   <br>
   <em>EquiFusion – Equities Market Overview Dashboard</em>
 </p>
