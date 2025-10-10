@@ -289,13 +289,12 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
                 <DialogContent className="bg-[#0B1220] text-gray-200 max-w-3xl">
                     <DialogHeader>
                         <DialogTitle className="flex justify-between items-start">
-                            <span className="text-md">{selectedNews?.Headline}</span>
+                            <span className="text-sm">{selectedNews?.Headline}</span>
                         </DialogTitle>
                     </DialogHeader>
                     {selectedNews && (
-                        <div>
-
-                            <div className="flex flex-wrap gap-3 text-[11px] md:text-xs mb-5 items-center">
+                        <div className="flex flex-col">
+                            <div className="flex flex-wrap gap-3 text-[10px] mb-5 items-center">
                                 {/* Time */}
                                 <span className="flex items-center gap-2 px-2 py-1 rounded-md bg-white/3 text-blue-300">
                                     <Clock className="w-4 h-4" />

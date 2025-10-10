@@ -118,9 +118,9 @@ const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) =
             className="rounded-lg border border-gray-800 p-3 bg-[#10182A]/80 hover:bg-[#16223B]/80 transition-all"
           >
             <div className="flex justify-between items-center mb-2">
-              <span className="text-white text-[11px] font-semibold">{item.ticker}</span>
+              <span className="text-white text-[10px] font-semibold">{item.ticker}</span>
               <span
-                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${sentimentColor(
+                className={`text-[9px] text-black font-semibold px-2 py-0.5 rounded-full ${sentimentColor(
                   item.score
                 )}`}
               >

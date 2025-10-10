@@ -31,7 +31,6 @@ const EquiFusionPage = () => {
                     <TradesharkSuggestions />
                     <WatchlistBox />
                     <NewsBox />
-                    <SocialSentimentBoard />
                 </div>
             </div>
 
