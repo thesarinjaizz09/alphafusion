@@ -10,6 +10,7 @@ import WatchlistBox from '@/components/watchlist-box'
 import EquitiesIndicesBox from '@/components/equities-indices-box'
 import NewsBox from '@/components/news-box'
 import SocialSentimentBoard from '@/components/social-sentiment-board'
+import CandlestickPanel from '@/components/candlestick-panel'
 
 const EquiFusionPage = () => {
     return (
@@ -25,6 +26,7 @@ const EquiFusionPage = () => {
                     <ExchangeInfoBox selectedExchange='NASDAQ' />
                     <MoversLosersBox />
                     <EquitiesIndicesBox />
+                    <CandlestickPanel />
                 </div>
                 {/* COL 2 */}
                 <div className="flex flex-col gap-3">
