@@ -8,6 +8,8 @@ import TradesharkSuggestions from '@/components/tradeshark-suggestions'
 import MoversLosersBox from '@/components/movers-losers'
 import WatchlistBox from '@/components/watchlist-box'
 import EquitiesIndicesBox from '@/components/equities-indices-box'
+import NewsBox from '@/components/news-box'
+import SocialSentimentBoard from '@/components/social-sentiment-board'
 
 const EquiFusionPage = () => {
     return (
@@ -18,16 +20,18 @@ const EquiFusionPage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 auto-rows-min">
-                {/* COL 1 EXCHANGE & MOVERS INSIGHTS */}
+                {/* COL 1 */}
                 <div className="flex flex-col col-span-2 gap-3">
                     <ExchangeInfoBox selectedExchange='NASDAQ' />
                     <MoversLosersBox />
                     <EquitiesIndicesBox />
                 </div>
-                {/* COL 2 TRADESHARK & HEATMAP */}
+                {/* COL 2 */}
                 <div className="flex flex-col gap-3">
                     <TradesharkSuggestions />
                     <WatchlistBox />
+                    <NewsBox />
+                    <SocialSentimentBoard />
                 </div>
             </div>
 

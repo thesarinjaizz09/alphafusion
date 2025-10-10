@@ -60,7 +60,7 @@ const EquitiesIndicesBox = () => {
                 headers={headers}
                 data={topGainersData}
                 title="Exchange's Equities & Indices"
-                rowsPerPage={10}
+                rowsPerPage={11}
             />
         </WindowLayout>
     );
