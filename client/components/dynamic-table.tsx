@@ -146,13 +146,12 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                     >
                                         <span className="truncate">{header}</span>
                                         <ArrowUpDown
-                                            className={`w-3 h-3 ml-1 shrink-0 transition-transform ${
-                                                sortConfig?.key === header
+                                            className={`w-3 h-3 ml-1 shrink-0 transition-transform ${sortConfig?.key === header
                                                     ? sortConfig.direction === "asc"
                                                         ? "rotate-180 text-accent"
                                                         : "text-accent"
                                                     : "text-gray-500"
-                                            }`}
+                                                }`}
                                         />
                                     </div>
                                     <input
@@ -177,9 +176,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                             : row[rowKey] ?? idx
                                         : idx
                                 }
-                                className={`text-white text-[10px] ${
-                                    idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
-                                } hover:bg-[#1B2B47] transition-colors`}
+                                className={`text-white text-[10px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
+                                    } hover:bg-[#1B2B47] transition-colors`}
                             >
                                 {headers.map((header) => {
                                     const value = row[header];
@@ -197,8 +195,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                             value.toUpperCase() === "BUY"
                                                 ? "text-green-400 font-semibold"
                                                 : value.toUpperCase() === "SELL"
-                                                ? "text-red-400 font-semibold"
-                                                : "text-yellow-400 font-semibold";
+                                                    ? "text-red-400 font-semibold"
+                                                    : "text-yellow-400 font-semibold";
                                     }
 
                                     return (
@@ -217,27 +215,31 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
             </div>
 
             {/* PAGINATION */}
-            <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
-                <button
-                    className="flex items-center gap-1 text-accent disabled:text-gray-600"
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                >
-                    <ChevronLeft className="w-3 h-3" /> Prev
-                </button>
+            {/* PAGINATION (only show if more than one page) */}
+            {processedData.length > rowsPerPage && (
+                <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
+                    <button
+                        className="flex items-center gap-1 text-accent disabled:text-gray-600"
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                    >
+                        <ChevronLeft className="w-3 h-3" /> Prev
+                    </button>
 
-                <div className="text-gray-400">
-                    Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
+                    <div className="text-gray-400">
+                        Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
+                    </div>
+
+                    <button
+                        className="flex items-center gap-1 text-accent disabled:text-gray-600"
+                        disabled={currentPage === totalPages || totalPages === 0}
+                        onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                    >
+                        Next <ChevronRight className="w-3 h-3" />
+                    </button>
                 </div>
+            )}
 
-                <button
-                    className="flex items-center gap-1 text-accent disabled:text-gray-600"
-                    disabled={currentPage === totalPages || totalPages === 0}
-                    onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-                >
-                    Next <ChevronRight className="w-3 h-3" />
-                </button>
-            </div>
 
             {title && titlePosition === "bottom" && TitleComponent}
         </div>
