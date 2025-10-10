@@ -1,6 +1,6 @@
 'use client'
 import DynamicTable from "./dynamic-table";
-import { SquarePercent } from "lucide-react";
+import { Shapes, SquarePercent } from "lucide-react";
 import WindowLayout from "./window-layout";
 
 const topGainersData = [
@@ -40,9 +40,9 @@ const topLosersData = [
 ];
 
 
-const MoversLosersBox = () => {
+const EquitiesIndicesBox = () => {
     return (
-        <WindowLayout title="Movers Insights" icon={SquarePercent} >
+        <WindowLayout title="Equities & Indices" icon={Shapes} >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <DynamicTable title="Exchange's Top Gainers" headers={["Symbol", "Price", "Change %", "Volume"]} data={topGainersData} />
                 <DynamicTable title="Exchange's Top Losers" headers={["Symbol", "Price", "Change %", "Volume"]} data={topLosersData} />
@@ -51,4 +51,4 @@ const MoversLosersBox = () => {
     );
 };
 
-export default MoversLosersBox;
+export default EquitiesIndicesBox;

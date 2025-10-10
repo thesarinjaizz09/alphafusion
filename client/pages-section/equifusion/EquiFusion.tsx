@@ -6,27 +6,32 @@ import ExchangeInfoBox from '@/components/exchange-info-box'
 import GlobalIndicesSummary from '@/components/global-indices-summary'
 import TradesharkSuggestions from '@/components/tradeshark-suggestions'
 import MoversLosersBox from '@/components/movers-losers'
-import MarketOrbitCloud from '@/components/market-orbit-cloud'
+import WatchlistBox from '@/components/watchlist-box'
+import EquitiesIndicesBox from '@/components/equities-indices-box'
 
 const EquiFusionPage = () => {
     return (
-        <div className="flex flex-1 flex-col gap-4 p-4 bg-[#050914] text-[#F5F6FA] min-h-screen">
+        <div className="flex flex-1 flex-col gap-3 p-4 bg-[#050914] text-[#F5F6FA] min-h-screen">
             {/* TOP SUMMARY BOX */}
             <div className="grid grid-cols-1">
                 <GlobalIndicesSummary selectedExchange="NASDAQ" />
             </div>
 
-            {/* ROW 1 EXCHANGE & TRADESHARK INSIGHTS */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <ExchangeInfoBox selectedExchange='NASDAQ' />
-                <TradesharkSuggestions selectedExchange="NASDAQ" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 auto-rows-min">
+                {/* COL 1 EXCHANGE & MOVERS INSIGHTS */}
+                <div className="flex flex-col col-span-2 gap-3">
+                    <ExchangeInfoBox selectedExchange='NASDAQ' />
+                    <MoversLosersBox />
+                    <EquitiesIndicesBox />
+                </div>
+                {/* COL 2 TRADESHARK & HEATMAP */}
+                <div className="flex flex-col gap-3">
+                    <TradesharkSuggestions />
+                    <WatchlistBox />
+                </div>
             </div>
 
-            {/* ROW 2 MARKET MOVERS & HEATMAP */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <MoversLosersBox selectedExchange='NASDAQ' />
-                <MarketOrbitCloud />
-            </div>
+
         </div >
     )
 }

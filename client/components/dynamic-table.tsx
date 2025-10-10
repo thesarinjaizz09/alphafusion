@@ -25,30 +25,28 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     titlePosition = "bottom",
 }) => {
     const TitleComponent = (
-        <div className="text-center text-accent text-[9px] p-2 font-medium">
+        <div className="text-center text-accent text-[9px] tracking-wide p-2 font-semibold bg-[#0A0F1C]/60 rounded-t-md">
             {title}
         </div>
     );
 
     // Limit rows to max 6, dynamic height calculation
-    const visibleRows = data.slice(0, 7);
-    const rowHeight = 42; // Approx height per row
-    const tableHeight = Math.min(visibleRows.length, 7) * rowHeight;
+    const visibleRows = data.slice(0, 6);
 
     return (
-        <div className="overflow-x-auto rounded-lg backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 flex flex-col">
+        <div className="overflow-hidden rounded-lg bg-[#0A0F1C]/80 border border-[#1E293B]/60 backdrop-blur-lg shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 transition-all duration-300 flex flex-col">
             {/* Title above table if position is top */}
             {title && titlePosition === "top" && TitleComponent}
 
             {/* Scrollable table body */}
-            <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: tableHeight }}>
+            <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-[#E3B341]/30 scrollbar-track-transparent max-h-[260px]">
                 <Table className="min-w-full text-[10px] table-fixed h-full">
                     <TableHeader>
-                        <TableRow className="bg-primary sticky top-0 z-30">
+                        <TableRow className="bg-primary border-b border-[#E3B341]/20">
                             {headers.map((header) => (
                                 <TableHead
                                     key={header}
-                                    className="text-left text-white-900"
+                                    className="text-left text-gray-300 font-semibold text-[10px] tracking-wider"
                                 >
                                     {header}
                                 </TableHead>
@@ -71,7 +69,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                             >
                                 {headers.map((header) => {
                                     const value = row[header];
-                                    let colorClass = "";
+                                    let colorClass = "text-gray-300";
 
                                     // Auto color for + / - values
                                     if (typeof value === "string" && (value.startsWith("+") || value.startsWith("-"))) {
@@ -87,8 +85,20 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                                 : "text-yellow-400 font-semibold";
                                     }
 
+                                    // const alignRight =
+                                    //     typeof value === "number" ||
+                                    //     (typeof value === "string" && /\d/.test(value));
+
+                                    const alignRight =
+                                        typeof value === "number" ||
+                                        /^\d+(\.\d+)?%?$/.test(value);
+
                                     return (
-                                        <TableCell key={header} className={colorClass}>
+                                        <TableCell
+                                            key={header}
+                                            className={`${colorClass} ${alignRight ? "text-right" : "text-left"
+                                                }`}
+                                        >
                                             {value}
                                         </TableCell>
                                     );
