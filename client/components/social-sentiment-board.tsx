@@ -147,27 +147,29 @@ const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) =
       </div>
 
       {/* 📄 Pagination */}
-      <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90 mt-3">
-        <button
-          className="flex items-center gap-1 text-accent disabled:text-gray-600"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-        >
-          <ChevronLeft className="w-3 h-3" /> Prev
-        </button>
+      {processed.length > itemsPerPage && (
+        <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90 mt-3">
+          <button
+            className="flex items-center gap-1 text-accent disabled:text-gray-600"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          >
+            <ChevronLeft className="w-3 h-3" /> Prev
+          </button>
 
-        <div className="text-gray-400">
-          Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
+          <div className="text-gray-400">
+            Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
+          </div>
+
+          <button
+            className="flex items-center gap-1 text-accent disabled:text-gray-600"
+            disabled={currentPage === totalPages || totalPages === 0}
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+          >
+            Next <ChevronRight className="w-3 h-3" />
+          </button>
         </div>
-
-        <button
-          className="flex items-center gap-1 text-accent disabled:text-gray-600"
-          disabled={currentPage === totalPages || totalPages === 0}
-          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-        >
-          Next <ChevronRight className="w-3 h-3" />
-        </button>
-      </div>
+      )}
 
     </WindowLayout>
   );
