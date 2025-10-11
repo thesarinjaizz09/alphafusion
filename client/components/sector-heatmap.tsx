@@ -180,209 +180,186 @@ const defaultData: Stock[] = [
 ];
 
 // Component for individual stock heatmap within a sector
-const SectorStockHeatmap: React.FC<{ sector: string; stocks: Stock[] }> = ({ sector, stocks }) => {
+const SectorStockHeatmap: React.FC<{ sector: string; stocks: Stock[] }> = ({
+  sector,
+  stocks
+}) => {
   const stockSvgRef = useRef<SVGSVGElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const stocksPerPage = 12;
+  const totalPages = Math.ceil(stocks.length / stocksPerPage);
+  const paginatedStocks = stocks.slice(
+    (currentPage - 1) * stocksPerPage,
+    currentPage * stocksPerPage
+  );
+
+  const cellHeight = 24;
+  const cellPadding = 2;
 
   useEffect(() => {
-    if (!stockSvgRef.current || stocks.length === 0) return;
+    if (!stockSvgRef.current || paginatedStocks.length === 0) return;
     const parent = stockSvgRef.current.parentElement;
     if (!parent) return;
 
     const width = parent.clientWidth;
-    const height = Math.min(200, Math.max(100, stocks.length * 25 + 40));
+    const height = paginatedStocks.length / 2 * (cellHeight + cellPadding * 2) + cellPadding;
 
-    const svg = d3.select(stockSvgRef.current).attr("width", width).attr("height", height);
+    const svg = d3.select(stockSvgRef.current)
+      .attr("width", width)
+      .attr("height", height);
     svg.selectAll("*").remove();
 
-    // Color scale for individual stocks
     const colorScale = d3.scaleLinear<string>()
       .domain([-5, -2.5, 0, 2.5, 5])
-      .range([
-        "#dc2626", // Deep red for strong negative
-        "#f87171", // Light red for moderate negative
-        "#1f2937", // Dark gray for neutral
-        "#34d399", // Light green for moderate positive
-        "#059669"  // Deep green for strong positive
-      ]);
+      .range(["#dc2626", "#f87171", "#1f2937", "#34d399", "#059669"]);
 
-    const cellHeight = 20;
-    const cellPadding = 2;
-    const cellWidth = (width - cellPadding * 2) / 2; // Two columns
-
-    // Create tooltip for individual stocks
-    const stockTooltip = d3
+    // Tooltip like sector heatmap
+    const tooltip = d3
       .select(parent)
       .append("div")
       .attr("class", "stock-tooltip")
       .style("position", "absolute")
       .style("background", "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)")
       .style("color", "#f8fafc")
-      .style("padding", "8px")
+      .style("padding", "10px")
       .style("border", "1px solid #334155")
-      .style("border-radius", "8px")
-      .style("box-shadow", "0 10px 15px -3px rgba(0, 0, 0, 0.3)")
+      .style("border-radius", "12px")
+      .style("box-shadow", "0 20px 25px -5px rgba(0,0,0,0.3),0 10px 10px -5px rgba(0,0,0,0.1)")
       .style("pointer-events", "none")
       .style("opacity", 0)
       .style("font-size", "9px")
       .style("font-family", "Inter, system-ui, sans-serif")
+      .style("min-width", "220px")
+      .style("backdrop-filter", "blur(8px)")
       .style("z-index", "1000");
 
-    stocks.forEach((stock, i) => {
+    paginatedStocks.forEach((stock, i) => {
       const col = i % 2;
       const row = Math.floor(i / 2);
-      const x = cellPadding + col * (cellWidth + cellPadding);
+      const x = cellPadding + col * (width / 2 - cellPadding);
       const y = cellPadding + row * (cellHeight + cellPadding);
 
-      const g = svg.append("g").attr("transform", `translate(${x},${y})`);
-
-      // Stock cell
-      const rect = g.append("rect")
-        .attr("width", cellWidth)
-        .attr("height", cellHeight)
-        .attr("rx", 4)
-        .attr("ry", 4)
-        .style("fill", colorScale(stock.change))
-        .style("stroke", "#374151")
-        .style("stroke-width", "1px")
+      const g = svg.append("g")
+        .attr("transform", `translate(${x},${y})`)
         .style("cursor", "pointer");
 
-      // Stock symbol
+      g.append("rect")
+        .attr("width", width / 2 - cellPadding)
+        .attr("height", cellHeight)
+        .attr("rx", 6)
+        .attr("ry", 6)
+        .style("fill", colorScale(stock.change))
+        .style("stroke", "#374151")
+        .style("stroke-width", "1px");
+
       g.append("text")
         .attr("x", 8)
         .attr("y", cellHeight / 2 + 3)
         .attr("fill", "#f8fafc")
         .attr("font-size", "9px")
         .attr("font-weight", "600")
-        .attr("font-family", "Inter, system-ui, sans-serif")
         .text(stock.symbol);
 
-      // Change percentage
       g.append("text")
-        .attr("x", cellWidth - 8)
+        .attr("x", width / 2 - 10)
         .attr("y", cellHeight / 2 + 3)
         .attr("text-anchor", "end")
         .attr("fill", stock.change >= 0 ? "#10b981" : "#ef4444")
         .attr("font-size", "8px")
         .attr("font-weight", "700")
-        .attr("font-family", "Inter, system-ui, sans-serif")
         .text(`${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%`);
 
-      // Add tooltip functionality
-      rect
-        .on("mouseover", (event) => {
-          stockTooltip
-            .html(`
-              <div style="margin-bottom: 8px;">
-                <div style="font-size: 10px; font-weight: 600; color: #fbbf24; margin-bottom: 4px;">
-                  ${stock.symbol}
-                </div>
-                <div style="font-size: 9px; color: #94a3b8;">
-                  ${sector} Sector
-                </div>
-              </div>
-              
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <div>
-                  <div style="font-size: 9px; color: #94a3b8; margin-bottom: 2px;">Change</div>
-                  <div style="font-size: 9px; font-weight: 700; color: ${stock.change >= 0 ? '#10b981' : '#ef4444'};">
-                    ${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%
-                  </div>
-                </div>
-                <div>
-                  <div style="font-size: 9px; color: #94a3b8; margin-bottom: 2px;">Price</div>
-                  <div style="font-size: 9px; font-weight: 600; color: #f8fafc;">
-                    ₹${stock.price?.toFixed(2) || 'N/A'}
-                  </div>
-                </div>
-              </div>
-              
-              <div style="display: flex; justify-content: space-between;">
-                <div>
-                  <div style="font-size: 9px; color: #94a3b8; margin-bottom: 2px;">Volume</div>
-                  <div style="font-size: 9px; font-weight: 600; color: #f8fafc;">
-                    ${stock.volume.toFixed(1)}M
-                  </div>
-                </div>
-                <div>
-                  <div style="font-size: 9px; color: #94a3b8; margin-bottom: 2px;">Market Cap</div>
-                  <div style="font-size: 9px; font-weight: 600; color: #f8fafc;">
-                    ₹${stock.marketCap?.toFixed(1) || 'N/A'}T
-                  </div>
-                </div>
-              </div>
-            `)
-            .style("opacity", 1);
+      g.on("mouseover", (event) => {
+        tooltip
+          .html(`
+            <div style="margin-bottom: 8px;">
+              <div style="font-size: 10px; font-weight: 600; color: #fbbf24; margin-bottom: 4px;">${stock.symbol}</div>
+              <div style="font-size: 9px; color: #94a3b8;">${sector} Sector</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px; border-top: 1px solid #334155; padding-top: 12px;">
+              <div style="font-size:9px; color:#94a3b8;">Price</div>
+              <div style="font-size:9px; font-weight:600; color:#f8fafc;">₹${stock.price?.toFixed(2) || 'N/A'}</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <div style="font-size:9px; color:#94a3b8;">Change</div>
+              <div style="font-size:9px; font-weight:700; color:${stock.change >= 0 ? '#10b981' : '#ef4444'};">${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%</div>
+            </div>
+            <div style="display:flex; justify-content:space-between;margin-bottom:4px;">
+              <div style="font-size:9px; color:#94a3b8;">Volume</div>
+              <div style="font-size:9px; font-weight:600; color:#f8fafc;">${stock.volume.toFixed(1)}M</div>
+            </div>
 
-          // Position tooltip
-          const tooltipWidth = 200;
-          const tooltipHeight = 120;
-          const containerRect = parent.getBoundingClientRect();
-          const mouseX = event.clientX;
-          const mouseY = event.clientY;
+            <div style="display:flex; justify-content:space-between;">
+              <div style="font-size:9px; color:#94a3b8;">Market Cap</div>
+              <div style="font-size:9px; font-weight:600; color:#f8fafc;">${stock.marketCap?.toFixed(1)}M</div>
+            </div>
+          `)
+          .style("opacity", 1);
 
-          const relativeX = mouseX - containerRect.left;
-          const relativeY = mouseY - containerRect.top;
+        const containerRect = parent.getBoundingClientRect();
+        const tooltipWidth = 220;
+        const tooltipHeight = 120;
+        const mouseY = event.clientY - containerRect.top;
 
-          let tooltipX = relativeX + 15;
-          let tooltipY = relativeY - 10;
+        const tooltipX = Math.max(10, (containerRect.width - tooltipWidth) / 2);
+        let tooltipY = mouseY - tooltipHeight / 2;
+        if (tooltipY < 0) tooltipY = 10;
+        if (tooltipY + tooltipHeight > containerRect.height) tooltipY = containerRect.height - tooltipHeight - 10;
 
-          // Keep tooltip within bounds
-          if (tooltipX + tooltipWidth > parent.clientWidth) {
-            tooltipX = relativeX - tooltipWidth - 15;
-          }
-          if (tooltipY + tooltipHeight > parent.clientHeight) {
-            tooltipY = relativeY - tooltipHeight - 10;
-          }
-          if (tooltipY < 0) {
-            tooltipY = 10;
-          }
-          if (tooltipX < 0) {
-            tooltipX = 10;
-          }
-
-          stockTooltip
-            .style("left", tooltipX + "px")
-            .style("top", tooltipY + "px");
-        })
-        .on("mouseout", () => {
-          stockTooltip.style("opacity", 0);
-        });
+        tooltip.style("left", tooltipX + "px").style("top", tooltipY + "px");
+      }).on("mouseout", () => {
+        tooltip.style("opacity", 0);
+      });
     });
 
-    // Cleanup function
-    return () => {
-      stockTooltip.remove();
-    };
-  }, [stocks, sector]);
-
-  if (stocks.length === 0) {
-    return (
-      <div className="text-[8px] text-gray-400 text-center py-4">
-        No stocks available for {sector} sector
-      </div>
-    );
-  }
+    return () => tooltip.remove();
+  }, [paginatedStocks, sector]);
 
   return (
     <div className="w-full">
-      <div className="text-[9px] text-gray-400 mb-2">
-        {stocks.length} stocks in {sector} sector
-      </div>
-      <div className="w-full overflow-auto">
+      <div ref={containerRef} className="w-full overflow-auto" style={{ height: paginatedStocks.length / 2 * (cellHeight + cellPadding * 2) + cellPadding }}>
         <svg ref={stockSvgRef} className="w-full"></svg>
       </div>
+
+      {/* Pagination below the heatmap */}
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center text-[9px] text-gray-300 px-3 py-1 mt-2">
+          <button
+            className="text-accent disabled:text-gray-600"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          >
+            Prev
+          </button>
+          <span className="text-gray-400">
+            Page <span className="text-accent">{currentPage}</span> of {totalPages}
+          </span>
+          <button
+            className="text-accent disabled:text-gray-600"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
 const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, sectorsPerPage = 20 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
   const [hoveredSector, setHoveredSector] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [layoutConfig, setLayoutConfig] = useState({ cols: 5, rows: 4, itemsPerPage: 20 });
+  const [layoutConfig, setLayoutConfig] = useState({ cols: 5, rows: 4, itemsPerPage: sectorsPerPage });
+  const [dimensions, setDimensions] = useState({ width: 400, height: 300 });
 
-  // Process sectors with dynamic pagination
+  // Process sectors with pagination
   const { sectorMap, totalPages, paginatedSectors } = useMemo(() => {
     const processedSectorMap = d3
       .rollups(
@@ -405,114 +382,81 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, secto
     const endIndex = startIndex + layoutConfig.itemsPerPage;
     const paginatedSectors = processedSectorMap.slice(startIndex, endIndex);
 
-    return {
-      sectorMap: processedSectorMap,
-      totalPages,
-      paginatedSectors
-    };
+    return { sectorMap: processedSectorMap, totalPages, paginatedSectors };
   }, [data, currentPage, layoutConfig.itemsPerPage]);
 
+  // Track container size
   useEffect(() => {
-    if (!svgRef.current) return;
-    const parent = svgRef.current.parentElement;
-    if (!parent) return;
-
-    const width = parent.clientWidth;
-    const height = 400;
-
-    // Add resize observer to handle window layout changes
-    const resizeObserver = new ResizeObserver(() => {
-      // Trigger re-render when container size changes
-      if (svgRef.current) {
-        const newWidth = parent.clientWidth;
-        if (Math.abs(newWidth - width) > 10) { // Only re-render if significant change
-          // Force re-render by updating a dummy state or calling the effect again
-          setTimeout(() => {
-            if (svgRef.current) {
-              const svg = d3.select(svgRef.current);
-              svg.selectAll("*").remove();
-              // Re-trigger the effect by updating layout config
-              setLayoutConfig(prev => ({ ...prev }));
-            }
-          }, 100);
-        }
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setDimensions({ width, height });
       }
     });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
-    resizeObserver.observe(parent);
+  // Render D3 Heatmap whenever size or data changes
+  useEffect(() => {
+    if (!svgRef.current) return;
+    const svg = d3.select(svgRef.current);
+    const parent = containerRef.current;
+    if (!parent) return;
 
-    // Calculate dynamic layout
+    svg.selectAll("*").remove();
+    const width = dimensions.width;
+    const height = dimensions.height;
+
+    // Layout calculations
     const maxRows = 5;
-    const minCellWidth = 70;
-    const minCellHeight = 50;
+    const minCellWidth = 50;
+    const minCellHeight = 65;
     const cellPadding = 3;
-    const legendSpace = 10; // Minimal space since all legends are removed
+    const legendSpace = 10;
+    
 
-    // Calculate optimal columns based on available width
     const availableWidth = width - cellPadding * 2;
     const cols = Math.max(2, Math.floor(availableWidth / (minCellWidth + cellPadding)));
-
-    // Calculate items per page based on max rows
     const itemsPerPage = maxRows * cols;
 
-    // Update layout config if it changed
     const newLayoutConfig = { cols, rows: maxRows, itemsPerPage };
-    if (JSON.stringify(newLayoutConfig) !== JSON.stringify(layoutConfig)) {
-      setLayoutConfig(newLayoutConfig);
-    }
+    if (JSON.stringify(newLayoutConfig) !== JSON.stringify(layoutConfig)) setLayoutConfig(newLayoutConfig);
 
-    const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
-    svg.selectAll("*").remove();
-
-    // Professional color scheme with gradients
+    // Color scale
     const colorScale = d3.scaleLinear<string>()
       .domain([-5, -2.5, 0, 2.5, 5])
-      .range([
-        "#dc2626", // Deep red for strong negative
-        "#f87171", // Light red for moderate negative
-        "#1f2937", // Dark gray for neutral
-        "#34d399", // Light green for moderate positive
-        "#059669"  // Deep green for strong positive
-      ]);
+      .range(["#dc2626", "#f87171", "#1f2937", "#34d399", "#059669"]);
 
-    // Use paginated sectors with dynamic layout
     const sectorCount = paginatedSectors.length;
     const actualRows = Math.min(maxRows, Math.ceil(sectorCount / cols));
-
-    // Calculate cell dimensions with constraints
-    const cellWidth = Math.max(minCellWidth, (availableWidth - cellPadding * (cols - 1)) / cols);
+    // const cellWidth = Math.max(minCellWidth, (availableWidth - cellPadding * (cols - 1)) / cols);
+    // const cellWidth = minCellWidth
     const availableHeight = height - legendSpace;
-    const cellHeight = Math.max(minCellHeight, (availableHeight - cellPadding * (actualRows - 1)) / actualRows);
+    // const cellHeight = Math.max(minCellHeight, (availableHeight - cellPadding * (actualRows - 1)) / actualRows);
+    const cellWidth = Math.max(minCellWidth, Math.max((availableWidth - cellPadding * (cols - 1)) / cols, minCellWidth));
+    const cellHeight = Math.max(minCellHeight, Math.min((availableHeight - cellPadding * (actualRows - 1)) / actualRows, minCellHeight));
 
-    // Create gradient definitions
+
+    // Gradients
     const defs = svg.append("defs");
-
-    // Create gradients for each color
     const gradients = [
       { id: "gradient-red", colors: ["#dc2626", "#f87171"] },
       { id: "gradient-green", colors: ["#34d399", "#059669"] },
       { id: "gradient-neutral", colors: ["#374151", "#1f2937"] }
     ];
-
     gradients.forEach(grad => {
       const gradient = defs.append("linearGradient")
         .attr("id", grad.id)
         .attr("x1", "0%").attr("y1", "0%")
         .attr("x2", "100%").attr("y2", "100%");
-
-      gradient.append("stop")
-        .attr("offset", "0%")
-        .attr("stop-color", grad.colors[0]);
-
-      gradient.append("stop")
-        .attr("offset", "100%")
-        .attr("stop-color", grad.colors[1]);
+      gradient.append("stop").attr("offset", "0%").attr("stop-color", grad.colors[0]);
+      gradient.append("stop").attr("offset", "100%").attr("stop-color", grad.colors[1]);
     });
 
-    // Enhanced tooltip - create within the component container
-    const tooltip = d3
-      .select(parent)
-      .append("div")
+    // Tooltip
+    const tooltip = d3.select(parent).selectAll(".market-heatmap-tooltip").data([0]).join("div")
       .attr("class", "market-heatmap-tooltip")
       .style("position", "absolute")
       .style("background", "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)")
@@ -520,7 +464,7 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, secto
       .style("padding", "8px")
       .style("border", "1px solid #334155")
       .style("border-radius", "12px")
-      .style("box-shadow", "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1)")
+      .style("box-shadow", "0 20px 25px -5px rgba(0,0,0,0.3),0 10px 10px -5px rgba(0,0,0,0.1)")
       .style("pointer-events", "none")
       .style("opacity", 0)
       .style("font-size", "9px")
@@ -529,247 +473,122 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, secto
       .style("z-index", "1000")
       .style("backdrop-filter", "blur(8px)");
 
-    const groups = svg
-      .selectAll("g.cell")
+    // Draw sectors
+    const groups = svg.selectAll("g.cell")
       .data(paginatedSectors, (d: any) => d[0])
-      .join(
-        (enter) => enter.append("g").attr("class", "cell"),
-        (update) => update,
-        (exit) => exit.remove()
-      );
+      .join("g")
+      .attr("class", "cell");
 
     groups.each(function ([sector, info], i) {
       const col = i % cols;
       const row = Math.floor(i / cols);
       const x = cellPadding + col * (cellWidth + cellPadding);
       const y = cellPadding + row * (cellHeight + cellPadding);
+      const g = d3.select(this).attr("transform", `translate(${x},${y})`);
 
-      const g = d3.select(this);
-      g.attr("transform", `translate(${x},${y})`);
-
-      // Determine gradient based on change
       let gradientId = "gradient-neutral";
       if (info.avgChange > 0.5) gradientId = "gradient-green";
       else if (info.avgChange < -0.5) gradientId = "gradient-red";
 
-      const rect = g
-        .selectAll("rect")
-        .data([info])
+      const rect = g.selectAll("rect").data([info])
         .join("rect")
         .attr("width", cellWidth)
         .attr("height", cellHeight)
-        .attr("rx", 8)
-        .attr("ry", 8)
+        .attr("rx", 8).attr("ry", 8)
         .style("cursor", "pointer")
         .style("fill", `url(#${gradientId})`)
         .style("stroke", "#374151")
         .style("stroke-width", "1px")
         .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
 
-      // Add hover effects
-      rect
-        .on("mouseover", (event, d) => {
-          setHoveredSector(sector);
+      // Hover & tooltip
+      rect.on("mouseover", (event, d) => {
+        setHoveredSector(sector);
+        const topStocks = d.stocks.sort((a, b) => Math.abs(b.change) - Math.abs(a.change)).slice(0, 3);
+        tooltip.html(`
+          <div style="margin-bottom:12px;font-size:10px;font-weight:600;color:#fbbf24;">${sector} Sector</div>
+          <div style="font-size:9px;color:#94a3b8;">${d.count} stocks • Market Cap: ₹${d.marketCap.toFixed(1)}T</div>
+          <div style="border-top:1px solid #334155;margin-top:8px;padding-top:8px;">
+            ${topStocks.map(stock => `<div style="display:flex;justify-content:space-between;font-size:9px;">
+              <span style="color:#f8fafc;">${stock.symbol}</span>
+              <span style="color:${stock.change >= 0 ? '#10b981' : '#ef4444'};font-weight:600;">
+                ${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%
+              </span>
+            </div>`).join('')}
+          </div>
+        `).style("opacity", 1);
 
-          // Enhanced tooltip content
-          const topStocks = d.stocks
-            .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
-            .slice(0, 3);
-
-          tooltip
-            .html(`
-              <div style="margin-bottom: 12px;">
-                <div style="font-size: 10px; font-weight: 600; color: #fbbf24; margin-bottom: 4px;">
-                  ${sector} Sector
-                </div>
-                <div style="font-size: 9px; color: #94a3b8;">
-                  ${d.count} stocks • Market Cap: ₹${d.marketCap.toFixed(1)}T
-                </div>
-              </div>
-              
-              <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                <div>
-                  <div style="font-size: 9px; color: #94a3b8; margin-bottom: 2px;">Avg Change</div>
-                  <div style="font-size: 9px; font-weight: 700; color: ${d.avgChange >= 0 ? '#10b981' : '#ef4444'};">
-                    ${d.avgChange >= 0 ? '+' : ''}${d.avgChange.toFixed(2)}%
-                  </div>
-                </div>
-                <div>
-                  <div style="font-size: 9px; color: #94a3b8; margin-bottom: 2px;">Total Volume</div>
-                  <div style="font-size: 9px; font-weight: 600; color: #f8fafc;">
-                    ${d.totalVol.toFixed(1)}M
-                  </div>
-                </div>
-              </div>
-              
-              <div style="border-top: 1px solid #334155; padding-top: 12px;">
-                <div style="font-size: 9px; color: #94a3b8; margin-bottom: 8px;">Top Movers</div>
-                ${topStocks.map(stock => `
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 9px;">
-                    <span style="color: #f8fafc;">${stock.symbol}</span>
-                    <span style="color: ${stock.change >= 0 ? '#10b981' : '#ef4444'}; font-weight: 600;">
-                      ${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%
-                    </span>
-                  </div>
-                `).join('')}
-              </div>
-            `)
-            .style("opacity", 1);
-
-          // Smart positioning to keep tooltip within container bounds
-          const tooltipWidth = 300; // Approximate tooltip width
-          const tooltipHeight = 200; // Approximate tooltip height
-          const containerRect = parent.getBoundingClientRect();
-          const mouseX = event.clientX;
-          const mouseY = event.clientY;
-
-          // Convert to relative coordinates within the container
-          const relativeX = mouseX - containerRect.left;
-          const relativeY = mouseY - containerRect.top;
-
-          let tooltipX = relativeX + 15;
-          let tooltipY = relativeY - 10;
-
-          // Check if tooltip would go off the right edge
-          if (tooltipX + tooltipWidth > parent.clientWidth) {
-            tooltipX = relativeX - tooltipWidth - 15; // Position to the left of cursor
-          }
-
-          // Check if tooltip would go off the bottom edge
-          if (tooltipY + tooltipHeight > parent.clientHeight) {
-            tooltipY = relativeY - tooltipHeight - 10; // Position above cursor
-          }
-
-          // Check if tooltip would go off the top edge
-          if (tooltipY < 0) {
-            tooltipY = 10; // Position at top of container
-          }
-
-          // Check if tooltip would go off the left edge
-          if (tooltipX < 0) {
-            tooltipX = 10; // Position at left of container
-          }
-
-          tooltip
-            .style("left", tooltipX + "px")
-            .style("top", tooltipY + "px");
-
-          // Add glow effect
-          rect.style("filter", "drop-shadow(0 4px 12px rgba(0,0,0,0.2)) brightness(1.1)");
-        })
+        const mouseX = event.clientX - parent.getBoundingClientRect().left;
+        const mouseY = event.clientY - parent.getBoundingClientRect().top;
+        let tooltipX = mouseX + 15;
+        let tooltipY = mouseY - 10;
+        if (tooltipX + 300 > parent.clientWidth) tooltipX = mouseX - 300 - 15;
+        if (tooltipY + 200 > parent.clientHeight) tooltipY = mouseY - 200 - 10;
+        if (tooltipY < 0) tooltipY = 10;
+        if (tooltipX < 0) tooltipX = 10;
+        tooltip.style("left", tooltipX + "px").style("top", tooltipY + "px");
+        rect.style("filter", "drop-shadow(0 4px 12px rgba(0,0,0,0.2)) brightness(1.1)");
+      })
         .on("mousemove", (event) => {
-          // Smart positioning for mousemove as well
-          const tooltipWidth = 300;
-          const tooltipHeight = 200;
-          const containerRect = parent.getBoundingClientRect();
-          const mouseX = event.clientX;
-          const mouseY = event.clientY;
-
-          // Convert to relative coordinates within the container
-          const relativeX = mouseX - containerRect.left;
-          const relativeY = mouseY - containerRect.top;
-
-          let tooltipX = relativeX + 15;
-          let tooltipY = relativeY - 10;
-
-          // Check if tooltip would go off the right edge
-          if (tooltipX + tooltipWidth > parent.clientWidth) {
-            tooltipX = relativeX - tooltipWidth - 15;
-          }
-
-          // Check if tooltip would go off the bottom edge
-          if (tooltipY + tooltipHeight > parent.clientHeight) {
-            tooltipY = relativeY - tooltipHeight - 10;
-          }
-
-          // Check if tooltip would go off the top edge
-          if (tooltipY < 0) {
-            tooltipY = 10;
-          }
-
-          // Check if tooltip would go off the left edge
-          if (tooltipX < 0) {
-            tooltipX = 10;
-          }
-
-          tooltip
-            .style("left", tooltipX + "px")
-            .style("top", tooltipY + "px");
+          const mouseX = event.clientX - parent.getBoundingClientRect().left;
+          const mouseY = event.clientY - parent.getBoundingClientRect().top;
+          let tooltipX = mouseX + 15;
+          let tooltipY = mouseY - 10;
+          if (tooltipX + 300 > parent.clientWidth) tooltipX = mouseX - 300 - 15;
+          if (tooltipY + 200 > parent.clientHeight) tooltipY = mouseY - 200 - 10;
+          if (tooltipY < 0) tooltipY = 10;
+          if (tooltipX < 0) tooltipX = 10;
+          tooltip.style("left", tooltipX + "px").style("top", tooltipY + "px");
         })
         .on("mouseout", () => {
           setHoveredSector(null);
           tooltip.style("opacity", 0);
           rect.style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
         })
-        .on("click", () => {
-          setSelectedSector(selectedSector === sector ? null : sector);
-        });
+        .on("click", () => setSelectedSector(selectedSector === sector ? null : sector));
 
-      // Sector title with better typography
-      const title = g
-        .selectAll("text.title")
-        .data([sector])
+      // Text & trend
+      g.selectAll("text.title").data([sector])
         .join("text")
         .attr("class", "title")
-        .attr("x", cellWidth / 2)
-        .attr("y", cellHeight / 2 - 6)
+        .attr("x", cellWidth / 2).attr("y", cellHeight / 2 - 6)
         .attr("text-anchor", "middle")
         .attr("fill", "#f8fafc")
         .attr("font-size", Math.min(Math.max(9, cellWidth / 15), 11))
         .attr("font-weight", "600")
-        .attr("font-family", "Inter, system-ui, sans-serif")
         .style("pointer-events", "none")
-        .text(sector.length > 10 ? sector.substring(0, 10) + "..." : sector);
+        .text(sector.length > 8 ? sector.substring(0, 8) + "." : sector);
 
-      // Change percentage with color coding
-      const value = g
-        .selectAll("text.value")
-        .data([info])
+      g.selectAll("text.value").data([info])
         .join("text")
         .attr("class", "value")
-        .attr("x", cellWidth / 2)
-        .attr("y", cellHeight / 2 + 6)
+        .attr("x", cellWidth / 2).attr("y", cellHeight / 2 + 6)
         .attr("text-anchor", "middle")
         .attr("fill", 'black')
         .attr("font-size", Math.max(8, cellWidth / 12))
         .attr("font-weight", "700")
-        .attr("font-family", "Inter, system-ui, sans-serif")
         .style("pointer-events", "none")
         .text(`${info.avgChange >= 0 ? '+' : ''}${info.avgChange.toFixed(1)}%`);
 
-      // Add trend indicator
-      const trendIcon = g
-        .selectAll("text.trend")
-        .data([info])
+      g.selectAll("text.trend").data([info])
         .join("text")
         .attr("class", "trend")
-        .attr("x", cellWidth - 6)
-        .attr("y", 12)
+        .attr("x", cellWidth - 6).attr("y", 12)
         .attr("text-anchor", "end")
         .attr("fill", info.avgChange >= 0 ? "#10b981" : "#ef4444")
         .attr("font-size", "10px")
         .style("pointer-events", "none")
         .text(info.avgChange >= 0 ? "↗" : "↘");
     });
-
-    // Legend removed - no longer needed
-
-    return () => {
-      tooltip.remove();
-      resizeObserver.disconnect();
-    };
-  }, [data, selectedSector, hoveredSector, paginatedSectors, currentPage, layoutConfig]);
+  }, [paginatedSectors, selectedSector, hoveredSector, dimensions.width, dimensions.height]);
 
   return (
-    <WindowLayout title="Market Heatmap" icon={BarChart3} height="500px">
+    <WindowLayout title="Market Heatmap" icon={BarChart3} fit={true}>
       <div className="w-full">
-
-        {/* Heatmap visualization */}
-        <div className="w-full overflow-auto max-h-[400px] flex items-center justify-center relative">
-          <svg ref={svgRef} className="w-full"></svg>
+        <div ref={containerRef} className="w-full h-[350px] flex items-center justify-center relative overflow-auto">
+          <svg ref={svgRef} className="w-full h-full"></svg>
         </div>
 
-        {/* Pagination Controls */}
         {totalPages > 1 && (
           <div className="flex justify-between items-center text-[9px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90 mt-2 mb-4">
             <button
@@ -779,11 +598,9 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, secto
             >
               <ChevronLeft className="w-3 h-3" /> Prev
             </button>
-
             <div className="text-gray-400">
               Page <span className="text-accent">{currentPage}</span> of {totalPages}
             </div>
-
             <button
               className="flex items-center gap-1 text-accent disabled:text-gray-600"
               disabled={currentPage === totalPages}
@@ -794,7 +611,6 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, secto
           </div>
         )}
 
-        {/* Selected sector details with stock heatmap */}
         {selectedSector && (
           <WindowLayout title={`${selectedSector} Sector Analysis`} icon={BarChart3}>
             <SectorStockHeatmap
@@ -807,5 +623,6 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, secto
     </WindowLayout>
   );
 };
+
 
 export default SectorHeatMap;

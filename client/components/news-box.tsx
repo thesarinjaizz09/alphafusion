@@ -209,7 +209,7 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
     };
 
     return (
-        <WindowLayout title="Financial News" icon={Newspaper} height="500px" fit={false}>
+        <WindowLayout title="Financial News" icon={Newspaper} height="500px" fit={true}>
             {/* Search & Sort */}
             <div className="flex flex-col md:flex-row items-center justify-between mb-3 gap-2">
                 <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-1 w-full max-w-xs border border-gray-700">
