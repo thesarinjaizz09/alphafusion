@@ -114,7 +114,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
             {/* ✅ Global Search */}
             {enableGlobalSearch && (
                 <div className="flex items-center justify-start px-3 py-2">
-                    <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-2 w-full max-w-xs border border-gray-700">
+                    <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-1 w-full max-w-xs border border-gray-700">
                         <Search className="w-3 h-3 text-gray-400 mr-2" />
                         <input
                             type="text"
