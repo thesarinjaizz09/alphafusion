@@ -114,7 +114,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
             {/* ✅ Global Search */}
             {enableGlobalSearch && (
                 <div className="flex items-center justify-start px-3 py-2">
-                    <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-1 w-full max-w-xs border border-gray-700">
+                    <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-2 w-full max-w-xs border border-gray-700">
                         <Search className="w-3 h-3 text-gray-400 mr-2" />
                         <input
                             type="text"
@@ -132,7 +132,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
 
             {/* TABLE */}
             <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: tableHeight + 60 }}>
-                <Table className="min-w-full text-[10px] h-full border-separate border-spacing-0 table-auto">
+                <Table className="min-w-full text-[9px] h-full border-separate border-spacing-0 table-auto">
                     <TableHeader>
                         <TableRow className="bg-[#121A2E] sticky top-0 z-30">
                             {headers.map((header) => (
@@ -176,7 +176,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                             : row[rowKey] ?? idx
                                         : idx
                                 }
-                                className={`text-white text-[10px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
+                                className={`text-white text-[9px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
                                     } hover:bg-[#1B2B47] transition-colors`}
                             >
                                 {headers.map((header) => {

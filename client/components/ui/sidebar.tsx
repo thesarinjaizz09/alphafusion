@@ -499,7 +499,7 @@ function SidebarMenuButton({
   asChild = false,
   isActive = false,
   variant = "default",
-  size = "default",
+  size = "sm",
   tooltip,
   className,
   ...props

@@ -22,31 +22,33 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
     const loopedIndices = [...indices, ...indices];
 
     return (
-        <WindowLayout title="Exchange Indices" icon={Waypoints}>
-            <div className="flex animate-scroll gap-4">
-                {loopedIndices.map((i, idx) => {
-                    const isPositive = i.changePercent >= 0;
-                    return (
-                        <div
-                            key={`${i.name}-${idx}`}
-                            className="flex-shrink-0 flex flex-col bg-[#16223B]/80 border border-[#1E263A] rounded-2xl px-3 py-2 min-w-[150px] shadow-lg"
-                        >
-                            <div className="flex flex-col justify-between gap-1 items-start">
-                                <span className="text-gray-300 text-[10px] font-medium">{i.name}</span>
-                                <div className="flex flex-col items-start">
-                                    <div className="text-white text-[10px] font-semibold">{i.price.toLocaleString()}</div>
-                                    <div
-                                        className={`flex items-center gap-1 text-[10px] font-medium ${isPositive ? "text-green-400" : "text-red-400"
-                                            }`}
-                                    >
-                                        {i.changePercent.toFixed(2)}%
-                                        {isPositive ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
+        <WindowLayout title="Indices, Equities & Macros" icon={Waypoints}>
+            <div className="overflow-hidden w-full">
+                <div className="flex animate-scroll gap-4 w-max">
+                    {loopedIndices.map((i, idx) => {
+                        const isPositive = i.changePercent >= 0;
+                        return (
+                            <div
+                                key={`${i.name}-${idx}`}
+                                className="flex-shrink-0 flex flex bg-[#16223B]/80 border border-[#1E263A] rounded-lg px-3 py-2 min-w-[150px] shadow-lg"
+                            >
+                                <div className="flex justify-center gap-3 items-center">
+                                    <span className="text-gray-300 text-[10px] font-medium">{i.name}</span>
+                                    <div className="flex gap-2 items-start">
+                                        <div className="text-white text-[9px] font-semibold">{i.price.toLocaleString()}</div>
+                                        <div
+                                            className={`flex items-center gap-1 text-[9px] font-medium ${isPositive ? "text-green-400" : "text-red-400"
+                                                }`}
+                                        >
+                                            {i.changePercent.toFixed(2)}%
+                                            {isPositive ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
 
             <style jsx>{`
@@ -59,7 +61,7 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
           }
         }
         .animate-scroll {
-          animation: scroll 10s linear infinite;
+          animation: scroll 60s linear infinite;
         }
       `}</style>
         </WindowLayout>
