@@ -357,7 +357,7 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, secto
   const [hoveredSector, setHoveredSector] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [layoutConfig, setLayoutConfig] = useState({ cols: 5, rows: 4, itemsPerPage: sectorsPerPage });
-  const [dimensions, setDimensions] = useState({ width: 400, height: 300 });
+  const [dimensions, setDimensions] = useState({ width: 400, height: 400 });
 
   // Process sectors with pagination
   const { sectorMap, totalPages, paginatedSectors } = useMemo(() => {
