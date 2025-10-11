@@ -243,14 +243,14 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
                         className="cursor-pointer bg-[#0B1220] border border-gray-800 p-2 rounded-lg shadow-md hover:shadow-[#E3B341]/20 transition-all flex flex-col"
                     >
                         <div className="flex justify-between items-start">
-                            <span className="text-gray-400 text-[10px]">{news.Ticker}</span>
-                            <span className={`text-[10px] font-semibold ${news.Action === "BUY" ? "text-green-400" :
+                            <span className="text-gray-400 text-[9px]">{news.Ticker}</span>
+                            <span className={`text-[9px] font-semibold ${news.Action === "BUY" ? "text-green-400" :
                                 news.Action === "SELL" ? "text-red-400" :
                                     "text-yellow-400"
                                 }`}>{news.Action}</span>
                         </div>
-                        <h4 className="text-gray-200 font-medium text-[11px mt-1 line-clamp-2">{news.Headline}</h4>
-                        <div className="flex justify-between items-center mt-2 text-gray-400 text-[10px]">
+                        <h4 className="text-gray-200 font-medium text-[10px] mt-1 line-clamp-2">{news.Headline}</h4>
+                        <div className="flex justify-between items-center mt-2 text-gray-400 text-[9px]">
                             <span>{news.Source}</span>
                             <span>{news.Time}</span>
                             <span>Score: {news.Score}</span>
@@ -261,7 +261,7 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
 
             {/* Pagination Controls */}
             {filteredData.length > rowsPerPage && (
-                <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
+                <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90 mt-2">
                     <button
                         className="flex items-center gap-1 text-accent disabled:text-gray-600"
                         disabled={currentPage === 1}
