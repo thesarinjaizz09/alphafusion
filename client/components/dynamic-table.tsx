@@ -9,6 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { NoResults } from "@/components/ui/no-results";
 
 interface DynamicTableProps {
     headers: string[];
@@ -167,49 +168,64 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                     </TableHeader>
 
                     <TableBody>
-                        {paginatedData.map((row, idx) => (
-                            <TableRow
-                                key={
-                                    rowKey
-                                        ? typeof rowKey === "function"
-                                            ? rowKey(row, idx)
-                                            : row[rowKey] ?? idx
-                                        : idx
-                                }
-                                className={`text-white text-[9px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
-                                    } hover:bg-[#1B2B47] transition-colors`}
-                            >
-                                {headers.map((header) => {
-                                    const value = row[header];
-                                    let colorClass = "";
-                                    const isNumber = /\d/.test(String(value));
-
-                                    if (typeof value === "string" && (value.startsWith("+") || value.startsWith("-"))) {
-                                        colorClass = value.startsWith("+")
-                                            ? "text-green-400 font-semibold"
-                                            : "text-red-400 font-semibold";
+                        {paginatedData.length > 0 ? (
+                            paginatedData.map((row, idx) => (
+                                <TableRow
+                                    key={
+                                        rowKey
+                                            ? typeof rowKey === "function"
+                                                ? rowKey(row, idx)
+                                                : row[rowKey] ?? idx
+                                            : idx
                                     }
+                                    className={`text-white text-[9px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
+                                        } hover:bg-[#1B2B47] transition-colors`}
+                                >
+                                    {headers.map((header) => {
+                                        const value = row[header];
+                                        let colorClass = "";
+                                        const isNumber = /\d/.test(String(value));
 
-                                    if (typeof value === "string" && ["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
-                                        colorClass =
-                                            value.toUpperCase() === "BUY"
+                                        if (typeof value === "string" && (value.startsWith("+") || value.startsWith("-"))) {
+                                            colorClass = value.startsWith("+")
                                                 ? "text-green-400 font-semibold"
-                                                : value.toUpperCase() === "SELL"
-                                                    ? "text-red-400 font-semibold"
-                                                    : "text-yellow-400 font-semibold";
-                                    }
+                                                : "text-red-400 font-semibold";
+                                        }
 
-                                    return (
-                                        <TableCell
-                                            key={header}
-                                            className={`${colorClass} ${isNumber ? "text-right" : "text-left"} px-2 py-2 max-w-[200px] truncate`}
-                                        >
-                                            {value}
-                                        </TableCell>
-                                    );
-                                })}
+                                        if (typeof value === "string" && ["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
+                                            colorClass =
+                                                value.toUpperCase() === "BUY"
+                                                    ? "text-green-400 font-semibold"
+                                                    : value.toUpperCase() === "SELL"
+                                                        ? "text-red-400 font-semibold"
+                                                        : "text-yellow-400 font-semibold";
+                                        }
+
+                                        return (
+                                            <TableCell
+                                                key={header}
+                                                className={`${colorClass} ${isNumber ? "text-right" : "text-left"} px-2 py-2 max-w-[200px] truncate`}
+                                            >
+                                                {value}
+                                            </TableCell>
+                                        );
+                                    })}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={headers.length} className="p-0 text-center">
+                                    <div className="flex justify-center items-center w-full">
+                                        <NoResults 
+                                            title="No Data Found"
+                                            description="No records match your current search or filter criteria."
+                                            searchTerm={search || undefined}
+                                            className="py-6"
+                                        />
+                                    </div>
+                                </TableCell>
                             </TableRow>
-                        ))}
+                        )}
                     </TableBody>
                 </Table>
             </div>

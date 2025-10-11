@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { X, ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import WindowLayout from "./window-layout";
 import SentimentMeter from "./sentiment-gauge";
+import { NoResults } from "@/components/ui/no-results";
 import {
     Clock,
     Newspaper,
@@ -236,27 +237,37 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
 
             {/* News Cards */}
             <div className="flex flex-col gap-3">
-                {paginatedData.map((news, idx) => (
-                    <div
-                        key={idx}
-                        onClick={() => setSelectedNews(news)}
-                        className="cursor-pointer bg-[#0B1220] border border-gray-800 p-2 rounded-lg shadow-md hover:shadow-[#E3B341]/20 transition-all flex flex-col"
-                    >
-                        <div className="flex justify-between items-start">
-                            <span className="text-gray-400 text-[9px]">{news.Ticker}</span>
-                            <span className={`text-[9px] font-semibold ${news.Action === "BUY" ? "text-green-400" :
-                                news.Action === "SELL" ? "text-red-400" :
-                                    "text-yellow-400"
-                                }`}>{news.Action}</span>
+                {paginatedData.length > 0 ? (
+                    paginatedData.map((news, idx) => (
+                        <div
+                            key={idx}
+                            onClick={() => setSelectedNews(news)}
+                            className="cursor-pointer bg-[#0B1220] border border-gray-800 p-2 rounded-lg shadow-md hover:shadow-[#E3B341]/20 transition-all flex flex-col"
+                        >
+                            <div className="flex justify-between items-start">
+                                <span className="text-gray-400 text-[9px]">{news.Ticker}</span>
+                                <span className={`text-[9px] font-semibold ${news.Action === "BUY" ? "text-green-400" :
+                                    news.Action === "SELL" ? "text-red-400" :
+                                        "text-yellow-400"
+                                    }`}>{news.Action}</span>
+                            </div>
+                            <h4 className="text-gray-200 font-medium text-[10px] mt-1 line-clamp-2">{news.Headline}</h4>
+                            <div className="flex justify-between items-center mt-2 text-gray-400 text-[9px]">
+                                <span>{news.Source}</span>
+                                <span>{news.Time}</span>
+                                <span>Score: {news.Score}</span>
+                            </div>
                         </div>
-                        <h4 className="text-gray-200 font-medium text-[10px] mt-1 line-clamp-2">{news.Headline}</h4>
-                        <div className="flex justify-between items-center mt-2 text-gray-400 text-[9px]">
-                            <span>{news.Source}</span>
-                            <span>{news.Time}</span>
-                            <span>Score: {news.Score}</span>
-                        </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <NoResults 
+                        title="No News Found"
+                        description="No news articles match your current search criteria."
+                        searchTerm={search || undefined}
+                        showFilterIcon={false}
+                        className="py-8"
+                    />
+                )}
             </div>
 
             {/* Pagination Controls */}

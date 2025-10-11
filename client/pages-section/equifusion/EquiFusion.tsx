@@ -11,6 +11,7 @@ import EquitiesIndicesBox from '@/components/equities-indices-box'
 import NewsBox from '@/components/news-box'
 import GlobalMarketMap from '@/components/global-market-map'
 import CandlestickPanel from '@/components/candlestick-panel'
+import SectorHeatMap from '@/components/sector-heatmap'
 
 const EquiFusionPage = () => {
     return (
@@ -33,7 +34,8 @@ const EquiFusionPage = () => {
                     <TradesharkSuggestions />
                     <WatchlistBox />
                     <NewsBox />
-                    <GlobalMarketMap />
+                    {/* <GlobalMarketMap /> */}
+                    <SectorHeatMap />
                 </div>
             </div>
 

@@ -12,6 +12,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import WindowLayout from './window-layout';
+import { NoResults } from '@/components/ui/no-results';
 
 interface SentimentData {
   ticker: string;
@@ -112,38 +113,50 @@ const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) =
 
       {/* 💬 Sentiment Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {paginatedData.map((item) => (
-          <div
-            key={item.ticker}
-            className="rounded-lg border border-gray-800 p-3 bg-[#10182A]/80 hover:bg-[#16223B]/80 transition-all"
-          >
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-white text-[10px] font-semibold">{item.ticker}</span>
-              <span
-                className={`text-[9px] text-black font-semibold px-2 py-0.5 rounded-full ${sentimentColor(
-                  item.score
-                )}`}
-              >
-                {item.score}%
-              </span>
-            </div>
+        {paginatedData.length > 0 ? (
+          paginatedData.map((item) => (
+            <div
+              key={item.ticker}
+              className="rounded-lg border border-gray-800 p-3 bg-[#10182A]/80 hover:bg-[#16223B]/80 transition-all"
+            >
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-white text-[10px] font-semibold">{item.ticker}</span>
+                <span
+                  className={`text-[9px] text-black font-semibold px-2 py-0.5 rounded-full ${sentimentColor(
+                    item.score
+                  )}`}
+                >
+                  {item.score}%
+                </span>
+              </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-gray-400 text-[10px]">
-                <Twitter className="w-3 h-3 text-sky-400" />
-                <Progress value={item.twitter} className="flex-1 h-2 bg-gray-800" />
-              </div>
-              <div className="flex items-center gap-2 text-gray-400 text-[10px]">
-                <MessageSquare className="w-3 h-3 text-orange-400" />
-                <Progress value={item.reddit} className="flex-1 h-2 bg-gray-800" />
-              </div>
-              <div className="flex items-center gap-2 text-gray-400 text-[10px]">
-                <BarChart3 className="w-3 h-3 text-emerald-400" />
-                <Progress value={item.stocktwits} className="flex-1 h-2 bg-gray-800" />
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-gray-400 text-[10px]">
+                  <Twitter className="w-3 h-3 text-sky-400" />
+                  <Progress value={item.twitter} className="flex-1 h-2 bg-gray-800" />
+                </div>
+                <div className="flex items-center gap-2 text-gray-400 text-[10px]">
+                  <MessageSquare className="w-3 h-3 text-orange-400" />
+                  <Progress value={item.reddit} className="flex-1 h-2 bg-gray-800" />
+                </div>
+                <div className="flex items-center gap-2 text-gray-400 text-[10px]">
+                  <BarChart3 className="w-3 h-3 text-emerald-400" />
+                  <Progress value={item.stocktwits} className="flex-1 h-2 bg-gray-800" />
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="col-span-2">
+            <NoResults 
+              title="No Sentiment Data Found"
+              description="No sentiment data matches your current search criteria."
+              searchTerm={search || undefined}
+              showFilterIcon={false}
+              className="py-8"
+            />
           </div>
-        ))}
+        )}
       </div>
 
       {/* 📄 Pagination */}
