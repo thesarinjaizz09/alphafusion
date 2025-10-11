@@ -22,7 +22,7 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
     const loopedIndices = [...indices, ...indices];
 
     return (
-        <WindowLayout title="Global Indices" icon={Waypoints}>
+        <WindowLayout title="Exchange Indices" icon={Waypoints}>
             <div className="flex animate-scroll gap-4">
                 {loopedIndices.map((i, idx) => {
                     const isPositive = i.changePercent >= 0;

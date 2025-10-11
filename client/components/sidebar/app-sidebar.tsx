@@ -179,11 +179,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="#">
-                <Image src={appLogo} alt="AlphaFusion Trademark" width={30} className="p-1 border-none border-violet-800 rounded-sm bg-slate-800" />
+                <Image src={appLogo} alt="AlphaFusion Trademark" width={25} className="p-1 border-none border-violet-800 rounded-sm bg-slate-800" />
 
-                <div className="grid flex-1 text-left text-sm leading-tight">
+                <div className="grid flex-1 text-left text-[11px] leading-tight">
                   <span className="truncate font-medium">AlphaFusion™</span>
-                  <span className="truncate text-[11px]">Finance</span>
+                  <span className="truncate text-[10px]">Finance</span>
                 </div>
               </a>
             </SidebarMenuButton>
