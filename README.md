@@ -154,9 +154,15 @@ AlphaFusion™ is a professional-grade market intelligence and trading platform 
 > Below are some screenshots of AlphaFusion™ dashboards and modules. The path `x` is used as the root folder for images.
 
 <p align="left">
-  <img src="images/equities.jpg" alt="FusionOne Dashboard" width="600"/>
+  <img src="images/equities.jpg" alt="FusionOne Dashboard" width="500"/>
   <br>
-  <em>EquiFusion – Equities Market Overview Dashboard</em>
+  <em>EquiFusion 1 – Equities Market Overview Dashboard</em>
+  <img src="images/equities-2.jpg" alt="FusionOne Dashboard" width="500"/>
+  <br>
+  <em>EquiFusion 2 – Equities Market Overview Dashboard</em>
+  <img src="images/equities-3.jpg" alt="FusionOne Dashboard" width="500"/>
+  <br>
+  <em>EquiFusion 3– Equities Market Overview Dashboard</em>
 </p>
 
 
