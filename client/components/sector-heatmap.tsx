@@ -488,8 +488,8 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
                   }
                 >
                   <div className="text-white text-[10px] font-semibold uppercase">
-                    {sectorInfo.sector.length > 7
-                      ? sectorInfo.sector.slice(0, 7)
+                    {sectorInfo.sector.length > 5
+                      ? sectorInfo.sector.slice(0, 5)
                       : sectorInfo.sector}
                   </div>
                   <div className="text-[9px] font-bold mt-1">
