@@ -231,7 +231,6 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
             </div>
 
             {/* PAGINATION */}
-            {/* PAGINATION (only show if more than one page) */}
             {processedData.length > rowsPerPage && (
                 <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
                     <button

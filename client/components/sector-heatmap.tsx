@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useState, useMemo } from "react";
 import * as d3 from "d3";
-import { Flame, TrendingUp, TrendingDown, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import WindowLayout from "./window-layout";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Flame, TrendingUp, TrendingDown, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Stock {
   symbol: string;
@@ -13,35 +14,35 @@ interface Stock {
   marketCap?: number;
 }
 
+interface Sector {
+  sector: string;
+  count: number;
+  marketCap: number;
+  avgChange: number;
+  stocks: Stock[]
+}
+interface SectorStockHeatmapProps {
+  sector: string;
+  stocks: Stock[];
+}
+
 interface MarketHeatMapProps {
   data?: Stock[];
   sectorsPerPage?: number;
 }
 
+const colorScale = (avgChange: number) => {
+  if (avgChange <= -5) return "#b91c1c";
+  if (avgChange < 0) return "#f87171";
+  if (avgChange === 0) return "#1f2937";
+  if (avgChange < 5) return "#34d399";
+  return "#059669";
+};
+
 const defaultData: Stock[] = [
   // 🟩 IT / Tech
   { symbol: "INFY", change: 2.34, volume: 1.8, sector: "IT", price: 1850.50, marketCap: 7.8 },
   { symbol: "TCS", change: 1.82, volume: 2.1, sector: "IT", price: 3850.25, marketCap: 14.2 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
-  { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
   { symbol: "TECHM", change: -0.94, volume: 1.4, sector: "IT", price: 1250.75, marketCap: 3.1 },
 
   // 🏦 Banking
@@ -180,12 +181,7 @@ const defaultData: Stock[] = [
 ];
 
 // Component for individual stock heatmap within a sector
-const SectorStockHeatmap: React.FC<{ sector: string; stocks: Stock[] }> = ({
-  sector,
-  stocks
-}) => {
-  const stockSvgRef = useRef<SVGSVGElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+const SectorStockHeatmap: React.FC<SectorStockHeatmapProps> = ({ sector, stocks }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const stocksPerPage = 12;
@@ -195,150 +191,75 @@ const SectorStockHeatmap: React.FC<{ sector: string; stocks: Stock[] }> = ({
     currentPage * stocksPerPage
   );
 
-  const cellHeight = 24;
-  const cellPadding = 2;
-
-  useEffect(() => {
-    if (!stockSvgRef.current || paginatedStocks.length === 0) return;
-    const parent = stockSvgRef.current.parentElement;
-    if (!parent) return;
-
-    const width = parent.clientWidth;
-    const height = paginatedStocks.length / 2 * (cellHeight + cellPadding * 2) + cellPadding;
-
-    const svg = d3.select(stockSvgRef.current)
-      .attr("width", width)
-      .attr("height", height);
-    svg.selectAll("*").remove();
-
-    const colorScale = d3.scaleLinear<string>()
-      .domain([-5, -2.5, 0, 2.5, 5])
-      .range(["#dc2626", "#f87171", "#1f2937", "#34d399", "#059669"]);
-
-    // Tooltip like sector heatmap
-    const tooltip = d3
-      .select(parent)
-      .append("div")
-      .attr("class", "stock-tooltip")
-      .style("position", "absolute")
-      .style("background", "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)")
-      .style("color", "#f8fafc")
-      .style("padding", "10px")
-      .style("border", "1px solid #334155")
-      .style("border-radius", "12px")
-      .style("box-shadow", "0 20px 25px -5px rgba(0,0,0,0.3),0 10px 10px -5px rgba(0,0,0,0.1)")
-      .style("pointer-events", "none")
-      .style("opacity", 0)
-      .style("font-size", "9px")
-      .style("font-family", "Inter, system-ui, sans-serif")
-      .style("min-width", "220px")
-      .style("backdrop-filter", "blur(8px)")
-      .style("z-index", "1000");
-
-    paginatedStocks.forEach((stock, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const x = cellPadding + col * (width / 2 - cellPadding);
-      const y = cellPadding + row * (cellHeight + cellPadding);
-
-      const g = svg.append("g")
-        .attr("transform", `translate(${x},${y})`)
-        .style("cursor", "pointer");
-
-      g.append("rect")
-        .attr("width", width / 2 - cellPadding)
-        .attr("height", cellHeight)
-        .attr("rx", 6)
-        .attr("ry", 6)
-        .style("fill", colorScale(stock.change))
-        .style("stroke", "#374151")
-        .style("stroke-width", "1px");
-
-      g.append("text")
-        .attr("x", 8)
-        .attr("y", cellHeight / 2 + 3)
-        .attr("fill", "#f8fafc")
-        .attr("font-size", "9px")
-        .attr("font-weight", "600")
-        .text(stock.symbol);
-
-      g.append("text")
-        .attr("x", width / 2 - 10)
-        .attr("y", cellHeight / 2 + 3)
-        .attr("text-anchor", "end")
-        .attr("fill", stock.change >= 0 ? "#10b981" : "#ef4444")
-        .attr("font-size", "8px")
-        .attr("font-weight", "700")
-        .text(`${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%`);
-
-      g.on("mouseover", (event) => {
-        tooltip
-          .html(`
-            <div style="margin-bottom: 8px;">
-              <div style="font-size: 10px; font-weight: 600; color: #fbbf24; margin-bottom: 4px;">${stock.symbol}</div>
-              <div style="font-size: 9px; color: #94a3b8;">${sector} Sector</div>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px; border-top: 1px solid #334155; padding-top: 12px;">
-              <div style="font-size:9px; color:#94a3b8;">Price</div>
-              <div style="font-size:9px; font-weight:600; color:#f8fafc;">₹${stock.price?.toFixed(2) || 'N/A'}</div>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <div style="font-size:9px; color:#94a3b8;">Change</div>
-              <div style="font-size:9px; font-weight:700; color:${stock.change >= 0 ? '#10b981' : '#ef4444'};">${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%</div>
-            </div>
-            <div style="display:flex; justify-content:space-between;margin-bottom:4px;">
-              <div style="font-size:9px; color:#94a3b8;">Volume</div>
-              <div style="font-size:9px; font-weight:600; color:#f8fafc;">${stock.volume.toFixed(1)}M</div>
-            </div>
-
-            <div style="display:flex; justify-content:space-between;">
-              <div style="font-size:9px; color:#94a3b8;">Market Cap</div>
-              <div style="font-size:9px; font-weight:600; color:#f8fafc;">${stock.marketCap?.toFixed(1)}M</div>
-            </div>
-          `)
-          .style("opacity", 1);
-
-        const containerRect = parent.getBoundingClientRect();
-        const tooltipWidth = 220;
-        const tooltipHeight = 120;
-        const mouseY = event.clientY - containerRect.top;
-
-        const tooltipX = Math.max(10, (containerRect.width - tooltipWidth) / 2);
-        let tooltipY = mouseY - tooltipHeight / 2;
-        if (tooltipY < 0) tooltipY = 10;
-        if (tooltipY + tooltipHeight > containerRect.height) tooltipY = containerRect.height - tooltipHeight - 10;
-
-        tooltip.style("left", tooltipX + "px").style("top", tooltipY + "px");
-      }).on("mouseout", () => {
-        tooltip.style("opacity", 0);
-      });
-    });
-
-    return () => tooltip.remove();
-  }, [paginatedStocks, sector]);
-
   return (
-    <div className="w-full">
-      <div ref={containerRef} className="w-full overflow-auto" style={{ height: paginatedStocks.length / 2 * (cellHeight + cellPadding * 2) + cellPadding }}>
-        <svg ref={stockSvgRef} className="w-full"></svg>
+    <div className="w-full overflow-visible">
+      <div className="grid grid-cols-2 gap-1 overflow-visible">
+        {paginatedStocks.map((stock) => (
+          <Tooltip key={stock.symbol}>
+            <TooltipTrigger asChild>
+              <div
+                className="rounded-sm px-2 py-2 cursor-pointer flex justify-between items-center"
+                style={{ backgroundColor: colorScale(stock.change) }}
+              >
+                <span className="text-white text-[10px] font-semibold">{stock.symbol}</span>
+                <span className="text-white text-[10px] font-bold">
+                  {stock.change >= 0 ? "+" : ""}
+                  {stock.change.toFixed(2)}%
+                </span>
+              </div>
+            </TooltipTrigger>
+
+            <TooltipContent
+              side="right"
+              align="center"
+              className="text-[10px] bg-[#0f172a] border border-gray-700 rounded-sm shadow-lg p-2"
+            >
+              <div className="font-semibold text-yellow-400 mb-1">{stock.symbol}</div>
+              <div className="mb-1">{sector} Sector</div>
+              <div className="flex justify-between border-t border-gray-700 pt-1">
+                <span>Price</span>
+                <span>₹{stock.price?.toFixed(2) || "N/A"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Change</span>
+                <span
+                  className={
+                    stock.change >= 0 ? "text-green-500 font-bold" : "text-red-500 font-bold"
+                  }
+                >
+                  {stock.change >= 0 ? "+" : ""}
+                  {stock.change.toFixed(2)}%
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Volume</span>
+                <span>{stock.volume.toFixed(1)}M</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Market Cap</span>
+                <span>{stock.marketCap?.toFixed(1)}M</span>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        ))}
       </div>
 
-      {/* Pagination below the heatmap */}
+      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center text-[9px] text-gray-300 px-3 py-1 mt-2">
+        <div className="flex justify-between items-center text-gray-400 text-xs mt-2 px-2">
           <button
-            className="text-accent disabled:text-gray-600"
             disabled={currentPage === 1}
+            className="text-accent disabled:text-gray-600"
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           >
             Prev
           </button>
-          <span className="text-gray-400">
+          <span>
             Page <span className="text-accent">{currentPage}</span> of {totalPages}
           </span>
           <button
-            className="text-accent disabled:text-gray-600"
             disabled={currentPage === totalPages}
+            className="text-accent disabled:text-gray-600"
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           >
             Next
@@ -349,280 +270,154 @@ const SectorStockHeatmap: React.FC<{ sector: string; stocks: Stock[] }> = ({
   );
 };
 
-const SectorHeatMap: React.FC<MarketHeatMapProps> = ({ data = defaultData, sectorsPerPage = 20 }) => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
+const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
+  data = defaultData,
+  sectorsPerPage = 20,
+}) => {
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
-  const [hoveredSector, setHoveredSector] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [layoutConfig, setLayoutConfig] = useState({ cols: 5, rows: 4, itemsPerPage: sectorsPerPage });
-  const [dimensions, setDimensions] = useState({ width: 400, height: 400 });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Process sectors with pagination
   const { sectorMap, totalPages, paginatedSectors } = useMemo(() => {
-    const processedSectorMap = d3
-      .rollups(
-        data,
-        (v) => ({
-          avgChange: d3.mean(v, (d) => d.change) ?? 0,
-          totalVol: d3.sum(v, (d) => d.volume),
-          stocks: v,
-          marketCap: d3.sum(v, (d) => d.marketCap ?? 0),
-          count: v.length,
-          topGainer: v.reduce((max, stock) => stock.change > max.change ? stock : max, v[0]),
-          topLoser: v.reduce((min, stock) => stock.change < min.change ? stock : min, v[0])
-        }),
-        (d) => d.sector
-      )
-      .sort((a, b) => Math.abs(b[1].avgChange) - Math.abs(a[1].avgChange));
+    const sectors = Object.entries(
+      data.reduce((acc: Record<string, any>, stock) => {
+        if (!acc[stock.sector]) acc[stock.sector] = { stocks: [] };
+        acc[stock.sector].stocks.push(stock);
+        return acc;
+      }, {})
+    ).map(([sector, info]: any) => ({
+      sector,
+      stocks: info.stocks,
+      avgChange:
+        info.stocks.reduce((sum: number, s: Stock) => sum + s.change, 0) /
+        info.stocks.length,
+      marketCap: info.stocks.reduce((sum: number, s: Stock) => sum + (s.marketCap || 0), 0),
+      count: info.stocks.length,
+    }));
 
-    const totalPages = Math.ceil(processedSectorMap.length / layoutConfig.itemsPerPage);
-    const startIndex = (currentPage - 1) * layoutConfig.itemsPerPage;
-    const endIndex = startIndex + layoutConfig.itemsPerPage;
-    const paginatedSectors = processedSectorMap.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(sectors.length / sectorsPerPage);
+    const start = (currentPage - 1) * sectorsPerPage;
+    const end = start + sectorsPerPage;
+    const paginatedSectors = sectors.slice(start, end);
 
-    return { sectorMap: processedSectorMap, totalPages, paginatedSectors };
-  }, [data, currentPage, layoutConfig.itemsPerPage]);
-
-  // Track container size
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        setDimensions({ width, height });
-      }
-    });
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  // Render D3 Heatmap whenever size or data changes
-  useEffect(() => {
-    if (!svgRef.current) return;
-    const svg = d3.select(svgRef.current);
-    const parent = containerRef.current;
-    if (!parent) return;
-
-    svg.selectAll("*").remove();
-    const width = dimensions.width;
-    const height = dimensions.height;
-
-    // Layout calculations
-    const maxRows = 5;
-    const minCellWidth = 50;
-    const minCellHeight = 65;
-    const cellPadding = 3;
-    const legendSpace = 10;
-    
-
-    const availableWidth = width - cellPadding * 2;
-    const cols = Math.max(2, Math.floor(availableWidth / (minCellWidth + cellPadding)));
-    const itemsPerPage = maxRows * cols;
-
-    const newLayoutConfig = { cols, rows: maxRows, itemsPerPage };
-    if (JSON.stringify(newLayoutConfig) !== JSON.stringify(layoutConfig)) setLayoutConfig(newLayoutConfig);
-
-    // Color scale
-    const colorScale = d3.scaleLinear<string>()
-      .domain([-5, -2.5, 0, 2.5, 5])
-      .range(["#dc2626", "#f87171", "#1f2937", "#34d399", "#059669"]);
-
-    const sectorCount = paginatedSectors.length;
-    const actualRows = Math.min(maxRows, Math.ceil(sectorCount / cols));
-    // const cellWidth = Math.max(minCellWidth, (availableWidth - cellPadding * (cols - 1)) / cols);
-    // const cellWidth = minCellWidth
-    const availableHeight = height - legendSpace;
-    // const cellHeight = Math.max(minCellHeight, (availableHeight - cellPadding * (actualRows - 1)) / actualRows);
-    const cellWidth = Math.max(minCellWidth, Math.max((availableWidth - cellPadding * (cols - 1)) / cols, minCellWidth));
-    const cellHeight = Math.max(minCellHeight, Math.min((availableHeight - cellPadding * (actualRows - 1)) / actualRows, minCellHeight));
-
-
-    // Gradients
-    const defs = svg.append("defs");
-    const gradients = [
-      { id: "gradient-red", colors: ["#dc2626", "#f87171"] },
-      { id: "gradient-green", colors: ["#34d399", "#059669"] },
-      { id: "gradient-neutral", colors: ["#374151", "#1f2937"] }
-    ];
-    gradients.forEach(grad => {
-      const gradient = defs.append("linearGradient")
-        .attr("id", grad.id)
-        .attr("x1", "0%").attr("y1", "0%")
-        .attr("x2", "100%").attr("y2", "100%");
-      gradient.append("stop").attr("offset", "0%").attr("stop-color", grad.colors[0]);
-      gradient.append("stop").attr("offset", "100%").attr("stop-color", grad.colors[1]);
-    });
-
-    // Tooltip
-    const tooltip = d3.select(parent).selectAll(".market-heatmap-tooltip").data([0]).join("div")
-      .attr("class", "market-heatmap-tooltip")
-      .style("position", "absolute")
-      .style("background", "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)")
-      .style("color", "#f8fafc")
-      .style("padding", "8px")
-      .style("border", "1px solid #334155")
-      .style("border-radius", "12px")
-      .style("box-shadow", "0 20px 25px -5px rgba(0,0,0,0.3),0 10px 10px -5px rgba(0,0,0,0.1)")
-      .style("pointer-events", "none")
-      .style("opacity", 0)
-      .style("font-size", "9px")
-      .style("font-family", "Inter, system-ui, sans-serif")
-      .style("min-width", "280px")
-      .style("z-index", "1000")
-      .style("backdrop-filter", "blur(8px)");
-
-    // Draw sectors
-    const groups = svg.selectAll("g.cell")
-      .data(paginatedSectors, (d: any) => d[0])
-      .join("g")
-      .attr("class", "cell");
-
-    groups.each(function ([sector, info], i) {
-      const col = i % cols;
-      const row = Math.floor(i / cols);
-      const x = cellPadding + col * (cellWidth + cellPadding);
-      const y = cellPadding + row * (cellHeight + cellPadding);
-      const g = d3.select(this).attr("transform", `translate(${x},${y})`);
-
-      let gradientId = "gradient-neutral";
-      if (info.avgChange > 0.5) gradientId = "gradient-green";
-      else if (info.avgChange < -0.5) gradientId = "gradient-red";
-
-      const rect = g.selectAll("rect").data([info])
-        .join("rect")
-        .attr("width", cellWidth)
-        .attr("height", cellHeight)
-        .attr("rx", 8).attr("ry", 8)
-        .style("cursor", "pointer")
-        .style("fill", `url(#${gradientId})`)
-        .style("stroke", "#374151")
-        .style("stroke-width", "1px")
-        .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
-
-      // Hover & tooltip
-      rect.on("mouseover", (event, d) => {
-        setHoveredSector(sector);
-        const topStocks = d.stocks.sort((a, b) => Math.abs(b.change) - Math.abs(a.change)).slice(0, 3);
-        tooltip.html(`
-          <div style="margin-bottom:12px;font-size:10px;font-weight:600;color:#fbbf24;">${sector} Sector</div>
-          <div style="font-size:9px;color:#94a3b8;">${d.count} stocks • Market Cap: ₹${d.marketCap.toFixed(1)}T</div>
-          <div style="border-top:1px solid #334155;margin-top:8px;padding-top:8px;">
-            ${topStocks.map(stock => `<div style="display:flex;justify-content:space-between;font-size:9px;">
-              <span style="color:#f8fafc;">${stock.symbol}</span>
-              <span style="color:${stock.change >= 0 ? '#10b981' : '#ef4444'};font-weight:600;">
-                ${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%
-              </span>
-            </div>`).join('')}
-          </div>
-        `).style("opacity", 1);
-
-        const mouseX = event.clientX - parent.getBoundingClientRect().left;
-        const mouseY = event.clientY - parent.getBoundingClientRect().top;
-        let tooltipX = mouseX + 15;
-        let tooltipY = mouseY - 10;
-        if (tooltipX + 300 > parent.clientWidth) tooltipX = mouseX - 300 - 15;
-        if (tooltipY + 200 > parent.clientHeight) tooltipY = mouseY - 200 - 10;
-        if (tooltipY < 0) tooltipY = 10;
-        if (tooltipX < 0) tooltipX = 10;
-        tooltip.style("left", tooltipX + "px").style("top", tooltipY + "px");
-        rect.style("filter", "drop-shadow(0 4px 12px rgba(0,0,0,0.2)) brightness(1.1)");
-      })
-        .on("mousemove", (event) => {
-          const mouseX = event.clientX - parent.getBoundingClientRect().left;
-          const mouseY = event.clientY - parent.getBoundingClientRect().top;
-          let tooltipX = mouseX + 15;
-          let tooltipY = mouseY - 10;
-          if (tooltipX + 300 > parent.clientWidth) tooltipX = mouseX - 300 - 15;
-          if (tooltipY + 200 > parent.clientHeight) tooltipY = mouseY - 200 - 10;
-          if (tooltipY < 0) tooltipY = 10;
-          if (tooltipX < 0) tooltipX = 10;
-          tooltip.style("left", tooltipX + "px").style("top", tooltipY + "px");
-        })
-        .on("mouseout", () => {
-          setHoveredSector(null);
-          tooltip.style("opacity", 0);
-          rect.style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
-        })
-        .on("click", () => setSelectedSector(selectedSector === sector ? null : sector));
-
-      // Text & trend
-      g.selectAll("text.title").data([sector])
-        .join("text")
-        .attr("class", "title")
-        .attr("x", cellWidth / 2).attr("y", cellHeight / 2 - 6)
-        .attr("text-anchor", "middle")
-        .attr("fill", "#f8fafc")
-        .attr("font-size", Math.min(Math.max(9, cellWidth / 15), 11))
-        .attr("font-weight", "600")
-        .style("pointer-events", "none")
-        .text(sector.length > 8 ? sector.substring(0, 8) + "." : sector);
-
-      g.selectAll("text.value").data([info])
-        .join("text")
-        .attr("class", "value")
-        .attr("x", cellWidth / 2).attr("y", cellHeight / 2 + 6)
-        .attr("text-anchor", "middle")
-        .attr("fill", 'black')
-        .attr("font-size", Math.max(8, cellWidth / 12))
-        .attr("font-weight", "700")
-        .style("pointer-events", "none")
-        .text(`${info.avgChange >= 0 ? '+' : ''}${info.avgChange.toFixed(1)}%`);
-
-      g.selectAll("text.trend").data([info])
-        .join("text")
-        .attr("class", "trend")
-        .attr("x", cellWidth - 6).attr("y", 12)
-        .attr("text-anchor", "end")
-        .attr("fill", info.avgChange >= 0 ? "#10b981" : "#ef4444")
-        .attr("font-size", "10px")
-        .style("pointer-events", "none")
-        .text(info.avgChange >= 0 ? "↗" : "↘");
-    });
-  }, [paginatedSectors, selectedSector, hoveredSector, dimensions.width, dimensions.height]);
+    return { sectorMap: sectors, totalPages, paginatedSectors };
+  }, [data, currentPage, sectorsPerPage]);
 
   return (
     <WindowLayout title="Market Heatmap" icon={BarChart3} fit={true}>
-      <div className="w-full">
-        <div ref={containerRef} className="w-full h-[350px] flex items-center justify-center relative overflow-auto">
-          <svg ref={svgRef} className="w-full h-full"></svg>
+      <div className="relative w-full overflow-visible">
+        {/* Heatmap grid */}
+        <div className="grid grid-cols-5 gap-1 overflow-visible">
+          {paginatedSectors.map((sectorInfo) => (
+            <Tooltip key={sectorInfo.sector}>
+              <TooltipTrigger asChild>
+                <div
+                  className="rounded-sm p-2 cursor-pointer flex flex-col items-center justify-center"
+                  style={{ backgroundColor: colorScale(sectorInfo.avgChange) }}
+                  onClick={() =>
+                    setSelectedSector(
+                      selectedSector === sectorInfo.sector ? null : sectorInfo.sector
+                    )
+                  }
+                >
+                  <div className="text-white text-[10px] font-semibold uppercase">
+                    {sectorInfo.sector.length > 7
+                      ? sectorInfo.sector.slice(0, 7)
+                      : sectorInfo.sector}
+                  </div>
+                  <div className="text-[9px] font-bold mt-1">
+                    {sectorInfo.avgChange >= 0 ? "+" : ""}
+                    {sectorInfo.avgChange.toFixed(2)}%
+                  </div>
+                </div>
+              </TooltipTrigger>
+
+              <TooltipContent
+                side="top"
+                align="center"
+                className="text-[10px] bg-[#0f172a] border border-gray-700 rounded-sm shadow-lg p-2"
+              >
+                <div className="font-semibold text-yellow-400 mb-1">
+                  {sectorInfo.sector}
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span>Stocks</span>
+                  <span>
+                    {sectorInfo.stocks
+                      .slice(0, 2)
+                      .map((s: Stock) => s.symbol)
+                      .join(",")}...
+                  </span>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span>Change</span>
+                  <span
+                    className={
+                      sectorInfo.avgChange >= 0
+                        ? "text-green-500 font-bold"
+                        : "text-red-500 font-bold"
+                    }
+                  >
+                    {sectorInfo.avgChange >= 0 ? "+" : ""}
+                    {sectorInfo.avgChange.toFixed(2)}%
+                  </span>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span>Stocks</span>
+                  <span>{sectorInfo.count}</span>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span>Market Cap</span>
+                  <span>{sectorInfo.marketCap?.toFixed(1)}M</span>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          ))}
         </div>
+      </div>
 
-        {totalPages > 1 && (
-          <div className="flex justify-between items-center text-[9px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90 mt-2 mb-4">
-            <button
-              className="flex items-center gap-1 text-accent disabled:text-gray-600"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            >
-              <ChevronLeft className="w-3 h-3" /> Prev
-            </button>
-            <div className="text-gray-400">
-              Page <span className="text-accent">{currentPage}</span> of {totalPages}
-            </div>
-            <button
-              className="flex items-center gap-1 text-accent disabled:text-gray-600"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            >
-              Next <ChevronRight className="w-3 h-3" />
-            </button>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90 mt-2">
+          <button
+            className="flex items-center gap-1 text-accent disabled:text-gray-600"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          >
+            <ChevronLeft className="w-3 h-3" /> Prev
+          </button>
+
+          <div className="text-gray-400">
+            Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
           </div>
-        )}
 
-        {selectedSector && (
-          <WindowLayout title={`${selectedSector} Sector Analysis`} icon={BarChart3}>
+          <button
+            className="flex items-center gap-1 text-accent disabled:text-gray-600"
+            disabled={currentPage === totalPages || totalPages === 0}
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+          >
+            Next <ChevronRight className="w-3 h-3" />
+          </button>
+        </div>
+      )}
+
+      {/* Sector Details */}
+      {selectedSector && (
+        <WindowLayout className="mt-2" title="Sector Stocks Heatmap" icon={BarChart3} fit={true}>
+          <div>
             <SectorStockHeatmap
               sector={selectedSector}
-              stocks={sectorMap.find(([sector]) => sector === selectedSector)?.[1]?.stocks || []}
+              stocks={sectorMap.find((s) => s.sector === selectedSector)?.stocks || []}
             />
-          </WindowLayout>
-        )}
-      </div>
+          </div>
+        </WindowLayout>
+      )}
     </WindowLayout>
   );
 };
+
+
+
 
 
 export default SectorHeatMap;

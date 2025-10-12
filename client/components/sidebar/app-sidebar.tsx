@@ -22,7 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import appLogo from "@/public/Storx.final.png"
+  import appLogo from "@/public/Storx.final.png"
 
 
 const data = {
