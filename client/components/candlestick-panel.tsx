@@ -3,31 +3,79 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CandlestickSeries, IChartApi, CandlestickData, UTCTimestamp } from 'lightweight-charts';
 import WindowLayout from './window-layout';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { ChartCandlestick } from 'lucide-react';
 
-const timeframes = ['1D', '1W', '1M', '1Y'];
+interface CandlestickPanelProps {
+    count?: number;
+}
 
-const CandlestickPanel = () => {
+const CandlestickPanel: React.FC<CandlestickPanelProps> = ({ count = 5 }) => {
+    const maxPerRow = 4;
+
+    return (
+        <WindowLayout title="Watchlist Charting" icon={ChartCandlestick} fit={false}>
+            <div className="relative overflow-hidden w-full">
+                <div
+                    className="grid gap-2"
+                    style={{
+                        gridTemplateColumns: `repeat(${Math.min(count, maxPerRow)}, 1fr)`,
+                    }}
+                >
+                    {Array.from({ length: count }).map((_, idx) => (
+                        <SingleChart key={idx} count={count} />
+                    ))}
+                </div>
+            </div>
+        </WindowLayout>
+    );
+};
+
+interface SingleChartProps {
+    count: number;
+}
+
+const SingleChart: React.FC<SingleChartProps> = ({ count }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
     const seriesRef = useRef<ReturnType<IChartApi['addSeries']> | null>(null);
     const [selectedTF, setSelectedTF] = useState('1D');
 
+    // Shrink axes/font sizes for more charts
+    const chartOptions = {
+        layout: {
+            background: { color: '#0B1220' },
+            textColor: '#DDD',
+        },
+        grid: {
+            vertLines: { color: '#1E293B' },
+            horzLines: { color: '#1E293B' },
+        },
+        timeScale: {
+            borderColor: '#1E293B',
+            timeVisible: true,
+            secondsVisible: false,
+            rightOffset: 3,
+            barSpacing: count > 2 ? 4 : 6,
+            tickMarkFormatter: count > 2 ? (time: any) => time : undefined,
+        },
+        rightPriceScale: {
+            borderColor: '#1E293B',
+            scaleMargins: { top: 0.2, bottom: 0.2 },
+        },
+    };
+
     useEffect(() => {
         if (!chartContainerRef.current) return;
 
-        const chart = createChart(chartContainerRef.current, {
-            layout: { background: { color: '#0B1220' }, textColor: '#DDD' },
-            grid: { vertLines: { color: '#1E293B' }, horzLines: { color: '#1E293B' } },
-            width: chartContainerRef.current.clientWidth,
-            height: 350,
-            timeScale: { borderColor: '#1E293B' },
-            rightPriceScale: { borderColor: '#1E293B' },
+        const container = chartContainerRef.current;
+        const width = container.clientWidth;
+
+        const chart = createChart(container, {
+            ...chartOptions,
+            width,
+            height: width, // square
         });
 
-        // ✅ Create candlestick series using addSeries(CandlestickSeries)
         const series = chart.addSeries(CandlestickSeries, {
             upColor: '#4ade80',
             downColor: '#ef4444',
@@ -40,13 +88,14 @@ const CandlestickPanel = () => {
         seriesRef.current = series;
 
         return () => chart.remove();
-    }, []);
+    }, [count]);
 
+    // Real-time updates
     useEffect(() => {
         if (!seriesRef.current) return;
 
         const now = Math.floor(Date.now() / 1000) as UTCTimestamp;
-        const data: CandlestickData<UTCTimestamp>[] = Array.from({ length: 60 }, (_, i) => ({
+        const initialData: CandlestickData<UTCTimestamp>[] = Array.from({ length: 60 }, (_, i) => ({
             time: (now - (60 - i) * 86400) as UTCTimestamp,
             open: 150 + Math.random() * 10,
             high: 160 + Math.random() * 10,
@@ -54,13 +103,28 @@ const CandlestickPanel = () => {
             close: 150 + Math.random() * 15,
         }));
 
-        seriesRef.current.setData(data);
+        seriesRef.current.setData(initialData);
+
+        const interval = setInterval(() => {
+            const newCandle: CandlestickData<UTCTimestamp> = {
+                time: Math.floor(Date.now() / 1000) as UTCTimestamp,
+                open: 150 + Math.random() * 10,
+                high: 160 + Math.random() * 10,
+                low: 140 - Math.random() * 10,
+                close: 150 + Math.random() * 15,
+            };
+            seriesRef.current!.update(newCandle);
+        }, 1000);
+
+        return () => clearInterval(interval);
     }, [selectedTF]);
 
+    // Resize chart on container resize
     useEffect(() => {
         const handleResize = () => {
             if (chartRef.current && chartContainerRef.current) {
-                chartRef.current.applyOptions({ width: chartContainerRef.current.clientWidth });
+                const width = chartContainerRef.current.clientWidth;
+                chartRef.current.applyOptions({ width, height: width });
             }
         };
         window.addEventListener('resize', handleResize);
@@ -68,23 +132,11 @@ const CandlestickPanel = () => {
     }, []);
 
     return (
-        <WindowLayout title="Charting Panel" icon={ChartCandlestick} fit={true}>
-
-            {/* {timeframes.map((tf) => (
-            <Button
-              key={tf}
-              variant={selectedTF === tf ? 'default' : 'outline'}
-              size="icon"
-              className={`text-[10px] ${selectedTF === tf ? 'bg-accent text-black' : 'text-gray-300'}`}
-              onClick={() => setSelectedTF(tf)}
-            >
-              {tf}
-            </Button>
-          ))} */}
-
-            <div ref={chartContainerRef} className="w-full rounded-lg overflow-hidden"  />
-
-        </WindowLayout>
+        <div
+            ref={chartContainerRef}
+            className="rounded-sm overflow-hidden border border-gray-800"
+            style={{ aspectRatio: '1 / 1' }} // square
+        />
     );
 };
 
