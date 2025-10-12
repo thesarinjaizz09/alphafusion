@@ -48,36 +48,35 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
 
     // Helper function to render tooltip content
     const renderTooltipContent = (item: IndexData | EquityData, type: 'index' | 'equity') => (
-        <div className="bg-[#0A0F1C] border border-gray-700 rounded-sm p-3 max-w-xs">
-            <div className="flex items-center gap-2 mb-2">
-                <div className="w-2 h-2 rounded-full bg-blue-400"></div>
-                <span className="text-white font-semibold text-[10px]">{item.symbol}</span>
+        <div className="bg-[#0A0F1C] rounded-sm p-2">
+            <div className="flex items-center gap-2 mb-1">
+                <span className="text-accent font-semibold text-[10px]">{item.symbol}</span>
                 <span className="text-gray-400 text-[9px]">({type.toUpperCase()})</span>
             </div>
-            
-            <div className="space-y-2 text-[10px]">
+
+            <div className="space-y-1 text-[10px] border-t border-gray-700 pt-1">
                 <div className="flex justify-between items-center">
                     <span className="text-gray-400 mr-1">Name:</span>
                     <span className="text-white font-medium">{item.name}</span>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                     <span className="text-gray-400 mr-1">Price:</span>
                     <span className="text-white font-semibold">{formatPrice(item.price, selectedExchange)}</span>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                     <span className="text-gray-400 mr-1">Change:</span>
                     <span className={`font-medium ${item.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                         {item.changePercent >= 0 ? '+' : ''}{item.changePercent.toFixed(2)}%
                     </span>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                     <span className="text-gray-400 mr-1">Market Cap:</span>
                     <span className="text-white">{formatLargeNumber(item.marketCap)}</span>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                     <span className="text-gray-400 mr-1">Volume:</span>
                     <span className="text-white">{formatLargeNumber(item.volume)}</span>
@@ -87,7 +86,7 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
     );
 
     return (
-        <WindowLayout title="Indices, Equities & Macros" icon={Waypoints}>
+        <WindowLayout title="Indices, Equities & Macros" icon={Waypoints} fit={true}>
             <div className="flex flex-col overflow-hidden w-full gap-2">
                 <div className="flex animate-scroll gap-4 w-max">
                     {loopedIndices.map((i, idx) => {
@@ -111,7 +110,7 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
                                         </div>
                                     </div>
                                 </TooltipTrigger>
-                                <TooltipContent side="top" className="bg-transparent border-none p-0">
+                                <TooltipContent side="top" className="bg-transparent border border-accent/30 p-0">
                                     {renderTooltipContent(i, 'index')}
                                 </TooltipContent>
                             </Tooltip>
@@ -140,7 +139,7 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
                                         </div>
                                     </div>
                                 </TooltipTrigger>
-                                <TooltipContent side="top" className="bg-transparent border-none p-0">
+                                <TooltipContent side="top" className="bg-transparent border border-accent/30 p-0">
                                     {renderTooltipContent(i, 'equity')}
                                 </TooltipContent>
                             </Tooltip>

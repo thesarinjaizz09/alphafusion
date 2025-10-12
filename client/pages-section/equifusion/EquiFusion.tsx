@@ -32,10 +32,10 @@ const EquiFusionPage = () => {
                 {/* COL 2 */}
                 <div className="flex flex-col gap-3">
                     <TradesharkSuggestions />
-                    <WatchlistBox />
-                    <NewsBox />
+                    {/* <WatchlistBox /> */}
                     {/* <GlobalMarketMap /> */}
                     <SectorHeatMap />
+                    <NewsBox />
                 </div>
             </div>
 

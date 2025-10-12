@@ -9,6 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { NoResults } from "@/components/ui/no-results";
 
 interface DynamicTableProps {
@@ -18,7 +19,7 @@ interface DynamicTableProps {
     title?: string;
     titlePosition?: "top" | "bottom";
     rowsPerPage?: number;
-    enableGlobalSearch?: boolean; // ✅ optional
+    enableGlobalSearch?: boolean;
 }
 
 const DynamicTable: React.FC<DynamicTableProps> = ({
@@ -33,14 +34,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [search, setSearch] = useState<string>(""); // ✅ global search
+    const [search, setSearch] = useState<string>("");
 
-    // --- Derived Data: Sorting + Filtering + Search ---
     const processedData = useMemo(() => {
-        // 1️⃣ Start with a shallow copy
         let tempData = [...data];
 
-        // 2️⃣ Global search
         if (search) {
             const lowerSearch = search.toLowerCase();
             tempData = tempData.filter((row) =>
@@ -48,7 +46,6 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
             );
         }
 
-        // 3️⃣ Column-specific filters
         tempData = tempData.filter((row) =>
             headers.every((header) => {
                 const filterValue = filters[header]?.toLowerCase() || "";
@@ -58,7 +55,6 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
             })
         );
 
-        // 4️⃣ Sorting
         if (sortConfig) {
             const { key, direction } = sortConfig;
             tempData.sort((a, b) => {
@@ -78,14 +74,12 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
         return tempData;
     }, [data, filters, headers, sortConfig, search]);
 
-    // --- Pagination ---
     const totalPages = Math.ceil(processedData.length / rowsPerPage);
     const paginatedData = useMemo(() => {
         const start = (currentPage - 1) * rowsPerPage;
         return processedData.slice(start, start + rowsPerPage);
     }, [processedData, currentPage, rowsPerPage]);
 
-    // --- Handlers ---
     const handleSort = (header: string) => {
         setSortConfig((prev) =>
             prev?.key === header
@@ -109,155 +103,195 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     const tableHeight = rowsPerPage * rowHeight;
 
     return (
-        <div className="overflow-x-auto rounded-sm backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 flex flex-col w-full border border-gray-800">
-            {title && titlePosition === "top" && TitleComponent}
+        <TooltipProvider delayDuration={150}>
+            <div className="overflow-x-auto rounded-sm backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 flex flex-col w-full border border-gray-800">
+                {title && titlePosition === "top" && TitleComponent}
 
-            {/* ✅ Global Search */}
-            {enableGlobalSearch && (
-                <div className="flex items-center justify-start px-2 py-2">
-                    <div className="flex items-center bg-[#10182A] rounded-sm px-1 py-1 w-full border border-gray-700">
-                        <Search className="w-3 h-3 text-gray-400 mr-2" />
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            value={search}
-                            onChange={(e) => {
-                                setSearch(e.target.value);
-                                setCurrentPage(1); // reset to first page on search
-                            }}
-                            className="bg-transparent text-gray-200 text-[10px] outline-none w-full"
-                        />
+                {enableGlobalSearch && (
+                    <div className="flex items-center justify-start px-2 py-2">
+                        <div className="flex items-center bg-[#10182A] rounded-sm px-1 py-1 w-full border border-gray-700">
+                            <Search className="w-3 h-3 text-gray-400 mr-2" />
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                value={search}
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                                className="bg-transparent text-gray-200 text-[10px] outline-none w-full"
+                            />
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
-            {/* TABLE */}
-            <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: tableHeight + 60 }}>
-                <Table className="min-w-full text-[9px] h-full border-separate border-spacing-0 table-auto">
-                    <TableHeader>
-                        <TableRow className="bg-[#121A2E] sticky top-0 z-30">
-                            {headers.map((header) => (
-                                <TableHead
-                                    key={header}
-                                    className="text-left text-white font-semibold cursor-pointer select-none hover:text-accent transition-all p-2"
-                                >
-                                    <div
-                                        onClick={() => handleSort(header)}
-                                        className="flex items-center justify-between w-full whitespace-nowrap"
+                <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: tableHeight + 60 }}>
+                    <Table className="min-w-full text-[9px] h-full border-separate border-spacing-0 table-auto">
+                        <TableHeader>
+                            <TableRow className="bg-[#121A2E] sticky top-0 z-30">
+                                {headers.map((header) => (
+                                    <TableHead
+                                        key={header}
+                                        className="text-left text-white font-semibold cursor-pointer select-none hover:text-accent transition-all p-2"
                                     >
-                                        <span className="truncate">{header}</span>
-                                        <ArrowUpDown
-                                            className={`w-3 h-3 ml-1 shrink-0 transition-transform ${sortConfig?.key === header
-                                                    ? sortConfig.direction === "asc"
-                                                        ? "rotate-180 text-accent"
-                                                        : "text-accent"
-                                                    : "text-gray-500"
-                                                }`}
+                                        <div
+                                            onClick={() => handleSort(header)}
+                                            className="flex items-center justify-between w-full whitespace-nowrap"
+                                        >
+                                            <span className="truncate">{header}</span>
+                                            <ArrowUpDown
+                                                className={`w-3 h-3 ml-1 shrink-0 transition-transform ${sortConfig?.key === header
+                                                        ? sortConfig.direction === "asc"
+                                                            ? "rotate-180 text-accent"
+                                                            : "text-accent"
+                                                        : "text-gray-500"
+                                                    }`}
+                                            />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={filters[header] || ""}
+                                            onChange={(e) => handleFilterChange(header, e.target.value)}
+                                            placeholder="filter..."
+                                            className="w-full text-[9px] mt-1 bg-transparent border-b border-gray-700 focus:border-accent outline-none text-gray-300 placeholder-gray-500"
                                         />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={filters[header] || ""}
-                                        onChange={(e) => handleFilterChange(header, e.target.value)}
-                                        placeholder="filter..."
-                                        className="w-full text-[9px] mt-1 bg-transparent border-b border-gray-700 focus:border-accent outline-none text-gray-300 placeholder-gray-500"
-                                    />
-                                </TableHead>
-                            ))}
-                        </TableRow>
-                    </TableHeader>
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        </TableHeader>
 
-                    <TableBody>
-                        {paginatedData.length > 0 ? (
-                            paginatedData.map((row, idx) => (
-                                <TableRow
-                                    key={
+                        <TableBody>
+                            {paginatedData.length > 0 ? (
+                                paginatedData.map((row, idx) => {
+                                    const key =
                                         rowKey
                                             ? typeof rowKey === "function"
                                                 ? rowKey(row, idx)
                                                 : row[rowKey] ?? idx
-                                            : idx
-                                    }
-                                    className={`text-white text-[9px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"
-                                        } hover:bg-[#1B2B47] transition-colors`}
-                                >
-                                    {headers.map((header) => {
-                                        const value = row[header];
-                                        let colorClass = "";
-                                        const isNumber = /\d/.test(String(value));
+                                            : idx;
 
-                                        if (typeof value === "string" && (value.startsWith("+") || value.startsWith("-"))) {
-                                            colorClass = value.startsWith("+")
-                                                ? "text-green-400 font-semibold"
-                                                : "text-red-400 font-semibold";
-                                        }
+                                    return (
+                                        <Tooltip key={key}>
+                                            <TooltipTrigger asChild>
+                                                <TableRow
+                                                    className={`text-white text-[9px] ${idx % 2 === 0
+                                                            ? "bg-[#16223B]/80"
+                                                            : "bg-[#10182A]/80"
+                                                        } hover:bg-[#1B2B47] transition-colors cursor-default`}
+                                                >
+                                                    {headers.map((header) => {
+                                                        const value = row[header];
+                                                        let colorClass = "";
+                                                        const isNumber = /\d/.test(String(value));
 
-                                        if (typeof value === "string" && ["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
-                                            colorClass =
-                                                value.toUpperCase() === "BUY"
-                                                    ? "text-green-400 font-semibold"
-                                                    : value.toUpperCase() === "SELL"
-                                                        ? "text-red-400 font-semibold"
-                                                        : "text-yellow-400 font-semibold";
-                                        }
+                                                        if (typeof value === "string" && (value.startsWith("+") || value.startsWith("-"))) {
+                                                            colorClass = value.startsWith("+")
+                                                                ? "text-green-400 font-semibold"
+                                                                : "text-red-400 font-semibold";
+                                                        }
 
-                                        return (
-                                            <TableCell
-                                                key={header}
-                                                className={`${colorClass} ${isNumber ? "text-right" : "text-left"} px-2 py-2 max-w-[200px] truncate`}
-                                            >
-                                                {value}
-                                            </TableCell>
-                                        );
-                                    })}
+                                                        if (typeof value === "string" && ["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
+                                                            colorClass =
+                                                                value.toUpperCase() === "BUY"
+                                                                    ? "text-green-400 font-semibold"
+                                                                    : value.toUpperCase() === "SELL"
+                                                                        ? "text-red-400 font-semibold"
+                                                                        : "text-yellow-400 font-semibold";
+                                                        }
+
+                                                        return (
+                                                            <TableCell
+                                                                key={header}
+                                                                className={`${colorClass} ${isNumber ? "text-right" : "text-left"
+                                                                    } px-2 py-2 max-w-[200px] truncate`}
+                                                            >
+                                                                {value}
+                                                            </TableCell>
+                                                        );
+                                                    })}
+                                                </TableRow>
+                                            </TooltipTrigger>
+
+                                            {/* Tooltip content */}
+                                            <TooltipContent className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg max-w-xs whitespace-pre-wrap">
+                                                {headers.map((header) => {
+                                                    const value = String(row[header]);
+
+                                                    let colorClass = "text-gray-100";
+                                                    const isChangeValue = value.startsWith("+") || value.startsWith("-");
+
+                                                    if (isChangeValue) {
+                                                        colorClass = value.startsWith("+")
+                                                            ? "text-green-400 font-semibold"
+                                                            : "text-red-400 font-semibold";
+                                                    } else if (["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
+                                                        colorClass =
+                                                            value.toUpperCase() === "BUY"
+                                                                ? "text-green-400 font-semibold"
+                                                                : value.toUpperCase() === "SELL"
+                                                                    ? "text-red-400 font-semibold"
+                                                                    : "text-yellow-400 font-semibold";
+                                                    }
+
+                                                    return (
+                                                        <div key={header} className="flex justify-between gap-2">
+                                                            <span className="text-gray-400">{header}:</span>
+                                                            <span className={`${colorClass} truncate max-w-[150px]`}>
+                                                                {value}
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </TooltipContent>
+
+                                        </Tooltip>
+                                    );
+                                })
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={headers.length} className="p-0 text-center">
+                                        <div className="flex justify-center items-center w-full">
+                                            <NoResults
+                                                title="No Data Found"
+                                                description="No records match your current search or filter criteria."
+                                                searchTerm={search || undefined}
+                                                className="py-6"
+                                            />
+                                        </div>
+                                    </TableCell>
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={headers.length} className="p-0 text-center">
-                                    <div className="flex justify-center items-center w-full">
-                                        <NoResults 
-                                            title="No Data Found"
-                                            description="No records match your current search or filter criteria."
-                                            searchTerm={search || undefined}
-                                            className="py-6"
-                                        />
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
-
-            {/* PAGINATION */}
-            {processedData.length > rowsPerPage && (
-                <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
-                    <button
-                        className="flex items-center gap-1 text-accent disabled:text-gray-600"
-                        disabled={currentPage === 1}
-                        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                    >
-                        <ChevronLeft className="w-3 h-3" /> Prev
-                    </button>
-
-                    <div className="text-gray-400">
-                        Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
-                    </div>
-
-                    <button
-                        className="flex items-center gap-1 text-accent disabled:text-gray-600"
-                        disabled={currentPage === totalPages || totalPages === 0}
-                        onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-                    >
-                        Next <ChevronRight className="w-3 h-3" />
-                    </button>
+                            )}
+                        </TableBody>
+                    </Table>
                 </div>
-            )}
 
+                {processedData.length > rowsPerPage && (
+                    <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
+                        <button
+                            className="flex items-center gap-1 text-accent disabled:text-gray-600"
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                        >
+                            <ChevronLeft className="w-3 h-3" /> Prev
+                        </button>
 
-            {title && titlePosition === "bottom" && TitleComponent}
-        </div>
+                        <div className="text-gray-400">
+                            Page <span className="text-accent">{currentPage}</span> of {totalPages || 1}
+                        </div>
+
+                        <button
+                            className="flex items-center gap-1 text-accent disabled:text-gray-600"
+                            disabled={currentPage === totalPages || totalPages === 0}
+                            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                        >
+                            Next <ChevronRight className="w-3 h-3" />
+                        </button>
+                    </div>
+                )}
+
+                {title && titlePosition === "bottom" && TitleComponent}
+            </div>
+        </TooltipProvider>
     );
 };
 

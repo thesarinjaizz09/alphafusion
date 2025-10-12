@@ -8,15 +8,17 @@ interface WindowLayoutProps {
     height?: string; // optional height prop
     fit?: boolean; // if true, height fits content
     className?: string; // optional custom classes
+    max?: boolean
 }
 
 export default function WindowLayout({
     title,
     icon: Icon,
     children,
-    height = '400px',
+    height = '390px',
     fit = false,
-    className = '', // default empty
+    className = '', // default empty,
+    max = false
 }: WindowLayoutProps) {
     const [isMinimized, setIsMinimized] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
@@ -29,8 +31,8 @@ export default function WindowLayout({
                 ${isMinimized ? "h-fit p-2 opacity-90" : "p-2 scale-100 opacity-100"} 
                 ${className}`} // merge custom classes here
             style={{
-                maxHeight: !isMinimized && !fit ? height : undefined,
-                height: !isMinimized && fit ? 'auto' : undefined,
+                maxHeight: !isMinimized && !fit && max ? height : undefined,
+                height: !isMinimized && !fit ? height : !isMinimized && fit ? 'auto' : undefined,
                 overflow: !isMinimized ? 'auto' : undefined,
             }}
         >

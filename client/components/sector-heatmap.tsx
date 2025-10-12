@@ -3,7 +3,8 @@ import * as d3 from "d3";
 import WindowLayout from "./window-layout";
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Flame, TrendingUp, TrendingDown, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { Flame, TrendingUp, TrendingDown, BarChart3, ChevronLeft, ChevronRight, Search, ArrowUpDown } from "lucide-react";
+import NoResults from "./ui/no-results";
 
 interface Stock {
   symbol: string;
@@ -183,16 +184,97 @@ const defaultData: Stock[] = [
 // Component for individual stock heatmap within a sector
 const SectorStockHeatmap: React.FC<SectorStockHeatmapProps> = ({ sector, stocks }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Stock; direction: "asc" | "desc" } | null>({ key: "change", direction: "desc" });
 
   const stocksPerPage = 12;
-  const totalPages = Math.ceil(stocks.length / stocksPerPage);
-  const paginatedStocks = stocks.slice(
-    (currentPage - 1) * stocksPerPage,
-    currentPage * stocksPerPage
-  );
+
+  const { sectorMap, totalPages, paginatedStocks } = useMemo(() => {
+
+    // Sorting
+    if (sortConfig) {
+      const { key, direction } = sortConfig;
+      stocks.sort((a, b) => {
+        let aVal: any = a[key];
+        let bVal: any = b[key];
+
+        if (typeof aVal === "number" && typeof bVal === "number") {
+          return direction === "asc" ? aVal - bVal : bVal - aVal;
+        }
+
+        return direction === "asc"
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
+      });
+    }
+
+    const filtered = stocks.filter((s) => {
+      const query = search.toLowerCase();
+
+      // Combine all possible fields into one string
+      const searchableText = [
+        s.symbol,
+        s.sector,
+        s.change?.toString(),
+        s.volume?.toString(),
+        s.price?.toString(),
+        s.marketCap?.toString(),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(query);
+    });
+
+
+    const totalPages = Math.ceil(filtered.length / stocksPerPage);
+    const start = (currentPage - 1) * stocksPerPage;
+    const end = start + stocksPerPage;
+    const paginatedStocks = filtered.slice(start, end);
+
+    return { sectorMap: stocks, totalPages, paginatedStocks };
+  }, [stocks, currentPage, stocksPerPage, search, sortConfig]);
+
+  const handleSort = (key: keyof Stock) => {
+    if (sortConfig?.key === key) {
+      setSortConfig({ key, direction: sortConfig.direction === "asc" ? "desc" : "asc" });
+    } else {
+      setSortConfig({ key, direction: "desc" });
+    }
+  };
+
 
   return (
     <div className="w-full overflow-visible">
+      <div className="flex flex-col items-center justify-start mb-2 gap-2">
+        <div className="flex items-center bg-[#10182A] rounded-sm px-2 py-1 w-full border border-gray-700">
+          <Search className="w-3 h-3 text-gray-400 mr-2" />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="bg-transparent text-gray-200 text-[10px] outline-none w-full placeholder-gray-500"
+          />
+        </div>
+        <div className="flex items-start w-full justify-between gap-3 text-[10px] text-gray-400">
+          <button onClick={() => handleSort("change")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
+            Change <ArrowUpDown className="w-3 h-3" />
+          </button>
+          <button onClick={() => handleSort("marketCap")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
+            MCap <ArrowUpDown className="w-3 h-3" />
+          </button>
+          <button onClick={() => handleSort("price")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
+            Price <ArrowUpDown className="w-3 h-3" />
+          </button>
+          <button onClick={() => handleSort("volume")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
+            Volume <ArrowUpDown className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
       <div className="grid grid-cols-2 gap-1 overflow-visible">
         {paginatedStocks.map((stock) => (
           <Tooltip key={stock.symbol}>
@@ -212,9 +294,9 @@ const SectorStockHeatmap: React.FC<SectorStockHeatmapProps> = ({ sector, stocks 
             <TooltipContent
               side="right"
               align="center"
-              className="text-[10px] bg-[#0f172a] border border-gray-700 rounded-sm shadow-lg p-2"
+              className="text-[10px] bg-[#0f172a] border border-accent/30 rounded-sm shadow-lg p-2"
             >
-              <div className="font-semibold text-yellow-400 mb-1">{stock.symbol}</div>
+              <div className="font-semibold text-yellow-400">{stock.symbol}</div>
               <div className="mb-1">{sector} Sector</div>
               <div className="flex justify-between border-t border-gray-700 pt-1">
                 <span>Price</span>
@@ -277,6 +359,8 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
 }) => {
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Sector; direction: "asc" | "desc" } | null>({ key: "avgChange", direction: "desc" });
 
   const { sectorMap, totalPages, paginatedSectors } = useMemo(() => {
     const sectors = Object.entries(
@@ -295,16 +379,99 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
       count: info.stocks.length,
     }));
 
-    const totalPages = Math.ceil(sectors.length / sectorsPerPage);
+    // Sorting
+    if (sortConfig) {
+      const { key, direction } = sortConfig;
+      sectors.sort((a, b) => {
+        let aVal: any = a[key];
+        let bVal: any = b[key];
+
+        if (typeof aVal === "number" && typeof bVal === "number") {
+          return direction === "asc" ? aVal - bVal : bVal - aVal;
+        }
+
+        return direction === "asc"
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
+      });
+    }
+
+    const filtered = sectors.filter((s: Sector) => {
+      const query = search.toLowerCase();
+
+      // Combine top-level sector fields
+      const sectorText = [
+        s.sector,
+        s.count?.toString(),
+        s.marketCap?.toString(),
+        s.avgChange?.toString(),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      // Combine all stock fields
+      const stockText = s.stocks
+        .map((st: Stock) =>
+          [
+            st.symbol,
+            st.sector,
+            st.change?.toString(),
+            st.volume?.toString(),
+            st.price?.toString(),
+            st.marketCap?.toString(),
+          ].join(" ")
+        )
+        .join(" ")
+        .toLowerCase();
+
+      // Final combined search text
+      const searchableText = `${sectorText} ${stockText}`;
+
+      return searchableText.includes(query);
+    });
+
+
+    const totalPages = Math.ceil(filtered.length / sectorsPerPage);
     const start = (currentPage - 1) * sectorsPerPage;
     const end = start + sectorsPerPage;
-    const paginatedSectors = sectors.slice(start, end);
+    const paginatedSectors = filtered.slice(start, end);
 
     return { sectorMap: sectors, totalPages, paginatedSectors };
-  }, [data, currentPage, sectorsPerPage]);
+  }, [data, currentPage, sectorsPerPage, search, sortConfig]);
+
+  const handleSort = (key: keyof Sector) => {
+    if (sortConfig?.key === key) {
+      setSortConfig({ key, direction: sortConfig.direction === "asc" ? "desc" : "asc" });
+    } else {
+      setSortConfig({ key, direction: "desc" });
+    }
+  };
 
   return (
-    <WindowLayout title="Market Heatmap" icon={BarChart3} fit={true}>
+    <WindowLayout title="Market Heatmap" icon={BarChart3}>
+      <div className="flex items-center justify-start mb-2 gap-2">
+        <div className="flex items-center bg-[#10182A] rounded-sm px-2 py-1 w-full border border-gray-700">
+          <Search className="w-3 h-3 text-gray-400 mr-2" />
+          <input
+            type="text"
+            placeholder="Search sectors..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="bg-transparent text-gray-200 text-[10px] outline-none w-full placeholder-gray-500"
+          />
+        </div>
+        <div className="flex gap-3 text-[10px] text-gray-400">
+          <button onClick={() => handleSort("avgChange")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
+            Change <ArrowUpDown className="w-3 h-3" />
+          </button>
+          <button onClick={() => handleSort("marketCap")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
+            MCap <ArrowUpDown className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
       <div className="relative w-full overflow-visible">
         {/* Heatmap grid */}
         <div className="grid grid-cols-5 gap-1 overflow-visible">
@@ -335,12 +502,12 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
               <TooltipContent
                 side="top"
                 align="center"
-                className="text-[10px] bg-[#0f172a] border border-gray-700 rounded-sm shadow-lg p-2"
+                className="text-[10px] bg-[#0f172a] border border-accent/30 rounded-sm shadow-lg p-2"
               >
                 <div className="font-semibold text-yellow-400 mb-1">
                   {sectorInfo.sector}
                 </div>
-                <div className="flex justify-between gap-2">
+                <div className="flex justify-between gap-2 border-t border-gray-700 pt-1">
                   <span>Stocks</span>
                   <span>
                     {sectorInfo.stocks
@@ -402,16 +569,25 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
       )}
 
       {/* Sector Details */}
-      {selectedSector && (
-        <WindowLayout className="mt-2" title="Sector Stocks Heatmap" icon={BarChart3} fit={true}>
+      <WindowLayout className="mt-2" title="Sector Stocks Heatmap" icon={BarChart3} fit={true}>
+        {selectedSector ? (
           <div>
             <SectorStockHeatmap
               sector={selectedSector}
               stocks={sectorMap.find((s) => s.sector === selectedSector)?.stocks || []}
             />
           </div>
-        </WindowLayout>
-      )}
+        ) :
+          <div className="flex flex-col gap-1 w-full text-center text-[9px] text-gray-400 border p-1 rounded-sm">
+            <span className="text-[10px] font-semibold">
+              Sector Stock Heatmap
+            </span>
+            <span>
+              Select a sector to view its stock's heatmap...
+            </span>
+          </div>
+        }
+      </WindowLayout>
     </WindowLayout>
   );
 };
