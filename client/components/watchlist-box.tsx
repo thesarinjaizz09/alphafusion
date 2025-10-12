@@ -1,5 +1,5 @@
 'use client'
-import { Brain, Cctv } from "lucide-react";
+import { Brain, Cctv, Diff, Plus } from "lucide-react";
 import WindowLayout from "./window-layout";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import DynamicTable from "./dynamic-table";
@@ -26,7 +26,13 @@ const headers = [
 
 const WatchlistBox = () => {
     return (
-        <WindowLayout title="Your Watchlist" icon={Cctv}>
+        <WindowLayout title="Your Watchlist" icon={Cctv} fit={true}>
+            <div className="flex gap-3 text-[10px] text-gray-400 mb-2">
+                <button className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
+                    <Diff className="w-3 h-3" />
+                    Equities 
+                </button>
+            </div>
             <DynamicTable
                 headers={headers}
                 data={watchlistData}
