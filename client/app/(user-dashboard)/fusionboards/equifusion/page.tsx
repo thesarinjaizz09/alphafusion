@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function EquiFusionBoard() {
   return (
-    <div className="rounded-lg overflow-hidden font-mono">
+    <div className="rounded-sm overflow-hidden font-mono">
       {/* HEADER */}
       <PanelTopbar suite="Boards" service="Equities" />
 

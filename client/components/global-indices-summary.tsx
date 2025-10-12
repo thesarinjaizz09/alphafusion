@@ -48,7 +48,7 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
 
     // Helper function to render tooltip content
     const renderTooltipContent = (item: IndexData | EquityData, type: 'index' | 'equity') => (
-        <div className="bg-[#0A0F1C] border border-gray-700 rounded-lg p-3 max-w-xs">
+        <div className="bg-[#0A0F1C] border border-gray-700 rounded-sm p-3 max-w-xs">
             <div className="flex items-center gap-2 mb-2">
                 <div className="w-2 h-2 rounded-full bg-blue-400"></div>
                 <span className="text-white font-semibold text-[10px]">{item.symbol}</span>

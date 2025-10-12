@@ -38,7 +38,7 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                        "bg-[#16223B]/80 shadow-lg text-accent justify-between h-[34px] font-normal text-[9px] rounded-lg transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 overflow-hidden text-ellipsis",
+                        "bg-[#16223B]/80 shadow-lg text-accent justify-between h-[34px] font-normal text-[9px] rounded-sm transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 overflow-hidden text-ellipsis",
                         span === "full" && "w-full",
                     )}
                     style={span === 'half' ? {

@@ -109,13 +109,13 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     const tableHeight = rowsPerPage * rowHeight;
 
     return (
-        <div className="overflow-x-auto rounded-lg backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 flex flex-col w-full border border-gray-800">
+        <div className="overflow-x-auto rounded-sm backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 flex flex-col w-full border border-gray-800">
             {title && titlePosition === "top" && TitleComponent}
 
             {/* ✅ Global Search */}
             {enableGlobalSearch && (
-                <div className="flex items-center justify-start px-3 py-2">
-                    <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-1 w-full max-w-xs border border-gray-700">
+                <div className="flex items-center justify-start px-2 py-2">
+                    <div className="flex items-center bg-[#10182A] rounded-sm px-1 py-1 w-full border border-gray-700">
                         <Search className="w-3 h-3 text-gray-400 mr-2" />
                         <input
                             type="text"

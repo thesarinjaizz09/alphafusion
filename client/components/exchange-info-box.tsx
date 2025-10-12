@@ -93,7 +93,7 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
                 <Combobox mode="Select Sector" span="full" items={exchanges} />
             </div>
 
-            <div className="bg-[#16223B]/80 rounded-lg p-2 mb-4 shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
+            <div className="bg-[#16223B]/80 rounded-sm p-2 mb-4 shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
                 <h2 className="font-semibold text-white mb-1">
                     <a
                         href={info.website}

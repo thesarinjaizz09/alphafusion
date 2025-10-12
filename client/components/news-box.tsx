@@ -211,8 +211,8 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
     return (
         <WindowLayout title="Financial News" icon={Newspaper} height="500px" fit={true}>
             {/* Search & Sort */}
-            <div className="flex flex-col md:flex-row items-center justify-between mb-3 gap-2">
-                <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-1 w-full max-w-xs border border-gray-700">
+            <div className="flex flex-col md:flex-row items-center justify-between mb-2 gap-2">
+                <div className="flex items-center bg-[#10182A] rounded-sm px-2 py-1 w-full max-w-xs border border-gray-700">
                     <Search className="w-3 h-3 text-gray-400 mr-2" />
                     <input
                         type="text"
@@ -226,23 +226,23 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
                     />
                 </div>
                 <div className="flex gap-3 text-[10px] text-gray-400">
-                    <button onClick={() => handleSort("Time")} className="flex items-center gap-1 hover:text-accent">
+                    <button onClick={() => handleSort("Time")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
                         Time <ArrowUpDown className="w-3 h-3" />
                     </button>
-                    <button onClick={() => handleSort("Score")} className="flex items-center gap-1 hover:text-accent">
+                    <button onClick={() => handleSort("Score")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
                         Score <ArrowUpDown className="w-3 h-3" />
                     </button>
                 </div>
             </div>
 
             {/* News Cards */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
                 {paginatedData.length > 0 ? (
                     paginatedData.map((news, idx) => (
                         <div
                             key={idx}
                             onClick={() => setSelectedNews(news)}
-                            className="cursor-pointer bg-[#0B1220] border border-gray-800 p-2 rounded-lg shadow-md hover:shadow-[#E3B341]/20 transition-all flex flex-col"
+                            className="cursor-pointer bg-[#0B1220] border border-gray-800 p-2 rounded-sm shadow-md hover:shadow-[#E3B341]/20 transition-all flex flex-col"
                         >
                             <div className="flex justify-between items-start">
                                 <span className="text-gray-400 text-[9px]">{news.Ticker}</span>
@@ -260,7 +260,7 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
                         </div>
                     ))
                 ) : (
-                    <NoResults 
+                    <NoResults
                         title="No News Found"
                         description="No news articles match your current search criteria."
                         searchTerm={search || undefined}
