@@ -32,15 +32,16 @@ const CandlestickPanel: React.FC<CandlestickPanelProps> = ({ count = 5 }) => {
 
 interface SingleChartProps {
     count: number;
+    ticker?: string; // optional ticker name
 }
 
-const SingleChart: React.FC<SingleChartProps> = ({ count }) => {
+const SingleChart: React.FC<SingleChartProps> = ({ count, ticker = "AAPL" }) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<IChartApi | null>(null);
     const seriesRef = useRef<ReturnType<IChartApi['addSeries']> | null>(null);
     const [selectedTF, setSelectedTF] = useState('1D');
+    const [livePrice, setLivePrice] = useState<number>(0);
 
-    // Shrink axes/font sizes for more charts
     const chartOptions = {
         layout: {
             background: { color: '#0B1220' },
@@ -73,7 +74,7 @@ const SingleChart: React.FC<SingleChartProps> = ({ count }) => {
         const chart = createChart(container, {
             ...chartOptions,
             width,
-            height: width, // square
+            height: width,
         });
 
         const series = chart.addSeries(CandlestickSeries, {
@@ -90,7 +91,7 @@ const SingleChart: React.FC<SingleChartProps> = ({ count }) => {
         return () => chart.remove();
     }, [count]);
 
-    // Real-time updates
+    // Real-time updates with live price
     useEffect(() => {
         if (!seriesRef.current) return;
 
@@ -104,6 +105,7 @@ const SingleChart: React.FC<SingleChartProps> = ({ count }) => {
         }));
 
         seriesRef.current.setData(initialData);
+        setLivePrice(initialData[initialData.length - 1].close); // initial price
 
         const interval = setInterval(() => {
             const newCandle: CandlestickData<UTCTimestamp> = {
@@ -114,12 +116,12 @@ const SingleChart: React.FC<SingleChartProps> = ({ count }) => {
                 close: 150 + Math.random() * 15,
             };
             seriesRef.current!.update(newCandle);
+            setLivePrice(newCandle.close); // update live price
         }, 1000);
 
         return () => clearInterval(interval);
     }, [selectedTF]);
 
-    // Resize chart on container resize
     useEffect(() => {
         const handleResize = () => {
             if (chartRef.current && chartContainerRef.current) {
@@ -132,11 +134,20 @@ const SingleChart: React.FC<SingleChartProps> = ({ count }) => {
     }, []);
 
     return (
-        <div
-            ref={chartContainerRef}
-            className="rounded-sm overflow-hidden border border-gray-800"
-            style={{ aspectRatio: '1 / 1' }} // square
-        />
+        <div className="flex flex-col rounded-sm border border-accent/30 overflow-hidden">
+            {/* Header with ticker and live price */}
+            <div className="flex justify-between items-center px-2 py-1 bg-[#0f172a] text-white text-[10px] font-semibold border-b border-accent/30">
+                <span>{ticker}</span>
+                <span>${livePrice.toFixed(2)}</span>
+            </div>
+
+            {/* Chart container */}
+            <div
+                ref={chartContainerRef}
+                className="flex-1"
+                style={{ aspectRatio: '1 / 1' }}
+            />
+        </div>
     );
 };
 
