@@ -213,8 +213,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                             </TooltipTrigger>
 
                                             {/* Tooltip content */}
-                                            <TooltipContent className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[150px] max-w-xs whitespace-pre-wrap">
-                                                <span className="text-[11px] border-b w-full text-accent">Details</span>
+                                            <TooltipContent className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[9px] shadow-lg min-w-[150px] max-w-xs whitespace-pre-wrap">
+                                                <span className="block text-[9px] font-semibold border-b w-full text-accent uppercase mb-1 pb-1">Details</span>
                                                 {headers.map((header) => {
                                                     const value = String(row[header]);
 

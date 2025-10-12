@@ -294,10 +294,10 @@ const SectorStockHeatmap: React.FC<SectorStockHeatmapProps> = ({ sector, stocks 
             <TooltipContent
               side="right"
               align="center"
-              className="text-[10px] bg-[#0f172a] border border-accent/30 rounded-sm shadow-lg p-2"
+              className="text-[9px] bg-[#0f172a] border border-accent/30 rounded-sm shadow-lg p-2 min-w-[150px] max-w-xs"
             >
-              <div className="font-semibold text-yellow-400">{stock.symbol}</div>
-              <div className="mb-1">{sector} Sector</div>
+              <div className="uppercase font-semibold text-yellow-400">{stock.symbol}</div>
+              <div className="mb-1">{sector}</div>
               <div className="flex justify-between border-t border-gray-700 pt-1">
                 <span>Price</span>
                 <span>₹{stock.price?.toFixed(2) || "N/A"}</span>
@@ -502,9 +502,9 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
               <TooltipContent
                 side="top"
                 align="center"
-                className="text-[10px] bg-[#0f172a] border border-accent/30 rounded-sm shadow-lg p-2"
+                className="text-[9px] bg-[#0f172a] border border-accent/30 rounded-sm shadow-lg p-2 min-w-[150px] max-w-xs"
               >
-                <div className="font-semibold text-yellow-400 mb-1">
+                <div className="uppercase font-semibold text-yellow-400 mb-1">
                   {sectorInfo.sector}
                 </div>
                 <div className="flex justify-between gap-2 border-t border-gray-700 pt-1">
