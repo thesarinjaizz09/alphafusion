@@ -251,7 +251,7 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
                                         "text-yellow-400"
                                     }`}>{news.Action}</span>
                             </div>
-                            <h4 className="text-gray-200 font-medium text-[10px] mt-1 line-clamp-2">{news.Headline}</h4>
+                            <h4 className="text-gray-200 font-medium text-[10px] mt-1 line-clamp-2">{news.Headline.length > 45 ? `${news.Headline.substring(0, 45)}...` : news.Headline}</h4>
                             <div className="flex justify-between items-center mt-2 text-gray-400 text-[9px]">
                                 <span>{news.Source}</span>
                                 <span>{news.Time}</span>
