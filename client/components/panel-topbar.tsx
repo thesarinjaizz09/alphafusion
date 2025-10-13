@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import LocalClock from "@/components/local-clock";
 
+
 type PanelTopbarProps = {
     suite: string;
     service: string;
@@ -38,6 +39,7 @@ const PanelTopbar = ({ suite, service }: PanelTopbarProps) => {
                 </Breadcrumb>
             </div>
             <LocalClock className="mr-5" />
+
         </header>
     )
 }

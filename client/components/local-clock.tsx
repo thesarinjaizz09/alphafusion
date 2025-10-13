@@ -3,6 +3,21 @@ import { Badge } from "./ui/badge";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import cn from "clsx";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { AppWindowMac, Braces, Mail, Sheet, SquarePlus, SquaresExclude } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface LocalClockProps {
   className?: string;
@@ -49,6 +64,66 @@ const LocalClock: React.FC<LocalClockProps> = ({
 
   return (
     <div className={cn("text-gray-300 font-mono flex items-center gap-2", className)}>
+      <DropdownMenu>
+        {/* Tooltip wraps around Dropdown trigger */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DropdownMenuTrigger asChild>
+              <SquarePlus
+                className="w-5 h-5 cursor-pointer text-gray-400 hover:text-accent transition"
+              />
+            </DropdownMenuTrigger>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[100px] max-w-[180px] whitespace-pre-wrap">
+            {"Click for more options"}
+          </TooltipContent>
+        </Tooltip>
+
+        {/* Dropdown menu itself */}
+        <DropdownMenuContent
+          side="bottom"
+          align="end"
+          className="text-[9px] w-40 bg-[#0A0F1C] text-gray-200 border-gray-700"
+        >
+          <DropdownMenuLabel className="text-[10px] text-accent">Window Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator className="bg-gray-700" />
+          <DropdownMenuItem
+            className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+          // onClick={onSettings}
+          >
+            <Mail className="w-3 h-3 text-blue-400" />
+            Subscribe
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+          // onClick={onHelp}
+          >
+            <Sheet className="w-3 h-3 text-blue-400" />
+            Link Sheets
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+          // onClick={onHelp}
+          >
+            <AppWindowMac className="w-3 h-3 text-blue-400" />
+            Add Widget
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+          // onClick={onHelp}
+          >
+            <SquaresExclude className="w-3 h-3 text-blue-400" />
+            Export CSV
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+          // onClick={onHelp}
+          >
+            <Braces className="w-3 h-3 text-blue-400" />
+            Export JSON
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       {countryCode && (
         <Image
           src={`https://flagcdn.com/${countryCode}.svg`}
