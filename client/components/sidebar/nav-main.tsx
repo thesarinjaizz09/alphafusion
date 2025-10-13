@@ -1,6 +1,6 @@
 "use client"
-
-import { AppWindow, ChevronRight, EllipsisVertical, Menu, type LucideIcon } from "lucide-react"
+import { useState, useRef } from "react";
+import { AppWindow, AppWindowMac, Braces, ChevronRight, Combine, EllipsisVertical, Mail, Menu, Sheet, SquaresExclude, TvMinimal, type LucideIcon } from "lucide-react"
 import Link from "next/link"
 import {
   Collapsible,
@@ -19,11 +19,13 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu"
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 export function NavMain({
   items,
@@ -40,6 +42,17 @@ export function NavMain({
     }[]
   }[]
 }) {
+  const [open, setOpen] = useState(false);
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const handleOpen = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Capture cursor position relative to viewport
+    setCursorPos({ x: e.clientX, y: e.clientY });
+    setOpen(true);
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Suite</SidebarGroupLabel>
@@ -64,27 +77,63 @@ export function NavMain({
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
-                        <ContextMenu key={subItem.url}>
-
-                          <ContextMenuContent>
-                            <ContextMenuItem>Widget</ContextMenuItem>
-                            <ContextMenuItem>Subscribe</ContextMenuItem>
-                            <ContextMenuItem>Create Window</ContextMenuItem>
-                            <ContextMenuItem>Merge Window</ContextMenuItem>
-                          </ContextMenuContent>
+                        <DropdownMenu>
+                          {/* Tooltip wraps around Dropdown trigger */}
                           <SidebarMenuSubItem key={subItem.title}>
                             <Link href={subItem.url} className="w-full">
                               <SidebarMenuSubButton asChild isActive={subItem.isActive}>
-                                <ContextMenuTrigger className="w-full">
 
-                                  <span className="w-full flex items-center justify-between text-[9px]">{subItem.title}
-                                    <EllipsisVertical className="w-3" />
-                                  </span>
-                                </ContextMenuTrigger>
+                                <span className="w-full flex items-center justify-between text-[9px]">{subItem.title}
+                                  <DropdownMenuTrigger asChild>
+                                    <EllipsisVertical className="w-3" style={{
+                                      color: 'gray'
+                                    }} />
+                                  </DropdownMenuTrigger>
+                                </span>
                               </SidebarMenuSubButton>
                             </Link>
                           </SidebarMenuSubItem>
-                        </ContextMenu>
+
+                          {/* Dropdown menu itself */}
+                          <DropdownMenuContent
+                            side="bottom"
+                            align="start"
+                            className="text-[9px] w-40 bg-[#0A0F1C] text-gray-200 border-gray-700"
+                          >
+                            <DropdownMenuLabel className="text-[10px] text-accent">Window Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-gray-700" />
+                            <DropdownMenuItem
+                              className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+                            // onClick={onHelp}
+                            >
+                              <TvMinimal className="w-3 h-3 text-blue-400" />
+                              Widget
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+                            // onClick={onSettings}
+                            >
+                              <Mail className="w-3 h-3 text-blue-400" />
+                              Subscribe
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+                            // onClick={onHelp}
+                            >
+                              <AppWindowMac className="w-3 h-3 text-blue-400" />
+                              New Window
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="flex items-center gap-2 hover:bg-primary cursor-pointer"
+                            // onClick={onHelp}
+                            >
+                              <Combine className="w-3 h-3 text-blue-400" />
+                              Merge Window
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+
+
                       ))}
                     </SidebarMenuSub>
                   </CollapsibleContent>
