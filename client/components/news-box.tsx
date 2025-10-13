@@ -300,7 +300,7 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
                 <DialogContent className="bg-[#0B1220] text-gray-200 max-w-3xl">
                     <DialogHeader>
                         <DialogTitle className="flex justify-between items-start">
-                            <span className="text-sm">{selectedNews?.Headline}</span>
+                            <span className="text-sm text-accent">{selectedNews?.Headline}</span>
                         </DialogTitle>
                     </DialogHeader>
                     {selectedNews && (
