@@ -43,7 +43,7 @@ const topLosersData = [
 const MoversLosersBox = () => {
     return (
         <WindowLayout title="Movers Insights" icon={SquarePercent} >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
                 <DynamicTable title="Exchange's Top Gainers" headers={["Symbol", "Price", "Change %", "Volume"]} data={topGainersData} />
                 <DynamicTable title="Exchange's Top Losers" headers={["Symbol", "Price", "Change %", "Volume"]} data={topLosersData} />
             </div>
