@@ -121,7 +121,7 @@ export default function WindowLayout({
                                 />
                             </TooltipTrigger>
                             <TooltipContent side="bottom" className={classes}>
-                                {isMinimized ? "Restore" : "Minimize"}
+                                {isMinimized ? "Restore" : "Minimize"} Widget
                             </TooltipContent>
                         </Tooltip>
 
@@ -134,7 +134,7 @@ export default function WindowLayout({
                                 />
                             </TooltipTrigger>
                             <TooltipContent side="bottom" className={classes}>
-                                Maximize
+                                Maximize Widget
                             </TooltipContent>
                         </Tooltip>
 
@@ -147,7 +147,7 @@ export default function WindowLayout({
                                 />
                             </TooltipTrigger>
                             <TooltipContent side="bottom" className={classes}>
-                                Close
+                                Close Widget
                             </TooltipContent>
                         </Tooltip>
 
