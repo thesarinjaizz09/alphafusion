@@ -16,7 +16,7 @@ const CandlestickPanel: React.FC<CandlestickPanelProps> = ({ count = 5 }) => {
         <WindowLayout title="Watchlist Charting" icon={ChartCandlestick} fit={false}>
             <div className="relative overflow-hidden w-full">
                 <div
-                    className="grid gap-2"
+                    className="grid gap-1"
                     style={{
                         gridTemplateColumns: `repeat(${Math.min(count, maxPerRow)}, 1fr)`,
                     }}
