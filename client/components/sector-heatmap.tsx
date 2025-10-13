@@ -578,7 +578,7 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
             />
           </div>
         ) :
-          <div className="flex flex-col gap-1 w-full text-center text-[9px] text-gray-400 border p-1 rounded-sm">
+          <div className="flex flex-col gap-1 w-full text-center text-[10px] text-gray-400 border p-2 rounded-sm">
             <span className="text-[10px] font-semibold">
               Sector Stock Heatmap
             </span>
