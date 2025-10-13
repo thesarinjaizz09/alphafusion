@@ -16,7 +16,8 @@ import {
     DialogDescription,
 } from "@/components/ui/dialog";
 
-const classes = "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[100px] max-w-[180px] whitespace-pre-wrap"
+const classes =
+    "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[100px] max-w-[180px] whitespace-pre-wrap";
 
 interface WindowLayoutProps {
     title: string;
@@ -56,11 +57,11 @@ export default function WindowLayout({
         <TooltipProvider>
             <div
                 className={`col-span-2 bg-[#0A0F1C] border border-gray-800 rounded-sm w-full text-gray-200 text-[10px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative overflow-hidden
-          ${isMinimized ? "h-fit p-2 opacity-90" : "p-2 scale-100 opacity-100"}
+          ${isMinimized ? "h-fit p-2 opacity-90" : "p-2 pt-0 scale-100 opacity-100"}
           ${full ? "h-full w-full" : ""}
           ${className}`}
                 style={{
-                    // 🧠 Priority order: full → maximized → normal/fitted
+                    // Priority order: full → maximized → normal/fitted
                     height: full
                         ? '100%'
                         : isMaximized
@@ -77,11 +78,12 @@ export default function WindowLayout({
                     overflow: !isMinimized ? 'auto' : undefined,
                 }}
             >
-
-                {/* Header */}
+                {/* Header - now sticky */}
                 <div
-                    className={`flex justify-between items-center ${isMinimized ? "mb-0" : "mb-3"
-                        } ${!isMinimized ? "border-b pb-2 border-accent" : "border-none pb-0"}`}
+                    className={`flex justify-between items-center sticky top-0 z-20 bg-[#0A0F1C]/95 backdrop-blur-md
+                        ${isMinimized ? "mb-0" : "mb-3"}
+                        ${!isMinimized ? "border-b py-2 border-accent" : "border-none pb-0"}
+                    `}
                 >
                     <div className="text-accent flex items-center gap-2">
                         {Icon && <Icon className="w-4 inline" />}
@@ -89,8 +91,6 @@ export default function WindowLayout({
                     </div>
 
                     <div className="flex gap-2 items-center">
-
-
                         {/* Action Buttons with Tooltips */}
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -141,8 +141,12 @@ export default function WindowLayout({
                     </div>
                 </div>
 
-                {/* Content */}
-                {!isMinimized && children}
+                {/* Scrollable Content */}
+                {!isMinimized && (
+                    <div className="pt-2">
+                        {children}
+                    </div>
+                )}
 
                 {/* Info Dialog */}
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
