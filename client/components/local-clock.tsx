@@ -75,7 +75,7 @@ const LocalClock: React.FC<LocalClockProps> = ({
             </DropdownMenuTrigger>
           </TooltipTrigger>
           <TooltipContent side="bottom" className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[100px] max-w-[180px] whitespace-pre-wrap">
-            {"Click for more options"}
+            Click for more window actions!
           </TooltipContent>
         </Tooltip>
 

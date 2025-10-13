@@ -174,7 +174,7 @@ export default function WindowLayout({
                                     </DropdownMenuTrigger>
                                 </TooltipTrigger>
                                 <TooltipContent side="bottom" className={classes}>
-                                    {desc || "Click for more options"}
+                                    Click for more widget actions!
                                 </TooltipContent>
                             </Tooltip>
 
@@ -184,7 +184,7 @@ export default function WindowLayout({
                                 align="end"
                                 className="text-[9px] w-40 bg-[#0A0F1C] text-gray-200 border-gray-700"
                             >
-                                <DropdownMenuLabel className="text-[10px] text-accent">Component Actions</DropdownMenuLabel>
+                                <DropdownMenuLabel className="text-[10px] text-accent">Widget Actions</DropdownMenuLabel>
                                 <DropdownMenuSeparator className="bg-gray-700" />
                                 <DropdownMenuItem
                                     className="flex items-center gap-2 hover:bg-primary cursor-pointer"

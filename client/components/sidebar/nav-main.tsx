@@ -26,6 +26,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function NavMain({
   items,
@@ -84,11 +90,19 @@ export function NavMain({
                               <SidebarMenuSubButton asChild isActive={subItem.isActive}>
 
                                 <span className="w-full flex items-center justify-between text-[9px]">{subItem.title}
-                                  <DropdownMenuTrigger asChild>
-                                    <EllipsisVertical className="w-3" style={{
-                                      color: 'gray'
-                                    }} />
-                                  </DropdownMenuTrigger>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <DropdownMenuTrigger asChild>
+                                        <EllipsisVertical className="w-3" style={{
+                                          color: 'gray'
+                                        }} />
+                                      </DropdownMenuTrigger>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom" className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[100px] max-w-[180px] whitespace-pre-wrap">
+                                      Click for more actions!
+                                    </TooltipContent>
+                                  </Tooltip>
+
                                 </span>
                               </SidebarMenuSubButton>
                             </Link>
@@ -100,7 +114,7 @@ export function NavMain({
                             align="start"
                             className="text-[9px] w-40 bg-[#0A0F1C] text-gray-200 border-gray-700"
                           >
-                            <DropdownMenuLabel className="text-[10px] text-accent">Window Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel className="text-[10px] text-accent">Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator className="bg-gray-700" />
                             <DropdownMenuItem
                               className="flex items-center gap-2 hover:bg-primary cursor-pointer"
