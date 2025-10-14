@@ -106,8 +106,8 @@ export default function WindowLayout({
                         ${!isMinimized ? "border-b py-2 border-accent" : "border-none pb-0"}
                     `}
                 >
-                    <div className="text-accent flex items-center gap-2">
-                        {Icon && <Icon className="w-4 inline" />}
+                    <div className="text-accent flex items-center justify-center gap-2 text-[9px] pt-1">
+                        {Icon && <Icon className="w-3 h-3 inline" />}
                         <span className="text-accent font-semibold">{title}</span>
                     </div>
 
@@ -188,28 +188,28 @@ export default function WindowLayout({
                                 <DropdownMenuSeparator className="bg-gray-700" />
                                 <DropdownMenuItem
                                     className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                    // onClick={onSettings}
+                                // onClick={onSettings}
                                 >
                                     <Mail className="w-3 h-3 text-blue-400" />
                                     Subscribe
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                    // onClick={onHelp}
+                                // onClick={onHelp}
                                 >
                                     <Sheet className="w-3 h-3 text-blue-400" />
                                     Link Sheets
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                    // onClick={onHelp}
+                                // onClick={onHelp}
                                 >
                                     <SquaresExclude className="w-3 h-3 text-blue-400" />
                                     Export CSV
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                    // onClick={onHelp}
+                                // onClick={onHelp}
                                 >
                                     <Braces className="w-3 h-3 text-blue-400" />
                                     Export JSON

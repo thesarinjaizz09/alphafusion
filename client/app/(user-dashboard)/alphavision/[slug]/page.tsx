@@ -12,6 +12,7 @@ import {
 
 import { Separator } from "@/components/ui/separator"
 import AlphaVisionPage from "@/pages-section/alphavision/AlphaVision"
+import PanelTopbar from "@/components/panel-topbar"
 
 interface PageProps {
     params: Promise<{ slug: string }>
@@ -132,32 +133,7 @@ export default async function AlphaVision({ params }: PageProps) {
 
     return (
         <div className="rounded-md">
-            <header className="flex h-16 shrink-0 items-center gap-2 border-b">
-                <div className="flex items-center gap-2 px-4">
-                    <SidebarTrigger className="-ml-1" />
-                    <Separator
-                        orientation="vertical"
-                        className="mr-2 data-[orientation=vertical]:h-4"
-                    />
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem className="hidden md:block">
-                                <BreadcrumbLink href="#" className="text-black">
-                                    AlphaFusion
-                                </BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator className="hidden md:block" />
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>AlphaVision</BreadcrumbPage>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator className="hidden md:block" />
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>{slug === 'stocks' ? 'Stocks AlphaVision' : 'Crypto AlphaVision'}</BreadcrumbPage>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
-                </div>
-            </header>
+            <PanelTopbar suite="Boards" service="AlphaVision" />
             <AlphaVisionPage config={config} stockGeneralData={stockGeneralData} sampleData={sampleData} reasons={reasons} indicators={indicators} strategiesInfluenced={strategiesInfluenced} />
         </div>
     )

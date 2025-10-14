@@ -24,10 +24,10 @@ export default function AuthPage({
             <div className="flex flex-col items-start gap-1 text-left">
                 {
                     authMode === 'signup' ? <><h1 className="text-3xl font-bold">Create Credentials</h1>
-                        <p className="text-muted-foreground text-sm w-full">
+                        <p className="text-sm w-full">
                             Create your credentials to access the AlphaFusion Dashboard
                         </p></> : <><h1 className="text-3xl font-bold">Login Credentials</h1>
-                        <p className="text-muted-foreground text-sm w-full">
+                        <p className="text-sm w-full">
                             Enter your credentials to access the AlphaFusion Dashboard
                         </p></>
                 }
