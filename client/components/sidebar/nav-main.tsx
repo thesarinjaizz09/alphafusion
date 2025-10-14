@@ -83,7 +83,7 @@ export function NavMain({
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
-                        <DropdownMenu>
+                        <DropdownMenu key={subItem.title}>
                           {/* Tooltip wraps around Dropdown trigger */}
                           <SidebarMenuSubItem key={subItem.title}>
                             <Link href={subItem.url} className="w-full">
