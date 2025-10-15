@@ -55,12 +55,12 @@ const EquitiesIndicesBox = () => {
     ];
 
     return (
-        <WindowLayout title="Equities & Indices" icon={Shapes} fit={true}>
+        <WindowLayout title="Equities & Indices" icon={Shapes} max={true} height="515px">
             <DynamicTable
                 headers={headers}
                 data={topGainersData}
                 title="Exchange's Equities & Indices"
-                rowsPerPage={11}
+                rowsPerPage={10}
             />
         </WindowLayout>
     );
