@@ -9,7 +9,7 @@ import MoversLosersBox from '@/components/movers-losers'
 import WatchlistBox from '@/components/watchlist-box'
 import EquitiesIndicesBox from '@/components/equities-indices-box'
 import NewsBox from '@/components/news-box'
-import GlobalMarketMap from '@/components/global-market-map'
+import InstitutionalFlow from '@/components/institutional-flow'
 import CandlestickPanel from '@/components/candlestick-panel'
 import SectorHeatMap from '@/components/sector-heatmap'
 
@@ -28,6 +28,7 @@ const EquiFusionPage = () => {
                     <MoversLosersBox />
                     <EquitiesIndicesBox />
                     <CandlestickPanel />
+                    <InstitutionalFlow />
                 </div>
                 {/* COL 2 */}
                 <div className="flex flex-col gap-3">
