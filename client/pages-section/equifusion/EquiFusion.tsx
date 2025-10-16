@@ -14,6 +14,7 @@ import CandlestickPanel from '@/components/candlestick-panel'
 import SectorHeatMap from '@/components/sector-heatmap'
 import InsiderTable from '@/components/insider-table'
 import MarketSentimentPanel from '@/components/market-sentiment'
+import AIAlertsPanel from '@/components/alerts-panel'
 
 const EquiFusionPage = () => {
     return (
@@ -40,6 +41,7 @@ const EquiFusionPage = () => {
                     <NewsBox />
                     <WatchlistBox />
                     <InsiderTable />
+                    <AIAlertsPanel />
                 </div>
             </div>
 
