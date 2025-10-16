@@ -4,6 +4,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianG
 import WindowLayout from "./window-layout";
 import SentimentMeter from "./sentiment-gauge";
 import DynamicTable from "./dynamic-table";
+import { Brain } from "lucide-react";
 
 interface MarketSentimentPanelProps {
     sentimentLabel?: "Bullish" | "Neutral" | "Bearish";
@@ -103,26 +104,14 @@ function MarketSentimentChart({ sentimentData, color }: any) {
                             </feMerge>
                         </filter>
                     </defs>
-
-                    <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="#1E293B"
-                        vertical={false}
-                        opacity={0.5}
-                    />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                     <XAxis
                         dataKey="time"
-                        tick={{ fill: "#94a3b8", fontSize: 10 }}
-                        tickLine={false}
-                        axisLine={{ stroke: "#1E293B" }}
+                        tick={{ fill: "#9ca3af", fontSize: 10 }}
+                        interval="preserveEnd"
+                        minTickGap={15}
                     />
-                    <YAxis
-                        domain={[-1, 1]}
-                        tickFormatter={(val) => `${(val * 100).toFixed(0)}%`}
-                        tick={{ fill: "#94a3b8", fontSize: 10 }}
-                        tickLine={false}
-                        axisLine={{ stroke: "#1E293B" }}
-                    />
+                    <YAxis tick={{ fill: "#9ca3af", fontSize: 10 }} />
                     <Tooltip
                         contentStyle={{
                             background: "rgba(15, 23, 42, 0.95)",
@@ -183,7 +172,7 @@ const MarketSentimentPanel: React.FC<MarketSentimentPanelProps> = ({
     const color = sentimentColors[label];
 
     return (
-        <WindowLayout title="Tradeshark Market Sentiment">
+        <WindowLayout title="Tradeshark Market Sentiment" icon={Brain}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-4">
                 <div className="bg-[#16223B]/80 flex items-start justify-between rounded-sm p-2 shadow-lg shadow-[#E3B341]/10">
                     <div>

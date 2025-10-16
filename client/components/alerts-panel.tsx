@@ -2,7 +2,7 @@
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { useState, useMemo } from "react";
-import { X, ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { X, ArrowUpDown, ChevronLeft, ChevronRight, Search, TriangleAlert } from "lucide-react";
 import WindowLayout from "./window-layout";
 import SentimentMeter from "./sentiment-gauge";
 import {
@@ -19,6 +19,7 @@ import { NoResults } from "@/components/ui/no-results";
 
 interface Alert {
     ticker: string;
+    title: string;
     description: string;
     type: "Volume" | "Volatility" | "Options";
     change?: string; // e.g., "+6.3%"
@@ -30,11 +31,40 @@ interface AIAlertsPanelProps {
 }
 
 const sampleAlerts: Alert[] = [
-    { ticker: "INFY.NS", description: "Unusual volume spike", type: "Volume", change: "+6.3%", time: "10:15 AM" },
-    { ticker: "TCS.NS", description: "Large deviation vs historical volatility", type: "Volatility", change: "+4.1%", time: "10:20 AM" },
-    { ticker: "RELIANCE.NS", description: "Abnormal options flow detected", type: "Options", change: "-4.1%", time: "10:30 AM" },
-    { ticker: "HDFC.NS", description: "Unusual volume spike", type: "Volume", change: "+5.5%", time: "10:35 AM" },
+    {
+        ticker: "INFY.NS",
+        title: "Volume Spike",
+        description: "Unusual volume spike observed, trading activity significantly above average.",
+        type: "Volume",
+        change: "+6.3%",
+        time: "10:15 AM"
+    },
+    {
+        ticker: "TCS.NS",
+        title: "High Volatility",
+        description: "Price movement shows large deviation from historical volatility, potential trend change.",
+        type: "Volatility",
+        change: "+4.1%",
+        time: "10:20 AM"
+    },
+    {
+        ticker: "RELIANCE.NS",
+        title: "Options Alert",
+        description: "Abnormal options flow detected, indicating possible large trades or hedging activity.",
+        type: "Options",
+        change: "-4.1%",
+        time: "10:30 AM"
+    },
+    {
+        ticker: "HDFC.NS",
+        title: "Volume Spike",
+        description: "Unusual volume spike observed, unusually high trading volume compared to past sessions.",
+        type: "Volume",
+        change: "+5.5%",
+        time: "10:35 AM"
+    },
 ];
+
 
 const typeColors = {
     Volume: "text-green-400",
@@ -108,7 +138,7 @@ const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({ alerts = sampleAlerts, ro
     };
 
     return (
-        <WindowLayout title="Tradeshark Alerts">
+        <WindowLayout title="Tradeshark Alerts" icon={TriangleAlert}>
             <div className="flex flex-col md:flex-row items-center justify-between mb-2 gap-2">
                 <div className="flex items-center bg-[#10182A] rounded-sm px-2 py-1 w-full max-w-xs border border-gray-700">
                     <Search className="w-3 h-3 text-gray-400 mr-2" />
@@ -144,7 +174,7 @@ const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({ alerts = sampleAlerts, ro
                                 <span className="text-gray-400 text-[9px]">{alert.ticker}</span>
                                 <span className={`text-[9px] font-semibold ${typeColors[alert.type]}`}>{alert.type}</span>
                             </div>
-                            <h4 className="text-gray-200 font-medium text-[10px] mt-1 line-clamp-2">{alert.description.length > 45 ? `${alert.description.substring(0, 45)}...` : alert.description}</h4>
+                            <h4 className="text-gray-200 font-medium text-[10px] mt-1 line-clamp-2">{alert.title.length > 45 ? `${alert.title.substring(0, 45)}...` : alert.title}</h4>
                             <div className="flex justify-between items-center mt-2 text-gray-400 text-[9px]">
                                 <span>{alert.change && (
                                     <span
@@ -198,7 +228,7 @@ const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({ alerts = sampleAlerts, ro
                 <DialogContent className="bg-[#0B1220] text-gray-200 max-w-3xl">
                     <DialogHeader>
                         <DialogTitle className="flex justify-between items-start">
-                            <span className="text-sm text-accent">{selectedAlert?.description}</span>
+                            <span className="text-sm text-accent">{selectedAlert?.title}</span>
                         </DialogTitle>
                     </DialogHeader>
                     {selectedAlert && (
@@ -233,6 +263,8 @@ const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({ alerts = sampleAlerts, ro
                                 </span>
 
                             </div>
+                            <p className="text-gray-300 mb-3 text-xs">{selectedAlert.description}</p>
+
 
                             {/* <SentimentMeter value={selectedNews.Score} /> */}
                         </div>

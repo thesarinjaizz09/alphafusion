@@ -17,7 +17,7 @@ import { Combobox } from "@/components/ui/combobox";
 import { exchanges } from "@/data/stocks.parameters";
 import { TooltipProps } from "recharts";
 import { LegendPayload } from "recharts";
-import { Diff } from "lucide-react";
+import { Diff, Sunrise, Waves } from "lucide-react";
 
 
 // ------------------------------
@@ -141,19 +141,10 @@ const InstitutionalFlow: React.FC = () => {
 
 
     return (
-        <WindowLayout title="Institutional Flow" max={true}>
+        <WindowLayout title="Institutional Flow" icon={Waves}>
             {/* Filter and Toggle */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-2">
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-1 mb-2">
                 <Combobox mode="Select Sector" span="full" items={exchanges} />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    {["Daily", "Weekly", "Monthly"].map((mode) => (
-                        <button key={mode}
-                            onClick={() => setViewMode(mode as any)} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
-                            <Diff className="w-3 h-3" />
-                            {mode} Flow
-                        </button>
-                    ))}
-                </div>
             </div>
 
             {/* Sentiment Cards */}
@@ -185,8 +176,8 @@ const InstitutionalFlow: React.FC = () => {
             </div>
 
             {/* Summary Cards */}
-            <div className="w-full flex items-center justify-center mb-2">
-                <div className="grid grid-cols-3 gap-2 w-full">
+            <div className="w-full grid grid-cols-1 mb-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
                     {[
                         { label: "Weekly", fii: summary.weekly.fii, dii: summary.weekly.dii },
                         { label: "MTD", fii: summary.mtd.fii, dii: summary.mtd.dii },

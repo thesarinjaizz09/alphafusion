@@ -8,9 +8,10 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Search, Maximize } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { NoResults } from "@/components/ui/no-results";
+import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 
 interface DynamicTableProps {
     headers: string[];
@@ -20,6 +21,7 @@ interface DynamicTableProps {
     titlePosition?: "top" | "bottom";
     rowsPerPage?: number;
     enableGlobalSearch?: boolean;
+    isDialog?: boolean; // new prop to adjust row count limit
 }
 
 function getColorClass(value: any): string {
@@ -27,50 +29,28 @@ function getColorClass(value: any): string {
 
     const trimmed = value.trim().toUpperCase();
 
-    // ✅ + / - prefixed numeric strings
-    if (trimmed.startsWith("+")) {
-        return "text-green-400 font-semibold";
-    } else if (trimmed.startsWith("-")) {
-        return "text-red-400 font-semibold";
-    }
+    if (trimmed.startsWith("+")) return "text-green-400 font-semibold";
+    if (trimmed.startsWith("-")) return "text-red-400 font-semibold";
+    if (!isNaN(Number(trimmed))) return "text-yellow-400 font-semibold";
 
-    // ✅ Pure numeric (no prefix)
-    if (!isNaN(Number(trimmed))) {
-        return "text-yellow-400 font-semibold";
-    }
-
-    // ✅ BUY / SELL / HOLD
     if (["BUY", "HOLD", "SELL"].includes(trimmed)) {
         switch (trimmed) {
-            case "BUY":
-                return "text-green-400 font-semibold";
-            case "SELL":
-                return "text-red-400 font-semibold";
-            case "HOLD":
-                return "text-yellow-400 font-semibold";
+            case "BUY": return "text-green-400 font-semibold";
+            case "SELL": return "text-red-400 font-semibold";
+            case "HOLD": return "text-yellow-400 font-semibold";
         }
     }
 
-    // ✅ POSITIVE / NEGATIVE
-    if (["POSITIVE", "NEGATIVE"].includes(trimmed)) {
-        return trimmed === "POSITIVE"
-            ? "text-green-400 font-semibold"
-            : "text-red-400 font-semibold";
-    }
+    if (["POSITIVE", "NEGATIVE"].includes(trimmed)) return trimmed === "POSITIVE" ? "text-green-400 font-semibold" : "text-red-400 font-semibold";
 
-    // ✅ HIGH / MEDIUM / LOW
     if (["HIGH", "MEDIUM", "LOW"].includes(trimmed)) {
         switch (trimmed) {
-            case "HIGH":
-                return "text-green-400 font-semibold";
-            case "MEDIUM":
-                return "text-yellow-400 font-semibold";
-            case "LOW":
-                return "text-red-400 font-semibold";
+            case "HIGH": return "text-green-400 font-semibold";
+            case "MEDIUM": return "text-yellow-400 font-semibold";
+            case "LOW": return "text-red-400 font-semibold";
         }
     }
 
-    // ✅ Default fallback (neutral)
     return "text-gray-100";
 }
 
@@ -82,11 +62,14 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     titlePosition = "bottom",
     rowsPerPage = 6,
     enableGlobalSearch = true,
+    isDialog = false,
 }) => {
     const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [search, setSearch] = useState<string>("");
+
+    const maxRowsPerPage = isDialog ? 10 : rowsPerPage;
 
     const processedData = useMemo(() => {
         let tempData = [...data];
@@ -114,31 +97,23 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 const bVal = b[key];
                 const aNum = parseFloat(String(aVal).replace(/[^\d.-]/g, ""));
                 const bNum = parseFloat(String(bVal).replace(/[^\d.-]/g, ""));
-                if (!isNaN(aNum) && !isNaN(bNum)) {
-                    return direction === "asc" ? aNum - bNum : bNum - aNum;
-                }
-                return direction === "asc"
-                    ? String(aVal).localeCompare(String(bVal))
-                    : String(bVal).localeCompare(String(aVal));
+                if (!isNaN(aNum) && !isNaN(bNum)) return direction === "asc" ? aNum - bNum : bNum - aNum;
+                return direction === "asc" ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
             });
         }
 
         return tempData;
     }, [data, filters, headers, sortConfig, search]);
 
-    const totalPages = Math.ceil(processedData.length / rowsPerPage);
+    const totalPages = Math.ceil(processedData.length / maxRowsPerPage);
     const paginatedData = useMemo(() => {
-        const start = (currentPage - 1) * rowsPerPage;
-        return processedData.slice(start, start + rowsPerPage);
-    }, [processedData, currentPage, rowsPerPage]);
+        const start = (currentPage - 1) * maxRowsPerPage;
+        return processedData.slice(start, start + maxRowsPerPage);
+    }, [processedData, currentPage, maxRowsPerPage]);
 
     const handleSort = (header: string) => {
         setSortConfig((prev) =>
-            prev?.key === header
-                ? prev.direction === "asc"
-                    ? { key: header, direction: "desc" }
-                    : null
-                : { key: header, direction: "asc" }
+            prev?.key === header ? (prev.direction === "asc" ? { key: header, direction: "desc" } : null) : { key: header, direction: "asc" }
         );
     };
 
@@ -148,11 +123,93 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     };
 
     const TitleComponent = (
-        <div className="text-center text-accent text-[9px] p-2 font-medium">{title}</div>
+        <div className="text-center text-accent text-[9px] p-2 font-medium">{title} Table</div>
     );
 
-    const rowHeight = 42;
-    const tableHeight = rowsPerPage * rowHeight;
+    const renderTable = (rows: Record<string, any>[]) => (
+        <Table className="min-w-full text-[9px]">
+            <TableHeader>
+                <TableRow className="bg-[#121A2E] sticky top-0 z-30">
+                    {headers.map((header) => (
+                        <TableHead key={header} className="text-left text-white font-semibold p-2">
+                            <div onClick={() => handleSort(header)} className="flex items-center justify-between w-full cursor-pointer select-none hover:text-accent transition-all">
+                                <span className="truncate">{header}</span>
+                                <ArrowUpDown
+                                    className={`w-3 h-3 ml-1 shrink-0 transition-transform ${sortConfig?.key === header
+                                        ? sortConfig.direction === "asc"
+                                            ? "rotate-180 text-accent"
+                                            : "text-accent"
+                                        : "text-gray-500"
+                                        }`}
+                                />
+                            </div>
+                            <input
+                                type="text"
+                                value={filters[header] || ""}
+                                onChange={(e) => handleFilterChange(header, e.target.value)}
+                                placeholder="filter..."
+                                className="w-full text-[9px] mt-1 bg-transparent border-b border-gray-700 focus:border-accent outline-none text-gray-300 placeholder-gray-500"
+                            />
+                        </TableHead>
+                    ))}
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {rows.length > 0 ? (
+                    rows.map((row, idx) => {
+                        const key = rowKey
+                            ? typeof rowKey === "function"
+                                ? rowKey(row, idx)
+                                : row[rowKey] ?? idx
+                            : idx;
+
+                        return (
+                            <Tooltip key={key}>
+                                <TooltipTrigger asChild>
+                                    <TableRow className={`text-white text-[9px] ${idx % 2 === 0 ? "bg-[#16223B]/80" : "bg-[#10182A]/80"} hover:bg-[#1B2B47] transition-colors cursor-default`}>
+                                        {headers.map((header) => {
+                                            const value = row[header];
+                                            const isNumber = /\d/.test(String(value));
+                                            return (
+                                                <TableCell key={header} className={`${getColorClass(value)} ${isNumber ? "text-right" : "text-left"} px-2 py-2 max-w-[200px] truncate`}>
+                                                    {value}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                </TooltipTrigger>
+                                <TooltipContent className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[9px] shadow-lg min-w-[150px] max-w-xs whitespace-pre-wrap">
+                                    <span className="block text-[9px] font-semibold border-b w-full text-accent uppercase mb-1 pb-1">Details</span>
+                                    {headers.map((header) => {
+                                        const value = String(row[header]);
+                                        return (
+                                            <div key={header} className="flex justify-between gap-2">
+                                                <span className="text-gray-400">{header}:</span>
+                                                <span className={`${getColorClass(value)} truncate max-w-[150px]`}>{value}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </TooltipContent>
+                            </Tooltip>
+                        );
+                    })
+                ) : (
+                    <TableRow>
+                        <TableCell colSpan={headers.length} className="p-0 text-center">
+                            <div className="flex justify-center items-center w-full">
+                                <NoResults
+                                    title="No Data Found"
+                                    description="No records match your current search or filter criteria."
+                                    searchTerm={search || undefined}
+                                    className="py-6"
+                                />
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
+    );
 
     return (
         <TooltipProvider delayDuration={150}>
@@ -160,7 +217,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 {title && titlePosition === "top" && TitleComponent}
 
                 {enableGlobalSearch && (
-                    <div className="flex items-center justify-start px-2 py-2">
+                    <div className="flex items-center justify-between px-2 py-2">
                         <div className="flex items-center bg-[#10182A] rounded-sm px-1 py-1 w-full border border-gray-700">
                             <Search className="w-3 h-3 text-gray-400 mr-2" />
                             <input
@@ -174,119 +231,41 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                 className="bg-transparent text-gray-200 text-[10px] outline-none w-full"
                             />
                         </div>
+
+                        {!isDialog && (
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <button className="ml-2 p-1 rounded-sm bg-[#10182A] border border-gray-700 hover:bg-[#16223B] transition-colors">
+                                        <Maximize className="w-3 h-3 text-gray-400" />
+                                    </button>
+                                </DialogTrigger>
+                                <DialogContent className="min-w-lg w-auto max-w-[90vw] p-4 bg-[#0A0F1C] rounded-sm overflow-auto">
+                                    <DialogHeader>
+                                        <DialogTitle className="text-accent text-[12px] mb-2">Expanded Table View</DialogTitle>
+                                    </DialogHeader>
+                                    <DynamicTable
+                                        headers={headers}
+                                        data={processedData}
+                                        rowKey={rowKey}
+                                        title={title}
+                                        titlePosition={titlePosition}
+                                        enableGlobalSearch={true}
+                                        rowsPerPage={10} // max rows in dialog
+                                        isDialog
+                                    />
+                                </DialogContent>
+
+                            </Dialog>
+
+                        )}
                     </div>
                 )}
 
-                <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: tableHeight + 60 }}>
-                    <Table className="min-w-full text-[9px] h-full border-separate border-spacing-0 table-auto">
-                        <TableHeader>
-                            <TableRow className="bg-[#121A2E] sticky top-0 z-30">
-                                {headers.map((header) => (
-                                    <TableHead
-                                        key={header}
-                                        className="text-left text-white font-semibold cursor-pointer select-none hover:text-accent transition-all p-2"
-                                    >
-                                        <div
-                                            onClick={() => handleSort(header)}
-                                            className="flex items-center justify-between w-full whitespace-nowrap"
-                                        >
-                                            <span className="truncate">{header}</span>
-                                            <ArrowUpDown
-                                                className={`w-3 h-3 ml-1 shrink-0 transition-transform ${sortConfig?.key === header
-                                                    ? sortConfig.direction === "asc"
-                                                        ? "rotate-180 text-accent"
-                                                        : "text-accent"
-                                                    : "text-gray-500"
-                                                    }`}
-                                            />
-                                        </div>
-                                        <input
-                                            type="text"
-                                            value={filters[header] || ""}
-                                            onChange={(e) => handleFilterChange(header, e.target.value)}
-                                            placeholder="filter..."
-                                            className="w-full text-[9px] mt-1 bg-transparent border-b border-gray-700 focus:border-accent outline-none text-gray-300 placeholder-gray-500"
-                                        />
-                                    </TableHead>
-                                ))}
-                            </TableRow>
-                        </TableHeader>
-
-                        <TableBody>
-                            {paginatedData.length > 0 ? (
-                                paginatedData.map((row, idx) => {
-                                    const key =
-                                        rowKey
-                                            ? typeof rowKey === "function"
-                                                ? rowKey(row, idx)
-                                                : row[rowKey] ?? idx
-                                            : idx;
-
-                                    return (
-                                        <Tooltip key={key}>
-                                            <TooltipTrigger asChild>
-                                                <TableRow
-                                                    className={`text-white text-[9px] ${idx % 2 === 0
-                                                        ? "bg-[#16223B]/80"
-                                                        : "bg-[#10182A]/80"
-                                                        } hover:bg-[#1B2B47] transition-colors cursor-default`}
-                                                >
-                                                    {headers.map((header) => {
-                                                        const value = row[header];
-                                                        const isNumber = /\d/.test(String(value));
-
-                                                        return (
-                                                            <TableCell
-                                                                key={header}
-                                                                className={`${getColorClass(value)} ${isNumber ? "text-right" : "text-left"
-                                                                    } px-2 py-2 max-w-[200px] truncate`}
-                                                            >
-                                                                {value}
-                                                            </TableCell>
-                                                        );
-                                                    })}
-                                                </TableRow>
-                                            </TooltipTrigger>
-
-                                            {/* Tooltip content */}
-                                            <TooltipContent className="bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[9px] shadow-lg min-w-[150px] max-w-xs whitespace-pre-wrap">
-                                                <span className="block text-[9px] font-semibold border-b w-full text-accent uppercase mb-1 pb-1">Details</span>
-                                                {headers.map((header) => {
-                                                    const value = String(row[header]);
-
-                                                    return (
-                                                        <div key={header} className="flex justify-between gap-2">
-                                                            <span className="text-gray-400">{header}:</span>
-                                                            <span className={`${getColorClass(value)} truncate max-w-[150px]`}>
-                                                                {value}
-                                                            </span>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </TooltipContent>
-
-                                        </Tooltip>
-                                    );
-                                })
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={headers.length} className="p-0 text-center">
-                                        <div className="flex justify-center items-center w-full">
-                                            <NoResults
-                                                title="No Data Found"
-                                                description="No records match your current search or filter criteria."
-                                                searchTerm={search || undefined}
-                                                className="py-6"
-                                            />
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: (isDialog ? 10 : rowsPerPage) * 42 + 60 }}>
+                    {renderTable(paginatedData)}
                 </div>
 
-                {processedData.length > rowsPerPage && (
+                {processedData.length > maxRowsPerPage && (
                     <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
                         <button
                             className="flex items-center gap-1 text-accent disabled:text-gray-600"

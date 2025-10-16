@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import WindowLayout from "./window-layout";
 import DynamicTable from "./dynamic-table";
+import { BookKey } from "lucide-react";
 
 interface InsiderTransaction {
     ticker: string;
@@ -41,8 +42,8 @@ const headers = ["Ticker", "Date", "Name", "Position", "Action", "Price", "Share
 
 const InsiderTable: React.FC = () => {
     return (
-        <WindowLayout title="Insider Transactions" max={true}>
-            <DynamicTable title="Insider Trading" headers={headers} data={mockInsiderData} />
+        <WindowLayout title="Insiders Transactions" icon={BookKey}>
+            <DynamicTable title="Insiders Transaction" headers={headers} data={mockInsiderData} />
         </WindowLayout>
     );
 };
