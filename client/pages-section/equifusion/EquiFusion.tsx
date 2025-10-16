@@ -12,6 +12,8 @@ import NewsBox from '@/components/news-box'
 import InstitutionalFlow from '@/components/institutional-flow'
 import CandlestickPanel from '@/components/candlestick-panel'
 import SectorHeatMap from '@/components/sector-heatmap'
+import InsiderTable from '@/components/insider-table'
+import MarketSentimentPanel from '@/components/market-sentiment'
 
 const EquiFusionPage = () => {
     return (
@@ -29,6 +31,7 @@ const EquiFusionPage = () => {
                     <EquitiesIndicesBox />
                     <CandlestickPanel />
                     <InstitutionalFlow />
+                    <MarketSentimentPanel />
                 </div>
                 {/* COL 2 */}
                 <div className="flex flex-col gap-3">
@@ -36,6 +39,7 @@ const EquiFusionPage = () => {
                     <SectorHeatMap />
                     <NewsBox />
                     <WatchlistBox />
+                    <InsiderTable />
                 </div>
             </div>
 

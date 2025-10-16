@@ -181,23 +181,29 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                                 >
                                                     {headers.map((header) => {
                                                         const value = row[header];
-                                                        let colorClass = "";
+                                                        let colorClass = "text-gray-100";
                                                         const isNumber = /\d/.test(String(value));
 
-                                                        if (typeof value === "string" && (value.startsWith("+") || value.startsWith("-"))) {
-                                                            colorClass = value.startsWith("+")
-                                                                ? "text-green-400 font-semibold"
-                                                                : "text-red-400 font-semibold";
+
+                                                        if (typeof value === "string") {
+                                                            const trimmed = value.trim();
+                                                            if (trimmed.startsWith("+")) {
+                                                                colorClass = "text-green-400 font-semibold";
+                                                            } else if (trimmed.startsWith("-")) {
+                                                                colorClass = "text-red-400 font-semibold";
+                                                            } else if (!isNaN(Number(trimmed))) {
+                                                                // Numeric but no +/-, treat as neutral
+                                                                colorClass = "text-yellow-400 font-semibold";
+                                                            } else if (["BUY", "HOLD", "SELL"].includes(trimmed.toUpperCase())) {
+                                                                colorClass =
+                                                                    trimmed.toUpperCase() === "BUY"
+                                                                        ? "text-green-400 font-semibold"
+                                                                        : trimmed.toUpperCase() === "SELL"
+                                                                            ? "text-red-400 font-semibold"
+                                                                            : "text-yellow-400 font-semibold";
+                                                            }
                                                         }
 
-                                                        if (typeof value === "string" && ["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
-                                                            colorClass =
-                                                                value.toUpperCase() === "BUY"
-                                                                    ? "text-green-400 font-semibold"
-                                                                    : value.toUpperCase() === "SELL"
-                                                                        ? "text-red-400 font-semibold"
-                                                                        : "text-yellow-400 font-semibold";
-                                                        }
 
                                                         return (
                                                             <TableCell
@@ -219,19 +225,24 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                                     const value = String(row[header]);
 
                                                     let colorClass = "text-gray-100";
-                                                    const isChangeValue = value.startsWith("+") || value.startsWith("-");
 
-                                                    if (isChangeValue) {
-                                                        colorClass = value.startsWith("+")
-                                                            ? "text-green-400 font-semibold"
-                                                            : "text-red-400 font-semibold";
-                                                    } else if (["BUY", "HOLD", "SELL"].includes(value.toUpperCase())) {
-                                                        colorClass =
-                                                            value.toUpperCase() === "BUY"
-                                                                ? "text-green-400 font-semibold"
-                                                                : value.toUpperCase() === "SELL"
-                                                                    ? "text-red-400 font-semibold"
-                                                                    : "text-yellow-400 font-semibold";
+                                                    if (typeof value === "string") {
+                                                        const trimmed = value.trim();
+                                                        if (trimmed.startsWith("+")) {
+                                                            colorClass = "text-green-400 font-semibold";
+                                                        } else if (trimmed.startsWith("-")) {
+                                                            colorClass = "text-red-400 font-semibold";
+                                                        } else if (!isNaN(Number(trimmed))) {
+                                                            // Numeric but no +/-, treat as neutral
+                                                            colorClass = "text-yellow-400 font-semibold";
+                                                        } else if (["BUY", "HOLD", "SELL"].includes(trimmed.toUpperCase())) {
+                                                            colorClass =
+                                                                trimmed.toUpperCase() === "BUY"
+                                                                    ? "text-green-400 font-semibold"
+                                                                    : trimmed.toUpperCase() === "SELL"
+                                                                        ? "text-red-400 font-semibold"
+                                                                        : "text-yellow-400 font-semibold";
+                                                        }
                                                     }
 
                                                     return (
