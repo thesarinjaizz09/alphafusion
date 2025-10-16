@@ -143,7 +143,7 @@ const InstitutionalFlow: React.FC = () => {
     return (
         <WindowLayout title="Institutional Flow" max={true}>
             {/* Filter and Toggle */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-2">
                 <Combobox mode="Select Sector" span="full" items={exchanges} />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                     {["Daily", "Weekly", "Monthly"].map((mode) => (
@@ -157,7 +157,7 @@ const InstitutionalFlow: React.FC = () => {
             </div>
 
             {/* Sentiment Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-2">
                 <div className="bg-[#16223B]/80 flex items-start justify-between rounded-sm p-2 shadow-lg shadow-[#E3B341]/10">
                     <div>
                         <h3 className="text-[10px] text-gray-400">Investor Sentiment</h3>
@@ -170,7 +170,7 @@ const InstitutionalFlow: React.FC = () => {
 
                 <div className="bg-[#16223B]/80 flex items-start justify-between rounded-sm p-2 shadow-lg shadow-[#E3B341]/10">
                     <div>
-                        <h3 className="text-[10px] text-gray-400">Cumulative Trend</h3>
+                        <h3 className="text-[10px] text-gray-400">Cumulative Sentiment</h3>
                         <div className={`text-[11px] font-semibold ${summary.sentiment.color}`}>
                             {summary.sentiment.label}
                         </div>
@@ -180,12 +180,12 @@ const InstitutionalFlow: React.FC = () => {
             </div>
 
             {/* Net Flow Comparison */}
-            <div className="grid grid-rows-1 mb-4">
+            <div className="grid grid-rows-1 mb-2">
                 <DynamicTable title="Net Flow Comparison" headers={["Attribute", "Value"]} data={tableData} />
             </div>
 
             {/* Summary Cards */}
-            <div className="w-full flex items-center justify-center mb-4">
+            <div className="w-full flex items-center justify-center mb-2">
                 <div className="grid grid-cols-3 gap-2 w-full">
                     {[
                         { label: "Weekly", fii: summary.weekly.fii, dii: summary.weekly.dii },
@@ -194,7 +194,7 @@ const InstitutionalFlow: React.FC = () => {
                     ].map((card) => (
                         <div
                             key={card.label}
-                            className="bg-[#16223B]/80 p-2 rounded-md min-w-[100px] shadow-md shadow-[#E3B341]/10"
+                            className="bg-[#16223B]/80 p-2 rounded-sm min-w-[100px] shadow-md shadow-[#E3B341]/10"
                         >
                             <h3 className="text-[10px] text-gray-400">{card.label}</h3>
                             <div className="text-[11px] font-semibold text-green-400">
