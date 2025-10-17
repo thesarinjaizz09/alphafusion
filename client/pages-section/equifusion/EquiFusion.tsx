@@ -15,6 +15,10 @@ import SectorHeatMap from '@/components/sector-heatmap'
 import InsiderTable from '@/components/insider-table'
 import MarketSentimentPanel from '@/components/market-sentiment'
 import AIAlertsPanel from '@/components/alerts-panel'
+import MacroDataPanel from '@/components/macrodata-panel'
+import SocialSentimentBoard from '@/components/social-sentiment-board'
+import EventsEarningsPanel from '@/components/earnings -events-panel'
+import UserNotes from '@/components/user-notes'
 
 const EquiFusionPage = () => {
     return (
@@ -33,6 +37,8 @@ const EquiFusionPage = () => {
                     <CandlestickPanel />
                     <InstitutionalFlow />
                     <MarketSentimentPanel />
+                    <MacroDataPanel />
+                    <UserNotes />
                 </div>
                 {/* COL 2 */}
                 <div className="flex flex-col gap-3">
@@ -42,7 +48,13 @@ const EquiFusionPage = () => {
                     <WatchlistBox />
                     <InsiderTable />
                     <AIAlertsPanel />
+                    <SocialSentimentBoard />
+                    <EventsEarningsPanel />
                 </div>
+            </div>
+
+            <div className="w-full bg-[#0A0F1C] px-4 py-3 text-gray-400 flex items-center justify-center border border-gray-800 rounded-sm w-full text-gray-200 text-[10px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative overflow-hidden">
+                ⚠️ This is a research tool. Data may contain errors and does not constitute financial advice. Users should conduct their own research before investing.
             </div>
 
 

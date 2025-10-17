@@ -85,10 +85,10 @@ const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) =
   };
 
   return (
-    <WindowLayout title="Social Sentiment" icon={BarChart3} height="500px" fit={false}>
+    <WindowLayout title="Social Sentiment" icon={BarChart3}>
       {/* 🔍 Search Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between mb-3 gap-2">
-        <div className="flex items-center bg-[#10182A] rounded-lg px-2 py-1 w-full max-w-xs border border-gray-700">
+        <div className="flex items-center bg-[#10182A] rounded-sm px-2 py-1 w-full max-w-xs border border-gray-700">
           <Search className="w-3 h-3 text-gray-400 mr-2" />
           <input
             type="text"
@@ -102,10 +102,10 @@ const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) =
           />
         </div>
         <div className="flex gap-3 text-[10px] text-gray-400">
-          <button onClick={() => toggleSort("ticker")} className="flex items-center gap-1 hover:text-accent">
+          <button onClick={() => toggleSort("ticker")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
             Ticker <ArrowUpDown className="w-3 h-3" />
           </button>
-          <button onClick={() => toggleSort("score")} className="flex items-center gap-1 hover:text-accent">
+          <button onClick={() => toggleSort("score")} className="flex items-center gap-1 hover:text-accent bg-[#10182A] rounded-sm px-2 py-1 border border-gray-700">
             Score <ArrowUpDown className="w-3 h-3" />
           </button>
         </div>
@@ -148,7 +148,7 @@ const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) =
           ))
         ) : (
           <div className="col-span-2">
-            <NoResults 
+            <NoResults
               title="No Sentiment Data Found"
               description="No sentiment data matches your current search criteria."
               searchTerm={search || undefined}
