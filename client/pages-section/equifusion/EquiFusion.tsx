@@ -17,13 +17,13 @@ import MarketSentimentPanel from '@/components/market-sentiment'
 import AIAlertsPanel from '@/components/alerts-panel'
 import MacroDataPanel from '@/components/macrodata-panel'
 import SocialSentimentBoard from '@/components/social-sentiment-board'
-import EventsEarningsPanel from '@/components/earnings -events-panel'
+import EventsEarningsPanel from '@/components/earnings-events-panel'
 import UserNotes from '@/components/user-notes'
+import FloatingAIButton from '@/components/floating-ai-button'
 
 const EquiFusionPage = () => {
     return (
         <div className="flex flex-1 flex-col gap-3 p-4 bg-[#050914] text-[#F5F6FA] min-h-screen">
-            {/* TOP SUMMARY BOX */}
             <div className="grid grid-cols-1">
                 <GlobalIndicesSummary selectedExchange="NASDAQ" />
             </div>
@@ -57,7 +57,7 @@ const EquiFusionPage = () => {
                 ⚠️ This is a research tool. Data may contain errors and does not constitute financial advice. Users should conduct their own research before investing.
             </div>
 
-
+            <FloatingAIButton />
         </div >
     )
 }
