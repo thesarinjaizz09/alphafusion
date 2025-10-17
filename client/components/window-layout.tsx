@@ -1,6 +1,6 @@
 'use client';
 
-import { CircleEllipsis, Maximize2, Info, Cog, Trash2, HelpCircle, Mail, SquaresExclude, Sheet, Braces } from "lucide-react";
+import { CircleEllipsis, Maximize2, Info, Cog, Trash2, HelpCircle, Mail, SquaresExclude, Sheet, Braces, Bot } from "lucide-react";
 import { useState, ReactNode } from "react";
 import {
     Tooltip,
@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const classes =
-    "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[100px] max-w-[180px] whitespace-pre-wrap";
+    "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[50px] max-w-[180px] whitespace-pre-wrap";
 
 interface WindowLayoutProps {
     title: string;
@@ -148,6 +148,17 @@ export default function WindowLayout({
                             </TooltipTrigger>
                             <TooltipContent side="bottom" className={classes}>
                                 Close Widget
+                            </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Bot
+                                    className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className={classes}>
+                                Tradeshark Context
                             </TooltipContent>
                         </Tooltip>
 
