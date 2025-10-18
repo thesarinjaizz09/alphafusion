@@ -57,7 +57,7 @@ const EquiFusionPage = () => {
                 ⚠️ This is a research tool. Data may contain errors and does not constitute financial advice. Users should conduct their own research before investing.
             </div>
 
-            <FloatingAIButton />
+            {/* <FloatingAIButton /> */}
         </div >
     )
 }

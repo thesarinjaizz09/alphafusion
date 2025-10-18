@@ -1,7 +1,10 @@
 'use client';
 
-import { CircleEllipsis, Maximize2, Info, Cog, Trash2, HelpCircle, Mail, SquaresExclude, Sheet, Braces, Bot } from "lucide-react";
-import { useState, ReactNode } from "react";
+import {
+    CircleEllipsis, Maximize2, Info, Mail, SquaresExclude, Sheet, Braces, Bot,
+    ArrowDown // 🆕 Added ArrowDown icon
+} from "lucide-react";
+import { useState, ReactNode, useEffect, useRef } from "react";
 import {
     Tooltip,
     TooltipContent,
@@ -37,7 +40,7 @@ interface WindowLayoutProps {
     max?: boolean;
     description?: string;
     full?: boolean;
-    maximizedChildren?: ReactNode; // optional second layout
+    maximizedChildren?: ReactNode;
 }
 
 export default function WindowLayout({
@@ -63,7 +66,6 @@ export default function WindowLayout({
 
     if (!isVisible) return null;
 
-    // 🧱 Default maximized layout (used if none is provided)
     const defaultMaximizedLayout = (
         <div className="flex flex-col items-center justify-center h-full text-center text-gray-300 p-6">
             <Maximize2 className="w-10 h-10 text-accent mb-3" />
@@ -80,7 +82,7 @@ export default function WindowLayout({
     return (
         <TooltipProvider>
             <div
-                className={`col-span-2 bg-[#0A0F1C] border border-gray-800 rounded-sm w-full text-gray-200 text-[10px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative overflow-hidden
+                className={`col-span-2 bg-[#0A0F1C] border border-gray-800 rounded-sm w-full text-gray-200 text-[10px] transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 relative overflow-auto custom-scroll
           ${isMinimized ? "h-fit p-2 opacity-90" : "p-2 pt-0 scale-100 opacity-100"}
           ${full ? "h-full w-full" : ""}
           ${className}`}
@@ -96,10 +98,9 @@ export default function WindowLayout({
                         !isMinimized && !fit && max && !full
                             ? height
                             : undefined,
-                    overflow: !isMinimized ? 'auto' : undefined,
                 }}
             >
-                {/* Header - Sticky */}
+                {/* Header */}
                 <div
                     className={`flex justify-between items-center sticky top-0 z-20 bg-[#0A0F1C]/95 backdrop-blur-md
                         ${isMinimized ? "mb-0" : "mb-3"}
@@ -112,7 +113,7 @@ export default function WindowLayout({
                     </div>
 
                     <div className="flex gap-2 items-center">
-                        {/* Minimize */}
+                        {/* Control buttons */}
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <button
@@ -125,7 +126,6 @@ export default function WindowLayout({
                             </TooltipContent>
                         </Tooltip>
 
-                        {/* Maximize */}
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <button
@@ -138,7 +138,6 @@ export default function WindowLayout({
                             </TooltipContent>
                         </Tooltip>
 
-                        {/* Close */}
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <button
@@ -162,7 +161,6 @@ export default function WindowLayout({
                             </TooltipContent>
                         </Tooltip>
 
-                        {/* Info */}
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <Info
@@ -174,8 +172,9 @@ export default function WindowLayout({
                                 {desc}
                             </TooltipContent>
                         </Tooltip>
+
+                        {/* Dropdown Menu */}
                         <DropdownMenu>
-                            {/* Tooltip wraps around Dropdown trigger */}
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <DropdownMenuTrigger asChild>
@@ -189,7 +188,6 @@ export default function WindowLayout({
                                 </TooltipContent>
                             </Tooltip>
 
-                            {/* Dropdown menu itself */}
                             <DropdownMenuContent
                                 side="bottom"
                                 align="end"
@@ -197,31 +195,19 @@ export default function WindowLayout({
                             >
                                 <DropdownMenuLabel className="text-[10px] text-accent">Widget Actions</DropdownMenuLabel>
                                 <DropdownMenuSeparator className="bg-gray-700" />
-                                <DropdownMenuItem
-                                    className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                // onClick={onSettings}
-                                >
+                                <DropdownMenuItem className="flex items-center gap-2 hover:bg-primary cursor-pointer">
                                     <Mail className="w-3 h-3 text-blue-400" />
                                     Subscribe
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                // onClick={onHelp}
-                                >
+                                <DropdownMenuItem className="flex items-center gap-2 hover:bg-primary cursor-pointer">
                                     <Sheet className="w-3 h-3 text-blue-400" />
                                     Link Sheets
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                // onClick={onHelp}
-                                >
+                                <DropdownMenuItem className="flex items-center gap-2 hover:bg-primary cursor-pointer">
                                     <SquaresExclude className="w-3 h-3 text-blue-400" />
                                     Export CSV
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="flex items-center gap-2 hover:bg-primary cursor-pointer"
-                                // onClick={onHelp}
-                                >
+                                <DropdownMenuItem className="flex items-center gap-2 hover:bg-primary cursor-pointer">
                                     <Braces className="w-3 h-3 text-blue-400" />
                                     Export JSON
                                 </DropdownMenuItem>
@@ -230,12 +216,16 @@ export default function WindowLayout({
                     </div>
                 </div>
 
-                {/* Scrollable Content */}
                 {!isMinimized && (
-                    <div className="pt-2">
+                    <div
+                        className="overflow-y-auto"
+                    >
                         {children}
                     </div>
                 )}
+
+                {/* 🆕 Floating scroll-down arrow */}
+
 
                 {/* Info Dialog */}
                 <Dialog open={isInfoDialogOpen} onOpenChange={setIsInfoDialogOpen}>
@@ -249,7 +239,7 @@ export default function WindowLayout({
                     </DialogContent>
                 </Dialog>
 
-                {/* Maximized Layout Dialog */}
+                {/* Maximized Dialog */}
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogContent
                         className="max-w-[95vw] max-h-[90vh] bg-[#0A0F1C] border border-accent/30 text-gray-100 overflow-y-auto"
