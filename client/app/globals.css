@@ -145,7 +145,7 @@
 
 /* Chrome, Edge, Safari */
 .custom-scroll::-webkit-scrollbar {
-  width: 2px; /* thin vertical scrollbar */
+  width: thin; /* thin vertical scrollbar */
 }
 
 .custom-scroll::-webkit-scrollbar-track {
