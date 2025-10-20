@@ -76,8 +76,8 @@ export default function ModernTimeFilter() {
                 {selected.value === "custom" && (
                     <Popover>
                         <PopoverTrigger asChild>
-                            <Button className="bg-[#16223B]/80 shadow-lg text-accent justify-between h-[30px] font-normal text-[9px] rounded-sm transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 overflow-hidden text-ellipsis">
-                                <Calendar className="w-4 h-4" /> Select Date
+                            <Button className="bg-[#16223B]/80 shadow-lg text-accent justify-between h-[30px] font-normal text-[9px] rounded-sm transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 overflow-hidden text-ellipsis border flex items-center">
+                                <Calendar className="w-3 h-3" />
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="bg-[#0B1320] border border-gray-700 rounded-md shadow-lg p-4 w-auto">
