@@ -2,9 +2,10 @@
 
 import {
     CircleEllipsis, Maximize2, Info, Mail, SquaresExclude, Sheet, Braces, Bot,
-    ArrowDown // 🆕 Added ArrowDown icon
+    Crosshair,
+    Clock12
 } from "lucide-react";
-import { useState, ReactNode, useEffect, useRef } from "react";
+import { useState, ReactNode } from "react";
 import {
     Tooltip,
     TooltipContent,
@@ -27,6 +28,7 @@ import {
     DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import TimeFilterBar from "./time-filters";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 const classes =
     "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[50px] max-w-[180px] whitespace-pre-wrap";
@@ -153,7 +155,7 @@ export default function WindowLayout({
 
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Bot
+                                <Crosshair
                                     className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
                                 />
                             </TooltipTrigger>
@@ -161,6 +163,20 @@ export default function WindowLayout({
                                 Tradeshark Context
                             </TooltipContent>
                         </Tooltip>
+
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Clock12
+                                    className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
+                                />
+                            </PopoverTrigger>
+                            <PopoverContent
+                                className="bg-[#0B1320] border border-gray-700 rounded-md shadow-lg p-3 w-72 mt-2"
+                                align="end"
+                            >
+                                <TimeFilterBar />
+                            </PopoverContent>
+                        </Popover>
 
                         <Tooltip>
                             <TooltipTrigger asChild>
@@ -216,8 +232,6 @@ export default function WindowLayout({
                         </DropdownMenu>
                     </div>
                 </div>
-
-                <TimeFilterBar />
 
                 {!isMinimized && (
                     <div
