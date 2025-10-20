@@ -19,9 +19,11 @@ interface DynamicTableProps {
     rowKey?: string | ((row: Record<string, any>, idx: number) => string | number);
     title?: string;
     titlePosition?: "top" | "bottom";
-    rowsPerPage?: number;
+    rowsPerPageProps?: number;
     enableGlobalSearch?: boolean;
     isDialog?: boolean; // new prop to adjust row count limit
+    mode?: 'all' | 'paginated';
+    onTableModeChange?: (mode: "all" | "paginated") => void;
 }
 
 function getColorClass(value: any): string {
@@ -60,16 +62,26 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     rowKey,
     title,
     titlePosition = "bottom",
-    rowsPerPage = 6,
+    rowsPerPageProps = 6,
     enableGlobalSearch = true,
     isDialog = false,
+    mode = 'paginated',
+    onTableModeChange,
 }) => {
     const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
     const [filters, setFilters] = useState<Record<string, string>>({});
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [search, setSearch] = useState<string>("");
+    const [tableMode, setTableMode] = useState<"all" | "paginated">(mode);
+    const [rowsPerPage, setRowsPerPage] = useState<number>(rowsPerPageProps);
+
 
     const maxRowsPerPage = isDialog ? 10 : rowsPerPage;
+
+    const setTableModeState = (newMode: "all" | "paginated") => {
+        setTableMode(newMode);
+        onTableModeChange?.(newMode); // propagate to parent
+    };
 
     const processedData = useMemo(() => {
         let tempData = [...data];
@@ -243,6 +255,49 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                     <DialogHeader>
                                         <DialogTitle className="text-accent text-[12px] mb-2">Expanded Table View</DialogTitle>
                                     </DialogHeader>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <div className="grid grid-cols-2 text-[10px] text-gray-300 bg-[#16223B]/80 rounded-sm shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 px-3 py-2">
+                                            <label className="flex items-center gap-1">
+                                                <input
+                                                    type="radio"
+                                                    name="tableMode"
+                                                    value="all"
+                                                    checked={tableMode === "all"}
+                                                    onChange={() => setTableMode("all")}
+                                                    className="accent-indigo-500"
+                                                />
+                                                Rows Data
+                                            </label>
+
+                                            <label className="flex items-center gap-1">
+                                                <input
+                                                    type="radio"
+                                                    name="tableMode"
+                                                    value="paginated"
+                                                    checked={tableMode === "paginated"}
+                                                    onChange={() => setTableMode("paginated")}
+                                                    className="accent-indigo-500"
+                                                />
+                                                Paginated Data
+                                            </label>
+                                        </div>
+                                        {tableMode === "paginated" && (
+                                            <div className="grid grid-cols-2 text-[10px] text-gray-300">
+                                                {/* <span>Rows per page:</span> */}
+                                                <select
+                                                    className="bg-[#0A0F1C] border border-gray-700 text-gray-100 text-xs px-2 py-1 rounded-sm"
+                                                    value={rowsPerPage}
+                                                    onChange={(e) => setRowsPerPage(Number(e.target.value))}
+                                                >
+                                                    {[5, 10, 20, 50, 100].map((num) => (
+                                                        <option key={num} value={num}>
+                                                            {num}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        )}
+                                    </div>
                                     <DynamicTable
                                         headers={headers}
                                         data={processedData}
@@ -250,8 +305,10 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                         title={title}
                                         titlePosition={titlePosition}
                                         enableGlobalSearch={true}
-                                        rowsPerPage={10} // max rows in dialog
+                                        rowsPerPageProps={rowsPerPage} // max rows in dialog
                                         isDialog
+                                        mode={tableMode}
+                                        onTableModeChange={setTableModeState}
                                     />
                                 </DialogContent>
 
@@ -265,7 +322,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                     {renderTable(paginatedData)}
                 </div>
 
-                {processedData.length > maxRowsPerPage && (
+                {tableMode !== 'all' && processedData.length > maxRowsPerPage && (
                     <div className="flex justify-between items-center text-[10px] text-gray-300 px-3 py-2 border-t border-gray-800 bg-[#0B1220]/90">
                         <button
                             className="flex items-center gap-1 text-accent disabled:text-gray-600"

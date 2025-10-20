@@ -87,7 +87,7 @@ const MacroDataPanel = () => {
                 headers={headers}
                 data={macroDataMock}
                 title="Macro's Insights"
-                rowsPerPage={10}
+                rowsPerPageProps={10}
             />
         </WindowLayout>
     );

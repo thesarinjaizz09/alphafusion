@@ -201,7 +201,7 @@ const MarketSentimentPanel: React.FC<MarketSentimentPanelProps> = ({
                     title="AI Reasoning Summary"
                     headers={["Factor", "Observation", "Impact", "Weight"]}
                     data={aiSentimentReasons}
-                    rowsPerPage={2}
+                    rowsPerPageProps={2}
                 />
             </div>
             <MarketSentimentChart sentimentData={sentimentData} color={sentimentColorsBase[label]} />
