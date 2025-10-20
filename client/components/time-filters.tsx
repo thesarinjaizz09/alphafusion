@@ -9,6 +9,10 @@ import { Calendar } from "lucide-react";
 import { Calendar as CalendarPicker } from "@/components/ui/calendar";
 import { exchanges } from "@/data/stocks.parameters";
 
+interface TimeFilterBarProps {
+    showSectorFilter?: boolean
+}
+
 type TimeRange = {
     label: string;
     value: string;
@@ -41,7 +45,7 @@ const timeRanges: { [group: string]: TimeRange[] } = {
     ],
 };
 
-export default function ModernTimeFilter() {
+export default function ModernTimeFilter({ showSectorFilter = true}: TimeFilterBarProps) {
     const [selected, setSelected] = useState<TimeRange>({ label: "1 Minute", value: "1m" });
     const [customRange, setCustomRange] = useState<{ from?: Date; to?: Date }>({});
 
@@ -56,9 +60,12 @@ export default function ModernTimeFilter() {
 
     return (
         <div className="bg-[#16223B]/80 rounded-sm p-2 mb-2 shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
-            <div className="mb-1">
-                <Combobox mode="Select Sector" span="full" items={exchanges} />
-            </div>
+            {
+                showSectorFilter && <div className="mb-1">
+                    <Combobox mode="Select Sector" span="full" items={exchanges} />
+                </div>
+            }
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
                 {Object.keys(timeRanges).map((group) => (
                     <div key={group} className="relative">

@@ -44,6 +44,8 @@ interface WindowLayoutProps {
     description?: string;
     full?: boolean;
     maximizedChildren?: ReactNode;
+    showFilters?: boolean;
+    showSectorFilter?: boolean
 }
 
 export default function WindowLayout({
@@ -57,6 +59,8 @@ export default function WindowLayout({
     description,
     full = false,
     maximizedChildren,
+    showFilters = true,
+    showSectorFilter = true
 }: WindowLayoutProps) {
     const [isMinimized, setIsMinimized] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(true);
@@ -152,28 +156,31 @@ export default function WindowLayout({
                             </TooltipContent>
                         </Tooltip>
 
-                        <DropdownMenu>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <DropdownMenuTrigger asChild>
-                                        <Clock12
-                                            className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
-                                        />
-                                    </DropdownMenuTrigger>
-                                </TooltipTrigger>
-                                <TooltipContent side="bottom" className={classes}>
-                                    Sort/Filter Widget
-                                </TooltipContent>
-                            </Tooltip>
+                        {
+                            showFilters && <DropdownMenu>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <DropdownMenuTrigger asChild>
+                                            <Clock12
+                                                className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
+                                            />
+                                        </DropdownMenuTrigger>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom" className={classes}>
+                                        Sort/Filter Widget
+                                    </TooltipContent>
+                                </Tooltip>
 
-                            <DropdownMenuContent
-                                side="bottom"
-                                align="end"
-                                className="text-[9px] max-w-lg bg-[#0A0F1C] text-gray-200 border-gray-700"
-                            >
-                                <TimeFilterBar />
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                                <DropdownMenuContent
+                                    side="bottom"
+                                    align="end"
+                                    className="text-[9px] max-w-lg bg-[#0A0F1C] text-gray-200 border-gray-700"
+                                >
+                                    <TimeFilterBar showSectorFilter={showSectorFilter} />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        }
+
 
                         <Tooltip>
                             <TooltipTrigger asChild>
