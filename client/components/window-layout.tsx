@@ -263,7 +263,7 @@ export default function WindowLayout({
                 {/* Maximized Dialog */}
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogContent
-                        className="max-w-[95vw] max-h-[90vh] bg-[#0A0F1C] border border-accent/30 text-gray-100 overflow-y-auto"
+                        className="bg-[#0A0F1C] border border-accent/30 text-gray-100 overflow-y-auto"
                     >
                         <DialogHeader className="h-fit border-b border-accent/30 pb-5">
                             <DialogTitle className="text-accent text-sm">
