@@ -26,6 +26,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import TimeFilterBar from "./time-filters";
 
 const classes =
     "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[50px] max-w-[180px] whitespace-pre-wrap";
@@ -215,6 +216,8 @@ export default function WindowLayout({
                         </DropdownMenu>
                     </div>
                 </div>
+
+                <TimeFilterBar />
 
                 {!isMinimized && (
                     <div

@@ -20,15 +20,22 @@ import {
 
 
 interface ComboboxProps {
-    mode: string,
-    items: { value: string; label: string }[],
-    span: "half" | "full" | 'third' | 'oneth'
+    mode: string;
+    items: { value: string; label: string }[];
+    span: "half" | "full" | "third" | "oneth";
+    onSelect?: (selected: { value: string; label: string }) => void; // <- add this
+    value?: string; // optional controlled value
 }
 
-export function Combobox({ mode, items, span }: ComboboxProps) {
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
+export function Combobox({ mode, items, span, onSelect, value: controlledValue }: ComboboxProps) {
+    const [open, setOpen] = React.useState(false);
+    const [value, setValue] = React.useState(controlledValue || "");
+    console.log({ mode })
 
+    // Keep internal state in sync if controlled
+    React.useEffect(() => {
+        if (controlledValue !== undefined) setValue(controlledValue);
+    }, [controlledValue]);
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -39,29 +46,33 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                     aria-expanded={open}
                     className={cn(
                         "bg-[#16223B]/80 shadow-lg text-accent justify-between h-[30px] font-normal text-[9px] rounded-sm transition-all duration-300 backdrop-blur-md shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 overflow-hidden text-ellipsis",
-                        span === "full" && "w-full",
+                        span === "full" && "w-full"
                     )}
-                    style={span === 'half' ? {
-                        width: "49%"
-                    } : span === 'third' ? {
-                        width: '65%'
-                    } : span === 'oneth' ? {
-                        width: '33%'
-                    } : {}}
+                    style={
+                        span === "half"
+                            ? { width: "49%" }
+                            : span === "third"
+                                ? { width: "65%" }
+                                : span === "oneth"
+                                    ? { width: "33%" }
+                                    : {}
+                    }
                 >
-                    {value
-                        ? items.find((item) => item.value === value)?.label
-                        : mode}
+                    {(value && items.find((item) => item.value === value)?.label) || mode}
+
                     <ChevronsUpDown className="opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="p-0 min-w-[var(--radix-popover-trigger-width)] w-fit">
+
+            <PopoverContent
+                align="start"
+                className="p-0 min-w-[var(--radix-popover-trigger-width)] w-fit"
+            >
                 <Command>
                     <CommandInput placeholder="Search..." className="h-9 text-[9px]" />
                     <CommandList>
-                        <CommandEmpty><span className="text-[9px]">
-                            No results found.
-                        </span>
+                        <CommandEmpty>
+                            <span className="text-[9px]">No results found.</span>
                         </CommandEmpty>
                         <CommandGroup>
                             {items.map((item) => (
@@ -69,8 +80,13 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                                     key={item.value}
                                     value={item.value}
                                     onSelect={(currentValue) => {
-                                        setValue(currentValue === value ? "" : currentValue)
-                                        setOpen(false)
+                                        setValue(currentValue === value ? "" : currentValue);
+                                        setOpen(false);
+                                        // Trigger parent's onSelect
+                                        if (onSelect) {
+                                            const selectedItem = items.find((i) => i.value === currentValue);
+                                            if (selectedItem) onSelect(selectedItem);
+                                        }
                                     }}
                                 >
                                     {item.label}
@@ -87,5 +103,5 @@ export function Combobox({ mode, items, span }: ComboboxProps) {
                 </Command>
             </PopoverContent>
         </Popover>
-    )
+    );
 }
