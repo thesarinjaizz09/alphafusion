@@ -87,7 +87,7 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
     ];
 
     return (
-        <WindowLayout title="Exchange Insights" icon={Landmark}>
+        <WindowLayout title="Exchange Insights" icon={Landmark} showFilters={false}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-2">
                 <Combobox mode="Select Exchange" span="full" items={exchanges} />
                 <Combobox mode="Select Sector" span="full" items={exchanges} />

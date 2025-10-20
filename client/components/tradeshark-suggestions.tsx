@@ -16,7 +16,7 @@ const TradesharkSuggestions = () => {
     ];
 
     return (
-        <WindowLayout title="Tradeshark's Suggestions" icon={Brain}>
+        <WindowLayout title="Tradeshark's Suggestions" icon={Brain} showFilters={false}>
             <div className="bg-[#16223B]/80 flex items-start justify-between rounded-sm p-2 mb-2 shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20">
                 <div>
                     <h3 className="text-[10px] text-gray-400">Exchange Sentiment</h3>
