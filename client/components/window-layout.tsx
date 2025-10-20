@@ -143,18 +143,6 @@ export default function WindowLayout({
 
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <button
-                                    className="cursor-pointer w-2 h-2 rounded-full bg-red-500 hover:bg-red-600"
-                                    onClick={() => setIsVisible(false)}
-                                />
-                            </TooltipTrigger>
-                            <TooltipContent side="bottom" className={classes}>
-                                Close Widget
-                            </TooltipContent>
-                        </Tooltip>
-
-                        <Tooltip>
-                            <TooltipTrigger asChild>
                                 <Crosshair
                                     className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
                                 />
@@ -164,19 +152,28 @@ export default function WindowLayout({
                             </TooltipContent>
                         </Tooltip>
 
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Clock12
-                                    className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
-                                />
-                            </PopoverTrigger>
-                            <PopoverContent
-                                className="bg-[#0B1320] border border-gray-700 rounded-md shadow-lg p-3 w-72 mt-2"
+                        <DropdownMenu>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <DropdownMenuTrigger asChild>
+                                        <Clock12
+                                            className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
+                                        />
+                                    </DropdownMenuTrigger>
+                                </TooltipTrigger>
+                                <TooltipContent side="bottom" className={classes}>
+                                    Sort/Filter Widget
+                                </TooltipContent>
+                            </Tooltip>
+
+                            <DropdownMenuContent
+                                side="bottom"
                                 align="end"
+                                className="text-[9px] max-w-lg bg-[#0A0F1C] text-gray-200 border-gray-700"
                             >
                                 <TimeFilterBar />
-                            </PopoverContent>
-                        </Popover>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
                         <Tooltip>
                             <TooltipTrigger asChild>

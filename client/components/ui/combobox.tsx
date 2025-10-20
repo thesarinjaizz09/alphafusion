@@ -30,7 +30,6 @@ interface ComboboxProps {
 export function Combobox({ mode, items, span, onSelect, value: controlledValue }: ComboboxProps) {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(controlledValue || "");
-    console.log({ mode })
 
     // Keep internal state in sync if controlled
     React.useEffect(() => {
