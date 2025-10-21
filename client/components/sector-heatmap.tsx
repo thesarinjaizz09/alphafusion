@@ -569,7 +569,7 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
       )}
 
       {/* Sector Details */}
-      <WindowLayout className="mt-2" title="Sector Stocks Heatmap" icon={BarChart3} fit={true}>
+      <WindowLayout className="mt-2" title="Sector Stocks Heatmap" icon={BarChart3} fit={true} showSectorFilter={false}>
         {selectedSector ? (
           <div>
             <SectorStockHeatmap
