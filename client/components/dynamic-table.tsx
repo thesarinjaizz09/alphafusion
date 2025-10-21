@@ -8,10 +8,19 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { ArrowUpDown, ChevronLeft, ChevronRight, Search, Maximize } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Search, Maximize, Grid3X3 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { NoResults } from "@/components/ui/no-results";
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
+
+const classes =
+    "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[50px] max-w-[180px] whitespace-pre-wrap";
+
 
 interface DynamicTableProps {
     headers: string[];
@@ -263,20 +272,66 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                         titlePosition={titlePosition}
                                         enableGlobalSearch={true}
                                         rowsPerPageProps={rowsPerPage} // max rows in dialog
-                                        isDialog
                                         mode={tableMode}
                                         onTableModeChange={setTableModeState}
                                     />
                                 </DialogContent>
-
                             </Dialog>
-
                         )}
+
+                        <DropdownMenu>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <DropdownMenuTrigger asChild>
+                                        <button className="ml-2 p-1 rounded-sm bg-[#10182A] border border-gray-700 hover:bg-[#16223B] transition-colors">
+                                            <Grid3X3 className="w-3 h-3 text-gray-400" />
+                                        </button>
+                                    </DropdownMenuTrigger>
+                                </TooltipTrigger>
+                                <TooltipContent side="bottom" className={classes}>
+                                    Data Display Settings
+                                </TooltipContent>
+                            </Tooltip>
+
+                            <DropdownMenuContent
+                                side="bottom"
+                                align="end"
+                                className="text-[9px] w-40 bg-[#0A0F1C] text-gray-200 border-gray-700"
+                            >
+                                <div className="w-full grid grid-cols-1 gap-2">
+                                    <div className="grid grid-cols-2 text-[9px] text-gray-300 bg-[#16223B]/80 rounded-sm shadow-lg shadow-[#E3B341]/10 hover:shadow-[#E3B341]/20 px-3 py-2">
+                                        <label className="flex items-center gap-1">
+                                            <input
+                                                type="radio"
+                                                name="tableMode"
+                                                value="all"
+                                                checked={tableMode === "all"}
+                                                onChange={() => setTableMode("all")}
+                                                className="accent-indigo-500"
+                                            />
+                                            Scrollable
+                                        </label>
+
+                                        <label className="flex items-center gap-1">
+                                            <input
+                                                type="radio"
+                                                name="tableMode"
+                                                value="paginated"
+                                                checked={tableMode === "paginated"}
+                                                onChange={() => setTableMode("paginated")}
+                                                className="accent-indigo-500"
+                                            />
+                                            Paginated
+                                        </label>
+                                    </div>
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 )}
 
                 <div className="flex-1 overflow-y-auto relative" style={{ maxHeight: (isDialog ? 10 : rowsPerPage) * 42 + 60 }}>
-                    {renderTable(paginatedData)}
+                    {renderTable(tableMode === 'all' ? processedData : paginatedData)}
                 </div>
 
                 {tableMode !== 'all' && processedData.length > maxRowsPerPage && (
@@ -317,7 +372,6 @@ const InnerDynamicTable: React.FC<DynamicTableProps> = ({
     titlePosition = "bottom",
     rowsPerPageProps = 6,
     enableGlobalSearch = true,
-    isDialog = false,
     mode = 'paginated',
     onTableModeChange,
 }) => {
@@ -328,13 +382,8 @@ const InnerDynamicTable: React.FC<DynamicTableProps> = ({
     const [tableMode, setTableMode] = useState<"all" | "paginated">(mode);
     const [rowsPerPage, setRowsPerPage] = useState<number>(rowsPerPageProps);
 
-
     const maxRowsPerPage = rowsPerPage;
 
-    const setTableModeState = (newMode: "all" | "paginated") => {
-        setTableMode(newMode);
-        onTableModeChange?.(newMode); // propagate to parent
-    };
 
     const processedData = useMemo(() => {
         let tempData = [...data];
