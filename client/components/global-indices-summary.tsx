@@ -86,7 +86,7 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
     );
 
     return (
-        <WindowLayout title="Indices, Equities & Macros" icon={Waypoints} fit={true}>
+        <WindowLayout title="Indices, Equities & Macros" icon={Waypoints} fit={true} showFilters={false}>
             <div className="flex flex-col overflow-hidden w-full gap-2">
                 <div className="flex animate-scroll gap-4 w-max">
                     {loopedIndices.map((i, idx) => {
