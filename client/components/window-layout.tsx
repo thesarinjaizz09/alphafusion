@@ -3,7 +3,7 @@
 import {
     CircleEllipsis, Maximize2, Info, Mail, SquaresExclude, Sheet, Braces, Bot,
     Crosshair,
-    Clock12
+    Timer
 } from "lucide-react";
 import { useState, ReactNode } from "react";
 import {
@@ -28,7 +28,6 @@ import {
     DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import TimeFilterBar from "./time-filters";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 const classes =
     "bg-[#0A0F1C]/95 border border-accent/30 text-gray-200 rounded-md p-2 text-[10px] shadow-lg min-w-[50px] max-w-[180px] whitespace-pre-wrap";
@@ -161,8 +160,8 @@ export default function WindowLayout({
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <DropdownMenuTrigger asChild>
-                                            <Clock12
-                                                className="w-3 h-3 cursor-pointer text-gray-400 hover:text-accent transition"
+                                            <Timer
+                                                className="w-3.5 h-3.5 cursor-pointer text-gray-400 hover:text-accent transition"
                                             />
                                         </DropdownMenuTrigger>
                                     </TooltipTrigger>
