@@ -10,8 +10,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import WindowLayout from './global/window-layout-widget';
+import WindowLayout from '@/components/global/window-layout-widget';
 import { NoResults } from '@/components/ui/no-results';
 
 interface SentimentData {
@@ -34,7 +33,7 @@ const dummySentiments: SentimentData[] = [
   { ticker: 'AMD', twitter: 76, reddit: 81, stocktwits: 80 },
 ];
 
-const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) => {
+const SocialSentimentBoardWidget = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) => {
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<'ticker' | 'score'>('score');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
@@ -188,4 +187,4 @@ const SocialSentimentBoard = ({ itemsPerPage = 4 }: { itemsPerPage?: number }) =
   );
 };
 
-export default SocialSentimentBoard;
+export default SocialSentimentBoardWidget;

@@ -1,11 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea as ShadTextarea } from "@/components/ui/textarea";
 import { Notebook, Tag, Trash2 } from "lucide-react";
-import WindowLayout from "./global/window-layout-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
 
 interface Note {
     id: number;
@@ -14,7 +10,7 @@ interface Note {
     time: string;
 }
 
-export default function UserNotes() {
+export default function UserNotesWidget() {
     const [notes, setNotes] = useState<Note[]>([]);
     const [note, setNote] = useState<string>("");
     const [tag, setTag] = useState<string>("");

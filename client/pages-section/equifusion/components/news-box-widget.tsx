@@ -1,8 +1,7 @@
 'use client'
 import { useState, useMemo } from "react";
 import { X, ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
-import WindowLayout from "./global/window-layout-widget";
-import SentimentMeter from "./global/sentiment-gauge-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
 import { NoResults } from "@/components/ui/no-results";
 import {
     Clock,
@@ -142,7 +141,7 @@ const newsData: NewsItem[] = [
 ];
 
 
-const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
+const NewsBoxWidget = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
     const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
     const [search, setSearch] = useState("");
     const [sortConfig, setSortConfig] = useState<{ key: keyof NewsItem; direction: "asc" | "desc" } | null>({ key: "Score", direction: "desc" });
@@ -366,4 +365,4 @@ const NewsBox = ({ rowsPerPage = 5 }: { rowsPerPage?: number }) => {
     );
 };
 
-export default NewsBox;
+export default NewsBoxWidget;

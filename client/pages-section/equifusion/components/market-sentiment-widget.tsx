@@ -1,9 +1,9 @@
 "use client";
 import React, { useMemo, useEffect, useState } from "react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Area } from "recharts";
-import WindowLayout from "./global/window-layout-widget";
-import SentimentMeter from "./global/sentiment-gauge-widget";
-import DynamicTable from "./global/dynamic-table-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
+import DynamicTable from "@/components/global/dynamic-table-widget";
+import SentimentMeter from "@/components/global/sentiment-gauge-widget";
 import { Brain } from "lucide-react";
 
 interface MarketSentimentPanelProps {
@@ -150,7 +150,7 @@ function MarketSentimentChart({ sentimentData, color }: any) {
 }
 
 
-const MarketSentimentPanel: React.FC<MarketSentimentPanelProps> = ({
+const MarketSentimentWidget: React.FC<MarketSentimentPanelProps> = ({
     sentimentLabel,
     dataPoints = 300,
 }) => {
@@ -208,4 +208,4 @@ const MarketSentimentPanel: React.FC<MarketSentimentPanelProps> = ({
     );
 };
 
-export default MarketSentimentPanel;
+export default MarketSentimentWidget;

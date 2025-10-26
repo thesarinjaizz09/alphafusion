@@ -1,10 +1,10 @@
 "use client";
 
 import { Shapes } from "lucide-react";
-import WindowLayout from "./global/window-layout-widget";
-import DynamicTable from "./global/dynamic-table-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
+import DynamicTable from "@/components/global/dynamic-table-widget";
 
-const MacroDataPanel = () => {
+const MacroDataPanelWidget = () => {
     // --- Data ---
     const macroDataMock = [
         // FX & indices
@@ -93,4 +93,4 @@ const MacroDataPanel = () => {
     );
 };
 
-export default MacroDataPanel;
+export default MacroDataPanelWidget;

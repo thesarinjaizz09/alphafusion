@@ -10,14 +10,14 @@ import {
     CartesianGrid,
     ReferenceLine,
 } from "recharts";
-import WindowLayout from "./global/window-layout-widget";
-import SentimentMeter from "./global/sentiment-gauge-widget";
-import DynamicTable from "./global/dynamic-table-widget";
+import WindowLayout from "../../../components/global/window-layout-widget";
+import SentimentMeter from "../../../components/global/sentiment-gauge-widget";
+import DynamicTable from "../../../components/global/dynamic-table-widget";
 import { Combobox } from "@/components/ui/combobox";
 import { exchanges } from "@/data/stocks.parameters";
 import { TooltipProps } from "recharts";
 import { LegendPayload } from "recharts";
-import { Diff, Sunrise, Waves } from "lucide-react";
+import { Waves } from "lucide-react";
 
 
 // ------------------------------
@@ -121,7 +121,7 @@ const CustomLegend: React.FC<CustomLegendProps> = ({ payload }) => {
 };
 
 
-const InstitutionalFlow: React.FC = () => {
+const InstitutionalFlowWidget: React.FC = () => {
     const [data, setData] = useState<FlowData[]>(flowdata);
 
     const [viewMode, setViewMode] = useState<"Daily" | "Weekly" | "Monthly">("Daily");
@@ -249,4 +249,4 @@ const InstitutionalFlow: React.FC = () => {
     );
 };
 
-export default InstitutionalFlow;
+export default InstitutionalFlowWidget;

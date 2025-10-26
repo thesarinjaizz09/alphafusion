@@ -1,9 +1,8 @@
 'use client'
 import { Brain, Cctv, Diff, Plus } from "lucide-react";
-import WindowLayout from "./global/window-layout-widget";
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
-import DynamicTable from "./global/dynamic-table-widget";
-import SentimentMeter from "./global/sentiment-gauge-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
+import DynamicTable from "@/components/global/dynamic-table-widget";
+
 
 // /data/watchlistData.ts
 
@@ -24,7 +23,7 @@ const headers = [
 ];
 
 
-const WatchlistBox = () => {
+const WatchlistWidget = () => {
     return (
         <WindowLayout title="Your Watchlist" icon={Cctv} max={true}>
             <div className="flex gap-3 text-[10px] text-gray-400 mb-2">
@@ -42,4 +41,4 @@ const WatchlistBox = () => {
     );
 };
 
-export default WatchlistBox;
+export default WatchlistWidget;

@@ -1,10 +1,10 @@
 "use client";
 import * as d3 from "d3";
-import WindowLayout from "./global/window-layout-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Flame, TrendingUp, TrendingDown, BarChart3, ChevronLeft, ChevronRight, Search, ArrowUpDown } from "lucide-react";
-import NoResults from "./ui/no-results";
+import NoResults from "@/components/ui/no-results";
 
 interface Stock {
   symbol: string;
@@ -353,7 +353,7 @@ const SectorStockHeatmap: React.FC<SectorStockHeatmapProps> = ({ sector, stocks 
 };
 
 
-const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
+const SectorHeatMapWidget: React.FC<MarketHeatMapProps> = ({
   data = defaultData,
   sectorsPerPage = 20,
 }) => {
@@ -596,4 +596,4 @@ const SectorHeatMap: React.FC<MarketHeatMapProps> = ({
 
 
 
-export default SectorHeatMap;
+export default SectorHeatMapWidget;

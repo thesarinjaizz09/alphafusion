@@ -1,10 +1,10 @@
 'use client'
 import { Brain } from "lucide-react";
-import WindowLayout from "./global/window-layout-widget";
-import DynamicTable from "./global/dynamic-table-widget";
-import SentimentMeter from "./global/sentiment-gauge-widget";
+import SentimentMeter from "@/components/global/sentiment-gauge-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
+import DynamicTable from "@/components/global/dynamic-table-widget";
 
-const TradesharkSuggestions = () => {
+const TradesharkSuggestionsWidget = () => {
 
     const tableData = [
         { Ticker: "AAPL", Action: "BUY", Target: "$220", Horizon: "2W", Score: "8.5" },
@@ -29,4 +29,4 @@ const TradesharkSuggestions = () => {
     );
 };
 
-export default TradesharkSuggestions;
+export default TradesharkSuggestionsWidget;

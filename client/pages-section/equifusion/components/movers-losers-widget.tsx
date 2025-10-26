@@ -1,7 +1,7 @@
 'use client'
-import DynamicTable from "./global/dynamic-table-widget";
+import DynamicTable from "@/components/global/dynamic-table-widget";
 import { SquarePercent } from "lucide-react";
-import WindowLayout from "./global/window-layout-widget";
+import WindowLayout from "@/components/global/window-layout-widget";
 
 const topGainersData = [
     { Symbol: "INFY", Price: "₹1,543.20", "Change %": "+3.42%", Volume: "1.2M", sparkline: [1480, 1495, 1505, 1520, 1543] },
@@ -40,7 +40,7 @@ const topLosersData = [
 ];
 
 
-const MoversLosersBox = () => {
+const MoversLosersWidget = () => {
     return (
         <WindowLayout title="Movers Insights" icon={SquarePercent} >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
@@ -51,4 +51,4 @@ const MoversLosersBox = () => {
     );
 };
 
-export default MoversLosersBox;
+export default MoversLosersWidget;
