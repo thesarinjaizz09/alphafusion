@@ -31,7 +31,7 @@ const bubbleData: Stock[] = [
 
 const exchangeName = "NSE";
 
-const MarketSolarSystem: React.FC = () => {
+const MarketOrbitCloudWidget: React.FC = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
@@ -244,4 +244,4 @@ Stocks: ${planet.stocks.join(", ")}`
   );
 };
 
-export default MarketSolarSystem;
+export default MarketOrbitCloudWidget;
