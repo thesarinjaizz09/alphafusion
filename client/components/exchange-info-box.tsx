@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import DynamicTable from "./dynamic-table";
+import DynamicTable from "./global/dynamic-table";
 import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
 import { Combobox } from "@/components/ui/combobox"

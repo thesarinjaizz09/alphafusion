@@ -2,7 +2,7 @@
 
 import { Shapes } from "lucide-react";
 import WindowLayout from "./window-layout";
-import DynamicTable from "./dynamic-table";
+import DynamicTable from "./global/dynamic-table";
 
 const EquitiesIndicesBox = () => {
     // --- Data ---

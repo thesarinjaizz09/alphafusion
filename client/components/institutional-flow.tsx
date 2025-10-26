@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import WindowLayout from "./window-layout";
 import SentimentMeter from "./sentiment-gauge";
-import DynamicTable from "./dynamic-table";
+import DynamicTable from "./global/dynamic-table";
 import { Combobox } from "@/components/ui/combobox";
 import { exchanges } from "@/data/stocks.parameters";
 import { TooltipProps } from "recharts";

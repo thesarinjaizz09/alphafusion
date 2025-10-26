@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import WindowLayout from "./window-layout";
-import DynamicTable from "./dynamic-table";
+import DynamicTable from "./global/dynamic-table";
 import { BookKey } from "lucide-react";
 
 interface InsiderTransaction {

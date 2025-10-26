@@ -2,7 +2,7 @@
 import { Brain, Cctv, Diff, Plus } from "lucide-react";
 import WindowLayout from "./window-layout";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
-import DynamicTable from "./dynamic-table";
+import DynamicTable from "./global/dynamic-table";
 import SentimentMeter from "./sentiment-gauge";
 
 // /data/watchlistData.ts

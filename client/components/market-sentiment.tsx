@@ -3,7 +3,7 @@ import React, { useMemo, useEffect, useState } from "react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Area } from "recharts";
 import WindowLayout from "./window-layout";
 import SentimentMeter from "./sentiment-gauge";
-import DynamicTable from "./dynamic-table";
+import DynamicTable from "./global/dynamic-table";
 import { Brain } from "lucide-react";
 
 interface MarketSentimentPanelProps {
