@@ -1,7 +1,5 @@
 "use client"
 
-import React from 'react'
-
 import ExchangeInfoBox from '@/components/exchange-info-box'
 import GlobalIndicesSummary from '@/components/global-indices-summary'
 import TradesharkSuggestions from '@/components/tradeshark-suggestions'
@@ -19,7 +17,6 @@ import MacroDataPanel from '@/components/macrodata-panel'
 import SocialSentimentBoard from '@/components/social-sentiment-board'
 import EventsEarningsPanel from '@/components/earnings-events-panel'
 import UserNotes from '@/components/user-notes'
-import FloatingAIButton from '@/components/floating-ai-button'
 
 const EquiFusionPage = () => {
     return (
