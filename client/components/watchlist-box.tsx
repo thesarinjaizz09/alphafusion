@@ -1,9 +1,9 @@
 'use client'
 import { Brain, Cctv, Diff, Plus } from "lucide-react";
-import WindowLayout from "./window-layout";
+import WindowLayout from "./global/window-layout-widget";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import DynamicTable from "./global/dynamic-table-widget";
-import SentimentMeter from "./sentiment-gauge";
+import SentimentMeter from "./global/sentiment-gauge-widget";
 
 // /data/watchlistData.ts
 

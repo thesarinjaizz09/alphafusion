@@ -1,7 +1,7 @@
 "use client";
 
 import { Shapes } from "lucide-react";
-import WindowLayout from "./window-layout";
+import WindowLayout from "./global/window-layout-widget";
 import DynamicTable from "./global/dynamic-table-widget";
 
 const MacroDataPanel = () => {

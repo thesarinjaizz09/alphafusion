@@ -3,8 +3,8 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { useState, useMemo } from "react";
 import { X, ArrowUpDown, ChevronLeft, ChevronRight, Search, TriangleAlert } from "lucide-react";
-import WindowLayout from "../../../components/window-layout";
-import SentimentMeter from "../../../components/sentiment-gauge";
+import WindowLayout from "../../../components/global/window-layout-widget";
+import SentimentMeter from "../../../components/global/sentiment-gauge-widget";
 import {
     Clock,
     Newspaper,

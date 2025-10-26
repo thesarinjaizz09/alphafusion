@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 // Example:
-import WindowLayout from '../window-layout';
+import WindowLayout from './window-layout-widget';
 const { ComposableMap, Geographies, Geography } = require('react-simple-maps') as any;
 
 import { scaleLinear } from 'd3-scale';

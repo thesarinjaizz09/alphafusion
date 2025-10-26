@@ -1,7 +1,7 @@
 "use client";
 
 import { Shapes } from "lucide-react";
-import WindowLayout from "@/components/window-layout";
+import WindowLayout from "@/components/global/window-layout-widget";
 import DynamicTable from "@/components/global/dynamic-table-widget";
 
 const EquitiesWidget = () => {

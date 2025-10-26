@@ -10,7 +10,7 @@ import {
     AlertTriangle,
     DollarSign,
 } from "lucide-react";
-import WindowLayout from "../../../components/window-layout";
+import WindowLayout from "../../../components/global/window-layout-widget";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { NoResults } from "@/components/ui/no-results";
 

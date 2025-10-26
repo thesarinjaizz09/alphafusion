@@ -1,4 +1,4 @@
-import WindowLayout from "../../../components/window-layout";
+import WindowLayout from "../../../components/global/window-layout-widget";
 import DynamicTable from "../../../components/global/dynamic-table-widget";
 import { BookKey } from "lucide-react";
 

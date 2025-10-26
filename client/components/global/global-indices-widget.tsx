@@ -1,4 +1,4 @@
-import WindowLayout from "../window-layout";
+import WindowLayout from "./window-layout-widget";
 import { dummyIndicesData, dummyEquitiesData } from "@/data/stocks.parameters";
 import { ArrowUp, ArrowDown, Waypoints, TrendingUp, BarChart3, DollarSign } from "lucide-react";
 import { useCurrency } from "@/hooks/use-currency";

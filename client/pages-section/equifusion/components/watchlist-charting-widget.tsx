@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CandlestickSeries, IChartApi, CandlestickData, UTCTimestamp } from 'lightweight-charts';
-import WindowLayout from '../../../components/window-layout';
+import WindowLayout from '../../../components/global/window-layout-widget';
 import { ChartCandlestick } from 'lucide-react';
 
 interface WatchlisetChartingWidgetProps {

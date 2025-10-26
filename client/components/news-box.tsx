@@ -1,8 +1,8 @@
 'use client'
 import { useState, useMemo } from "react";
 import { X, ArrowUpDown, ChevronLeft, ChevronRight, Search } from "lucide-react";
-import WindowLayout from "./window-layout";
-import SentimentMeter from "./sentiment-gauge";
+import WindowLayout from "./global/window-layout-widget";
+import SentimentMeter from "./global/sentiment-gauge-widget";
 import { NoResults } from "@/components/ui/no-results";
 import {
     Clock,

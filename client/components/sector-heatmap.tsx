@@ -1,6 +1,6 @@
 "use client";
 import * as d3 from "d3";
-import WindowLayout from "./window-layout";
+import WindowLayout from "./global/window-layout-widget";
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Flame, TrendingUp, TrendingDown, BarChart3, ChevronLeft, ChevronRight, Search, ArrowUpDown } from "lucide-react";

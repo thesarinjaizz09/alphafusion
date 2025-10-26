@@ -1,7 +1,7 @@
 'use client'
 import DynamicTable from "./global/dynamic-table-widget";
 import { SquarePercent } from "lucide-react";
-import WindowLayout from "./window-layout";
+import WindowLayout from "./global/window-layout-widget";
 
 const topGainersData = [
     { Symbol: "INFY", Price: "₹1,543.20", "Change %": "+3.42%", Volume: "1.2M", sparkline: [1480, 1495, 1505, 1520, 1543] },

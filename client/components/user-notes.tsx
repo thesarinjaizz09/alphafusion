@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea as ShadTextarea } from "@/components/ui/textarea";
 import { Notebook, Tag, Trash2 } from "lucide-react";
-import WindowLayout from "./window-layout";
+import WindowLayout from "./global/window-layout-widget";
 
 interface Note {
     id: number;

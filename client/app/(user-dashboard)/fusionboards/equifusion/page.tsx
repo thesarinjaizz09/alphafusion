@@ -1,6 +1,6 @@
 
 import { EquiFusionPage } from "@/pages-section";
-import PanelTopbar from "@/components/panel-topbar";
+import PanelTopbar from "@/components/global/panel-topbar-widget";
 
 export const metadata = {
   title: "EquiFusion",

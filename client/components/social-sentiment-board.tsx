@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import WindowLayout from './window-layout';
+import WindowLayout from './global/window-layout-widget';
 import { NoResults } from '@/components/ui/no-results';
 
 interface SentimentData {

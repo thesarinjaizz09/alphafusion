@@ -1,8 +1,8 @@
 "use client";
 import React, { useMemo, useEffect, useState } from "react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Area } from "recharts";
-import WindowLayout from "./window-layout";
-import SentimentMeter from "./sentiment-gauge";
+import WindowLayout from "./global/window-layout-widget";
+import SentimentMeter from "./global/sentiment-gauge-widget";
 import DynamicTable from "./global/dynamic-table-widget";
 import { Brain } from "lucide-react";
 

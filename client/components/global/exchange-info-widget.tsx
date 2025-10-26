@@ -11,7 +11,7 @@ import { exchangeData } from "@/data/stocks.parameters";
 import { formatInTimeZone } from "date-fns-tz";
 import { parse } from "date-fns";
 
-import WindowLayout from "../window-layout";
+import WindowLayout from "./window-layout-widget";
 
 const ExchangeInfoWidget = ({ selectedExchange }: { selectedExchange: string }) => {
     const [info, setInfo] = useState<ExchangeInfoType | null>(null);
