@@ -1,6 +1,5 @@
 
 import { EquiFusionPage } from "@/pages-section";
-import PanelTopbar from "@/components/global/panel-topbar-widget";
 
 export const metadata = {
   title: "EquiFusion",
@@ -11,10 +10,6 @@ export const metadata = {
 export default function EquiFusionBoard() {
   return (
     <div className="rounded-sm overflow-hidden font-mono">
-      {/* HEADER */}
-      <PanelTopbar suite="Boards" service="Equities" />
-
-      {/* MAIN CONTENT */}
       <EquiFusionPage />
     </div >
   );
