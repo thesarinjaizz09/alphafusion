@@ -1,4 +1,4 @@
-import WindowLayout from "./window-layout";
+import WindowLayout from "../window-layout";
 import { dummyIndicesData, dummyEquitiesData } from "@/data/stocks.parameters";
 import { ArrowUp, ArrowDown, Waypoints, TrendingUp, BarChart3, DollarSign } from "lucide-react";
 import { useCurrency } from "@/hooks/use-currency";
@@ -24,11 +24,11 @@ interface EquityData {
     sparkline: number[];
 }
 
-interface GlobalIndicesSummaryProps {
+interface GlobalIndicesWidgetProps {
     selectedExchange: keyof typeof dummyIndicesData;
 }
 
-const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) => {
+const GlobalIndicesWidget = ({ selectedExchange }: GlobalIndicesWidgetProps) => {
     const indices: IndexData[] = dummyIndicesData[selectedExchange] || [];
     const equities: EquityData[] = dummyEquitiesData[selectedExchange] || [];
     const { formatPrice } = useCurrency();
@@ -165,4 +165,4 @@ const GlobalIndicesSummary = ({ selectedExchange }: GlobalIndicesSummaryProps) =
     );
 };
 
-export default GlobalIndicesSummary;
+export default GlobalIndicesWidget;

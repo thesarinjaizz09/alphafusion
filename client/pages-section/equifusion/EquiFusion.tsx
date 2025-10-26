@@ -1,7 +1,7 @@
 "use client"
 
 import ExchangeInfoWidget from '@/components/global/exchange-info-widget'
-import GlobalIndicesSummary from '@/components/global-indices-summary'
+import GlobalIndicesWidget from '@/components/global/global-indices-widget'
 import TradesharkSuggestions from '@/components/tradeshark-suggestions'
 import MoversLosersBox from '@/components/movers-losers'
 import WatchlistBox from '@/components/watchlist-box'
@@ -22,7 +22,7 @@ const EquiFusionPage = () => {
     return (
         <div className="flex flex-1 flex-col gap-3 p-4 bg-[#050914] text-[#F5F6FA] min-h-screen">
             <div className="grid grid-cols-1">
-                <GlobalIndicesSummary selectedExchange="NASDAQ" />
+                <GlobalIndicesWidget selectedExchange="NASDAQ" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 auto-rows-min">
