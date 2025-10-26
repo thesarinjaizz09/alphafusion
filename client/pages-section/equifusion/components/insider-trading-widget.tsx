@@ -1,5 +1,5 @@
 import WindowLayout from "../../../components/window-layout";
-import DynamicTable from "../../../components/global/dynamic-table";
+import DynamicTable from "../../../components/global/dynamic-table-widget";
 import { BookKey } from "lucide-react";
 
 // Mock data

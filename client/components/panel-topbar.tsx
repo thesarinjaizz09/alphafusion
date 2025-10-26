@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import LocalClock from "@/components/local-clock";
+import LocalClock from "@/components/global/local-clock-widget";
 
 
 type PanelTopbarProps = {

@@ -1,5 +1,5 @@
 'use client'
-import DynamicTable from "./global/dynamic-table";
+import DynamicTable from "./global/dynamic-table-widget";
 import { SquarePercent } from "lucide-react";
 import WindowLayout from "./window-layout";
 

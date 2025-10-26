@@ -1,5 +1,5 @@
 'use client'
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import cn from "clsx";
@@ -15,7 +15,6 @@ import { AppWindowMac, Braces, Mail, Sheet, SquarePlus, SquaresExclude } from 'l
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 

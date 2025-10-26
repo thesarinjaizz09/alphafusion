@@ -1,7 +1,7 @@
 'use client'
 import { Brain } from "lucide-react";
 import WindowLayout from "./window-layout";
-import DynamicTable from "./global/dynamic-table";
+import DynamicTable from "./global/dynamic-table-widget";
 import SentimentMeter from "./sentiment-gauge";
 
 const TradesharkSuggestions = () => {

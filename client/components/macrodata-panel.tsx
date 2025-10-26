@@ -2,7 +2,7 @@
 
 import { Shapes } from "lucide-react";
 import WindowLayout from "./window-layout";
-import DynamicTable from "./global/dynamic-table";
+import DynamicTable from "./global/dynamic-table-widget";
 
 const MacroDataPanel = () => {
     // --- Data ---
