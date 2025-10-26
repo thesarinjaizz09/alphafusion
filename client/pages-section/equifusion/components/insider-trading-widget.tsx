@@ -1,17 +1,6 @@
-import React, { useState } from "react";
-import WindowLayout from "./window-layout";
-import DynamicTable from "./global/dynamic-table";
+import WindowLayout from "../../../components/window-layout";
+import DynamicTable from "../../../components/global/dynamic-table";
 import { BookKey } from "lucide-react";
-
-interface InsiderTransaction {
-    ticker: string;
-    insiderName: string;
-    position: string;
-    transactionType: "Buy" | "Sell";
-    shares: number;
-    percentChange: number;
-    date: string;
-}
 
 // Mock data
 const mockInsiderData = [
@@ -40,7 +29,7 @@ const mockInsiderData = [
 
 const headers = ["Ticker", "Date", "Name", "Position", "Action", "Price", "Shares", "Change"]
 
-const InsiderTable: React.FC = () => {
+const InsiderTradingWidget: React.FC = () => {
     return (
         <WindowLayout title="Insiders Transactions" icon={BookKey}>
             <DynamicTable title="Insiders Transaction" headers={headers} data={mockInsiderData} />
@@ -48,4 +37,4 @@ const InsiderTable: React.FC = () => {
     );
 };
 
-export default InsiderTable;
+export default InsiderTradingWidget;

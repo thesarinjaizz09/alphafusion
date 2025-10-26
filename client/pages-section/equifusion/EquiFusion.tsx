@@ -10,7 +10,7 @@ import NewsBox from '@/components/news-box'
 import InstitutionalFlow from '@/components/institutional-flow'
 import WatchlisetChartingWidget from './components/watchlist-charting-widget'
 import SectorHeatMap from '@/components/sector-heatmap'
-import InsiderTable from '@/components/insider-table'
+import InsiderTradingWidget from './components/insider-trading-widget'
 import MarketSentimentPanel from '@/components/market-sentiment'
 import TradesharkAlertsWidget from './components/tradeshark-alerts-widget'
 import MacroDataPanel from '@/components/macrodata-panel'
@@ -43,7 +43,7 @@ const EquiFusionPage = () => {
                     <SectorHeatMap />
                     <NewsBox />
                     <WatchlistBox />
-                    <InsiderTable />
+                    <InsiderTradingWidget />
                     <TradesharkAlertsWidget />
                     <SocialSentimentBoard />
                     <EventsEarningsWidget />
