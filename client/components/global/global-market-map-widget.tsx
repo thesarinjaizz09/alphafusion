@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 // Example:
-import WindowLayout from './window-layout';
+import WindowLayout from '../window-layout';
 const { ComposableMap, Geographies, Geography } = require('react-simple-maps') as any;
 
 import { scaleLinear } from 'd3-scale';
@@ -26,7 +26,7 @@ const mockData: RegionData[] = [
     // Add more regions as needed
 ];
 
-const GlobalMarketMap = () => {
+const GlobalMarketMapWidget = () => {
     const [data, setData] = useState<RegionData[]>([]);
 
     useEffect(() => {
@@ -69,4 +69,4 @@ const GlobalMarketMap = () => {
     );
 };
 
-export default GlobalMarketMap;
+export default GlobalMarketMapWidget;
