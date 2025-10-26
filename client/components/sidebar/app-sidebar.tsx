@@ -22,7 +22,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-  import appLogo from "@/public/Storx.final.png"
+import appLogo from "@/public/Storx.final.png"
 
 
 const data = {
@@ -172,17 +172,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   });
 
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
+      {...props}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <Image src={appLogo} alt="AlphaFusion Trademark" width={25} className="p-1 border-none border-violet-800 rounded-sm bg-slate-800" />
-
-                <div className="grid flex-1 text-left text-[11px] leading-tight">
-                  <span className="truncate font-medium">AlphaFusion™</span>
-                  <span className="truncate text-[10px]">Finance</span>
+            <SidebarMenuButton size="lg" asChild className="p-1.5 h-auto">
+              <a href="#" className="bg-gradient-to-tr from-green-500/20 to-emerald-700/40 flex items-center justify-center shadow-inner border border-green-800/50">
+                <Image src={appLogo} alt="AlphaFusion Trademark" width={28} className="p-1 border-none border-violet-800 rounded-sm bg-slate-800" />
+                <div className="grid flex-1 text-left text-xs leading-tight">
+                  <span className="truncate font-bold text-emerald-400">AlphaFusion</span>
+                  <span className="truncate text-[11px] text-green-200/80">Finance</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -191,12 +193,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainWithActive} />
-        {/* <NavProjects projects={data.projects} /> */}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
-    </Sidebar>
+    </Sidebar >
   )
 }
