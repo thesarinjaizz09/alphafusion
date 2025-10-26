@@ -3,8 +3,8 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { useState, useMemo } from "react";
 import { X, ArrowUpDown, ChevronLeft, ChevronRight, Search, TriangleAlert } from "lucide-react";
-import WindowLayout from "./window-layout";
-import SentimentMeter from "./sentiment-gauge";
+import WindowLayout from "../../../components/window-layout";
+import SentimentMeter from "../../../components/sentiment-gauge";
 import {
     Clock,
     Newspaper,
@@ -26,7 +26,7 @@ interface Alert {
     time?: string; // optional timestamp
 }
 
-interface AIAlertsPanelProps {
+interface TradesharkAlertsWidgetProps {
     alerts?: Alert[];
 }
 
@@ -72,7 +72,7 @@ const typeColors = {
     Options: "text-purple-400",
 };
 
-const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({ alerts = sampleAlerts, rowsPerPage = 4 }: { alerts?: Alert[], rowsPerPage?: number }) => {
+const TradesharkAlertsWidget: React.FC<TradesharkAlertsWidgetProps> = ({ alerts = sampleAlerts, rowsPerPage = 4 }: { alerts?: Alert[], rowsPerPage?: number }) => {
     const [selectedAlert, setSelectedAlert] = useState<Alert | null>(null);
     const [search, setSearch] = useState("");
     const [sortConfig, setSortConfig] = useState<{ key: keyof Alert; direction: "asc" | "desc" } | null>({ key: "change", direction: "desc" });
@@ -275,4 +275,4 @@ const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({ alerts = sampleAlerts, ro
     );
 };
 
-export default AIAlertsPanel;
+export default TradesharkAlertsWidget;

@@ -12,7 +12,7 @@ import CandlestickPanel from '@/components/candlestick-panel'
 import SectorHeatMap from '@/components/sector-heatmap'
 import InsiderTable from '@/components/insider-table'
 import MarketSentimentPanel from '@/components/market-sentiment'
-import AIAlertsPanel from '@/components/alerts-panel'
+import TradesharkAlertsWidget from './components/tradeshark-alerts-widget'
 import MacroDataPanel from '@/components/macrodata-panel'
 import SocialSentimentBoard from '@/components/social-sentiment-board'
 import EventsEarningsPanel from '@/components/earnings-events-panel'
@@ -44,7 +44,7 @@ const EquiFusionPage = () => {
                     <NewsBox />
                     <WatchlistBox />
                     <InsiderTable />
-                    <AIAlertsPanel />
+                    <TradesharkAlertsWidget />
                     <SocialSentimentBoard />
                     <EventsEarningsPanel />
                 </div>
