@@ -1,10 +1,10 @@
 "use client";
 
 import { Shapes } from "lucide-react";
-import WindowLayout from "./window-layout";
-import DynamicTable from "./global/dynamic-table";
+import WindowLayout from "@/components/window-layout";
+import DynamicTable from "@/components/global/dynamic-table";
 
-const EquitiesIndicesBox = () => {
+const EquitiesWidget = () => {
     // --- Data ---
     const topGainersData = [
         { Symbol: "INFY", Price: "₹1,543.20", "Change %": "+3.42%", Volume: "1.2M", "52W High/Low": "₹1650 / ₹1210", "P/E": "27.4", "Dividend Yield": "2.1%" },
@@ -66,4 +66,4 @@ const EquitiesIndicesBox = () => {
     );
 };
 
-export default EquitiesIndicesBox;
+export default EquitiesWidget;

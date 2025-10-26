@@ -5,7 +5,7 @@ import GlobalIndicesSummary from '@/components/global-indices-summary'
 import TradesharkSuggestions from '@/components/tradeshark-suggestions'
 import MoversLosersBox from '@/components/movers-losers'
 import WatchlistBox from '@/components/watchlist-box'
-import EquitiesIndicesBox from '@/components/equities-indices-box'
+import EquitiesWidget from './components/equities-widget'
 import NewsBox from '@/components/news-box'
 import InstitutionalFlow from '@/components/institutional-flow'
 import WatchlisetChartingWidget from './components/watchlist-charting-widget'
@@ -30,7 +30,7 @@ const EquiFusionPage = () => {
                 <div className="flex flex-col col-span-2 gap-3">
                     <ExchangeInfoBox selectedExchange='NASDAQ' />
                     <MoversLosersBox />
-                    <EquitiesIndicesBox />
+                    <EquitiesWidget />
                     <WatchlisetChartingWidget />
                     <InstitutionalFlow />
                     <MarketSentimentPanel />
