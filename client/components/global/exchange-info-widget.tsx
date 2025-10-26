@@ -1,8 +1,8 @@
 'use client'
 import Image from "next/image";
-import DynamicTable from "./global/dynamic-table";
+import DynamicTable from "./dynamic-table";
 import { useEffect, useState } from "react";
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 import { Combobox } from "@/components/ui/combobox"
 import { exchanges } from '@/data/stocks.parameters'
 import { Landmark, MoveRight } from "lucide-react";
@@ -11,9 +11,9 @@ import { exchangeData } from "@/data/stocks.parameters";
 import { formatInTimeZone } from "date-fns-tz";
 import { parse } from "date-fns";
 
-import WindowLayout from "./window-layout";
+import WindowLayout from "../window-layout";
 
-const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => {
+const ExchangeInfoWidget = ({ selectedExchange }: { selectedExchange: string }) => {
     const [info, setInfo] = useState<ExchangeInfoType | null>(null);
     const [localTime, setLocalTime] = useState<string>("");
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -130,4 +130,4 @@ const ExchangeInfoBox = ({ selectedExchange }: { selectedExchange: string }) => 
     );
 };
 
-export default ExchangeInfoBox;
+export default ExchangeInfoWidget;
