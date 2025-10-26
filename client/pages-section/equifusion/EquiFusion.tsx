@@ -8,7 +8,7 @@ import WatchlistBox from '@/components/watchlist-box'
 import EquitiesIndicesBox from '@/components/equities-indices-box'
 import NewsBox from '@/components/news-box'
 import InstitutionalFlow from '@/components/institutional-flow'
-import CandlestickPanel from '@/components/candlestick-panel'
+import WatchlisetChartingWidget from './components/watchlist-charting-widget'
 import SectorHeatMap from '@/components/sector-heatmap'
 import InsiderTable from '@/components/insider-table'
 import MarketSentimentPanel from '@/components/market-sentiment'
@@ -31,7 +31,7 @@ const EquiFusionPage = () => {
                     <ExchangeInfoBox selectedExchange='NASDAQ' />
                     <MoversLosersBox />
                     <EquitiesIndicesBox />
-                    <CandlestickPanel />
+                    <WatchlisetChartingWidget />
                     <InstitutionalFlow />
                     <MarketSentimentPanel />
                     <MacroDataPanel />

@@ -2,14 +2,14 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CandlestickSeries, IChartApi, CandlestickData, UTCTimestamp } from 'lightweight-charts';
-import WindowLayout from './window-layout';
+import WindowLayout from '../../../components/window-layout';
 import { ChartCandlestick } from 'lucide-react';
 
-interface CandlestickPanelProps {
+interface WatchlisetChartingWidgetProps {
     count?: number;
 }
 
-const CandlestickPanel: React.FC<CandlestickPanelProps> = ({ count = 5 }) => {
+const WatchlisetChartingWidget: React.FC<WatchlisetChartingWidgetProps> = ({ count = 5 }) => {
     const maxPerRow = 4;
 
     return (
@@ -151,4 +151,4 @@ const SingleChart: React.FC<SingleChartProps> = ({ count, ticker = "AAPL" }) => 
     );
 };
 
-export default CandlestickPanel;
+export default WatchlisetChartingWidget;
