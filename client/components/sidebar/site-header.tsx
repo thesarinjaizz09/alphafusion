@@ -1,12 +1,11 @@
 "use client"
 
 import { SidebarIcon } from "lucide-react"
-
+import LocalClock from "../global/local-clock-widget"
 import { SearchForm } from "../ui/search-form"
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -31,19 +30,22 @@ export function SiteHeader() {
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
         <Breadcrumb className="hidden sm:block">
-          <BreadcrumbList className="text-emerald-100/80">
+          <BreadcrumbList className="text-[#E3B341]/90 font-medium text-[10px] ">
             <BreadcrumbItem>
-              <BreadcrumbLink href="#" className="text-[11px]">
-                Dashboard
-              </BreadcrumbLink>
+              <BreadcrumbPage className="text-[#E3B341]/90 font-semibold">
+                Suite
+              </BreadcrumbPage>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            <BreadcrumbSeparator className="hidden md:block text-[#E3B341]/50" />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-emerald-100/80 text-[11px]">Global Dashboard</BreadcrumbPage>
+              <BreadcrumbPage className="text-[#F5F6FA] font-semibold">
+                Service
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <SearchForm className="w-full md:min-w-md sm:ml-auto sm:w-auto mr-3" />
+        <SearchForm className="w-full md:min-w-xs sm:ml-auto sm:w-auto" />
+        <LocalClock className="mr-2" />
       </div>
     </header>
   )
