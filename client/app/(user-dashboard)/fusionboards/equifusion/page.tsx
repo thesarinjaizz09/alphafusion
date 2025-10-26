@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function EquiFusionBoard() {
   return (
-    <div className="rounded-sm overflow-hidden font-mono">
+    <div className="rounded-sm font-mono">
       <EquiFusionPage />
     </div >
   );

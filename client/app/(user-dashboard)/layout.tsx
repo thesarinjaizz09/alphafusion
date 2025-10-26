@@ -27,7 +27,7 @@ export default function UserDashboardLayout({
         <SiteHeader />
         <div className="flex flex-1">
           <AppSidebar />
-          <SidebarInset className='max-h-[calc(100vh-(var(--spacing)*11.5))] overflow-hidden overflow-y-auto'>
+          <SidebarInset className='max-h-[calc(100vh-(var(--spacing)*11.5))] overflow-y-scroll'>
             {children}
           </SidebarInset>
         </div>
