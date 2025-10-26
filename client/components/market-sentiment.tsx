@@ -86,7 +86,6 @@ const generateMarketData = (points: number = 300) => {
 };
 
 function MarketSentimentChart({ sentimentData, color }: any) {
-    console.log({ sentimentData })
     return (
         <div className="h-72 bg-[#16223B]/80 rounded-sm p-2 shadow-lg shadow-[#E3B341]/10">
             <ResponsiveContainer width="100%" height="100%">

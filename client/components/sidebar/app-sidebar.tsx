@@ -38,9 +38,8 @@ const data = {
       icon: LayoutDashboard,
       isActive: true,
       items: [
-        { title: "Fusion", url: "/fusionboards/fusionone" },
-        { title: "MyBoard", url: "/fusionboards/myfusionboard" },
-        { title: "Global", url: "/fusionboards/globalfusion" },
+        { title: "MyBoards", url: "/fusionboards/myfusionboard" },
+        { title: "FusionBoard", url: "/fusionboards/fusionone" },
         { title: "Equities", url: "/fusionboards/equifusion" },
         { title: "Bonds", url: "/fusionboards/bondfusion" },
         { title: "Forex", url: "/fusionboards/forexfusion" },
