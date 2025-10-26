@@ -15,7 +15,7 @@ import MarketSentimentPanel from '@/components/market-sentiment'
 import TradesharkAlertsWidget from './components/tradeshark-alerts-widget'
 import MacroDataPanel from '@/components/macrodata-panel'
 import SocialSentimentBoard from '@/components/social-sentiment-board'
-import EventsEarningsPanel from '@/components/earnings-events-panel'
+import EventsEarningsWidget from './components/events-earnings-widget'
 import UserNotes from '@/components/user-notes'
 
 const EquiFusionPage = () => {
@@ -46,7 +46,7 @@ const EquiFusionPage = () => {
                     <InsiderTable />
                     <TradesharkAlertsWidget />
                     <SocialSentimentBoard />
-                    <EventsEarningsPanel />
+                    <EventsEarningsWidget />
                 </div>
             </div>
 

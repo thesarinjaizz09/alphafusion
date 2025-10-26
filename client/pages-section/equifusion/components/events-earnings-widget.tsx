@@ -6,13 +6,11 @@ import {
     ChevronRight,
     Search,
     CalendarDays,
-    Building2,
     LineChart,
     AlertTriangle,
-    Clock,
     DollarSign,
 } from "lucide-react";
-import WindowLayout from "./window-layout";
+import WindowLayout from "../../../components/window-layout";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { NoResults } from "@/components/ui/no-results";
 
@@ -103,20 +101,7 @@ const impactColor = (impact: string) => {
     }
 };
 
-const typeIcon = (type: string) => {
-    switch (type.toLowerCase()) {
-        case "earnings":
-            return <LineChart className="w-4 h-4 text-sky-400" />;
-        case "dividend":
-            return <DollarSign className="w-4 h-4 text-emerald-400" />;
-        case "ipo":
-            return <Building2 className="w-4 h-4 text-yellow-400" />;
-        default:
-            return <AlertTriangle className="w-4 h-4 text-purple-400" />;
-    }
-};
-
-export default function EarningsEventsPanel({ rowsPerPage = 5 }: { rowsPerPage?: number }) {
+export default function EventsEarningsWidget({ rowsPerPage = 5 }: { rowsPerPage?: number }) {
     const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
     const [search, setSearch] = useState("");
     const [sortConfig, setSortConfig] = useState<{ key: keyof EventItem; direction: "asc" | "desc" } | null>({
