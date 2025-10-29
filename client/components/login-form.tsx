@@ -5,11 +5,10 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { ArrowBigRightDash, Mail, Lock, FileKey } from "lucide-react"
+import { Mail, Lock, LayoutDashboard } from "lucide-react"
 
 export function LoginForm({
   className,
@@ -38,10 +37,10 @@ export function LoginForm({
               Forgot your password?
             </Link>
           </div>
-          <Input id="password" type="password" required />
+          <Input id="password" type="password" required placeholder="********" />
         </Field>
         <Field>
-          <Button type="submit" className="cursor-pointer">Dashboard <ArrowBigRightDash /></Button>
+          <Button type="submit" className="cursor-pointer"><LayoutDashboard className="size-3" />Dashboard </Button>
         </Field>
         <Field>
           <FieldDescription className="text-center text-xs">
