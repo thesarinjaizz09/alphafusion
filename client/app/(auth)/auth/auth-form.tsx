@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthValues, AuthSchema } from "./validate";
 import { Mail, Lock, LayoutDashboard } from "lucide-react"
 import { signIn } from "@/lib/auth/client";
+import { Spinner } from "@/components/ui/spinner";
 
 export function AuthForm({
   className,
@@ -126,7 +127,14 @@ export function AuthForm({
             )}
           />
 
-          <Button type="submit" className="cursor-pointer" disabled={isPending}><LayoutDashboard className="size-3" />Dashboard </Button>
+          <Button type="submit" className="cursor-pointer" disabled={isPending}>
+            {
+              isPending ? 
+              <Spinner /> : 
+              <LayoutDashboard className="size-3" />
+            }
+            Dashboard
+          </Button>
           <Field>
             <FieldDescription className="text-center text-xs">
               Don&apos;t have credentials?{" "}

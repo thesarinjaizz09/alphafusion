@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateValues, CreateSchema } from "./validate";
+import { Spinner } from "@/components/ui/spinner";
 import { LayoutDashboard, Mail, Lock, SquareUser } from "lucide-react"
 
 export function CreateForm({ className }: React.ComponentProps<"form">) {
@@ -151,7 +152,12 @@ export function CreateForm({ className }: React.ComponentProps<"form">) {
           />
 
           <Button type="submit" disabled={isPending} className="cursor-pointer">
-            <LayoutDashboard className="size-3" /> Dashboard
+            {
+              isPending
+                ? <Spinner />
+                : <LayoutDashboard className="size-3" />
+            } 
+            Dashboard
           </Button>
 
           <Field>
