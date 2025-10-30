@@ -17,9 +17,8 @@ const AuthLayout = ({
 }>) => {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="p-3">
         <div className="flex flex-col gap-4 p-6 md:p-10 w-full h-full rounded-sm">
-          <div className="flex justify-center gap-2 md:justify-start">
+          <div className="flex justify-center md:justify-start">
             <a href="#" className="flex items-center gap-2 font-medium">
               <Image src={appLogo} alt="AlphaFusion Corporation" width={32} className="p-1 border-none rounded-sm bg-primary" />
               <div className="grid flex-1 text-left leading-tight text-primary-foreground">
@@ -34,7 +33,6 @@ const AuthLayout = ({
             </div>
           </div>
         </div>
-      </div>
       <div className="bg-muted relative hidden lg:block">
         <video
           src="/backgrounds/auth.bg.3.mp4"
