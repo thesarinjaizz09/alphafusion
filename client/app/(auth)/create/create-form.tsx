@@ -41,22 +41,26 @@ export function CreateForm({ className }: React.ComponentProps<"form">) {
   });
 
   function onSubmit(data: CreateValues) {
-    startTransition(async () => {
-      await signUp.email({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        callbackURL: process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards",
-      }, {
-        onSuccess: () => {
-          toast.success("Credentials created successfully");
-          router.push(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
-        },
-        onError: (ctx) => {
-          toast.error(ctx.error.message);
-        },
+    try {
+      startTransition(async () => {
+        await signUp.email({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          callbackURL: process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards",
+        }, {
+          onSuccess: () => {
+            toast.success("Credentials created successfully");
+            router.push(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        });
       });
-    });
+    } catch (error) {
+      toast.error("Internal client error");
+    }
   }
 
   return (
@@ -156,7 +160,7 @@ export function CreateForm({ className }: React.ComponentProps<"form">) {
               isPending
                 ? <Spinner />
                 : <LayoutDashboard className="size-3" />
-            } 
+            }
             Dashboard
           </Button>
 

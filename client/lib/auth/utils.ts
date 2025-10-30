@@ -3,19 +3,27 @@ import { redirect } from "next/navigation";
 import { auth } from "./server";
 
 export const isAuthenticated = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
 
-    if(!session) redirect("/auth");
+        if (!session) redirect("/auth");
 
-    return session;
+        return session;
+    } catch (error) {
+        redirect("/auth");
+    }
 };
 
 export const isNotAuthenticated = async () => {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    });
-
-    if(session) redirect(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+    
+        if (session) redirect(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");        
+    } catch (error) {
+        console.error(error);
+    }
 };

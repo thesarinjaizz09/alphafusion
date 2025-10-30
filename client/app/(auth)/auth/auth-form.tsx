@@ -42,21 +42,25 @@ export function AuthForm({
   });
 
   function onSubmit(data: AuthValues) {
-    startTransition(async () => {
-      await signIn.email({
-        email: data.email,
-        password: data.password,
-        callbackURL: process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards",
-      }, {
-        onSuccess: () => {
-          toast.success("Credentials authenticated successfully");
-          router.push(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
-        },
-        onError: (ctx) => {
-          toast.error(ctx.error.message);
-        },
+    try {
+      startTransition(async () => {
+        await signIn.email({
+          email: data.email,
+          password: data.password,
+          callbackURL: process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards",
+        }, {
+          onSuccess: () => {
+            toast.success("Credentials authenticated successfully");
+            router.push(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message);
+          },
+        });
       });
-    });
+    } catch (error) {
+      toast.error("Internal client error");
+    }
   }
 
   return (
@@ -129,9 +133,9 @@ export function AuthForm({
 
           <Button type="submit" className="cursor-pointer" disabled={isPending}>
             {
-              isPending ? 
-              <Spinner /> : 
-              <LayoutDashboard className="size-3" />
+              isPending ?
+                <Spinner /> :
+                <LayoutDashboard className="size-3" />
             }
             Dashboard
           </Button>

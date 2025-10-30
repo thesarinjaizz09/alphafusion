@@ -20,8 +20,13 @@ export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
 export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
-  const session = await auth.api.getSession({ headers: await headers() });
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
 
-  if(!session) throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied - Unauthorized", cause: "Authentication guard triggered: auth.api.getSession() returned null. Possible expired, revoked, or malformed session token." });
-  return next({ ctx: { ...ctx, session: session } });
+    if (!session) throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied - Unauthorized", cause: "Authentication guard triggered: Session returned null. Possible expired, revoked, or malformed session token." });
+
+    return next({ ctx: { ...ctx, session: session } });
+  } catch (error) {
+    throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Access denied - Internal server error", cause: "Authentication guard triggered: Failed to fetch session. Internal server error" });
+  }
 })
