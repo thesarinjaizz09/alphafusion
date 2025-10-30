@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"; // <-- change to your production domain
 const DEFAULT_IMAGE = `${BASE_URL}/og-default.jpg`;
 
+function isAbsoluteUrl(u: string): boolean {
+    return /^https?:\/\//i.test(u);
+}
+
 const defaultMetadata: Metadata = {
     metadataBase: new URL(BASE_URL),
     title: {
@@ -88,8 +92,8 @@ export function generatePageMetadata(options?: {
         "@type": schemaType,
         name: title || "AlphaFusion Terminal",
         description: metaDescription,
-        url: `${BASE_URL}${url}`,
-        image: `${BASE_URL}${image}`,
+        url: isAbsoluteUrl(url) ? url : `${BASE_URL}${url}`,
+        image: isAbsoluteUrl(image) ? image : `${BASE_URL}${image}`,
         publisher: {
             "@type": "Organization",
             name: "AlphaFusion Corporation",

@@ -13,8 +13,9 @@ export const CreateSchema = z
       .regex(/^[a-zA-Z0-9\s]+$/, "Only letters, numbers, and spaces allowed")
       .refine(
         (name) => {
-          for (const pattern of restrictedNames) {
-            if (name.toLowerCase().includes(pattern)) {
+          for (const word of restrictedNames) {
+            const regex = new RegExp(`\\b${word}\\b`, "i");
+            if (regex.test(name)) {
               return false;
             }
           }
