@@ -12,6 +12,8 @@ export const isAuthenticated = async () => {
 
         if (!session) redirect("/auth");
 
+        if (session.user.role === "ADMIN") redirect(process.env.NEXT_PUBLIC_UNAUTHORIZED_REDIRECT_URL || "/unauth");
+
         return session;
     } catch (error) {
         redirect("/auth");
@@ -24,9 +26,11 @@ export const isNotAuthenticated = async () => {
             headers: await headers()
         });
 
-        if (typeof window === "undefined" && session) {
+        if (session) {
+            if (session.user.role === "ADMIN") redirect(process.env.NEXT_PUBLIC_UNAUTHORIZED_REDIRECT_URL || "/unauth");
             redirect(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
         }
+
     } catch (error) {
         console.error(error);
     }

@@ -24,6 +24,7 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
     const session = await auth.api.getSession({ headers: await headers() });
 
     if (!session) throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied - Unauthorized", cause: "Authentication guard triggered: Session returned null. Possible expired, revoked, or malformed session token." });
+    if (session.user.role === "ADMIN") throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied - Unauthorized", cause: "Authentication guard triggered: Session returned admin role." });
 
     return next({ ctx: { ...ctx, session: session } });
   } catch (error) {

@@ -1,5 +1,4 @@
 import { betterAuth } from "better-auth";
-import { nextCookies } from "better-auth/next-js";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prismaClient from "../db";
 
@@ -11,5 +10,12 @@ export const auth = betterAuth({
         enabled: true,
         autoSignIn: true
     },
-    plugins: [nextCookies()]
+    user: {
+        additionalFields: {
+            role: {
+                type: ["USER", "ADMIN"],
+                input: false
+            }
+        }
+    }
 });

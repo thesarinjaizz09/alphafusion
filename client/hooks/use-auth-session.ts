@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { getSession } from "@/lib/auth/client";
 
 interface UseAuthSessionProps {
@@ -11,6 +12,8 @@ interface UseAuthSessionProps {
 }
 
 export function useAuthSession(): UseAuthSessionProps {
+    const router = useRouter();
+
     const [session, setSession] = useState<any | null>(null);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -21,6 +24,9 @@ export function useAuthSession(): UseAuthSessionProps {
         (async () => {
             try {
                 const result = await getSession();
+                if (result && result.data?.user.role === "ADMIN") {
+                    router.push(process.env.NEXT_PUBLIC_UNAUTHORIZED_REDIRECT_URL || "/unauth");
+                }
                 if (isMounted) {
                     setSession(result ?? null);
                 }
