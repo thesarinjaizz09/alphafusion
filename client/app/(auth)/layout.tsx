@@ -4,12 +4,6 @@ import { GalleryVerticalEnd } from "lucide-react"
 import appLogo from "@/public/alphafusion.png"
 import Image from "next/image";
 
-
-export const metadata: Metadata = {
-  title: "Auth - AlphaFusion",
-  description: "Sign up/Log in for AlphaFusion – the AI-powered trading platform for stocks and crypto. Get real-time forecasts, actionable signals, and autonomous trading for smarter investments."
-}
-
 const AuthLayout = ({
   children,
 }: Readonly<{
