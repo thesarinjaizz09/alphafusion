@@ -1,16 +1,29 @@
+'use client'
+
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import Link from "next/link"
-import { Mail, Lock, LayoutDashboard } from "lucide-react"
+import { useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LayoutDashboard, Mail, Lock, SquareUser } from "lucide-react"
 
-export function LoginForm({
+export function CreateForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
@@ -18,25 +31,23 @@ export function LoginForm({
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-start gap-1 text-left">
-          <h1 className="text-3xl font-bold">Auth Credentials</h1>
+          <h1 className="text-3xl font-bold">Create Credentials</h1>
           <p className="text-sm w-full">
-            Enter your credentials to access the AlphaFusion Dashboard
+            Create your credentials to access the AlphaFusion Dashboard
           </p>
         </div>
         <Field>
+          <FieldLabel htmlFor="name"><SquareUser className="size-3.5 text-primary" /> Name</FieldLabel>
+          <Input id="name" type="text" placeholder="John Doe" required />
+        </Field>
+        <Field>
           <FieldLabel htmlFor="email"><Mail className="size-3.5 text-primary" /> Email</FieldLabel>
+
           <Input id="email" type="email" placeholder="m@example.com" required />
         </Field>
         <Field>
-          <div className="flex items-center">
-            <FieldLabel htmlFor="password"><Lock className="size-3.5 text-primary" />Password</FieldLabel>
-            <Link
-              href="/forgot"
-              className="ml-auto text-xs underline-offset-4 hover:underline text-gray-400"
-            >
-              Forgot your password?
-            </Link>
-          </div>
+          <FieldLabel htmlFor="password"><Lock className="size-3.5 text-primary" />Password</FieldLabel>
+
           <Input id="password" type="password" required placeholder="********" />
         </Field>
         <Field>
@@ -44,9 +55,9 @@ export function LoginForm({
         </Field>
         <Field>
           <FieldDescription className="text-center text-xs">
-            Don&apos;t have credentials?{" "}
-            <Link href="/create" className="underline underline-offset-4">
-              Sign up
+            Already have credentials?{" "}
+            <Link href="/auth" className="underline underline-offset-4">
+              Sign in
             </Link>
           </FieldDescription>
         </Field>
