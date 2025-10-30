@@ -1,6 +1,7 @@
 import Image from "next/image";
 import appLogo from "@/public/alphafusion.png"
 import { generatePageMetadata } from "@/lib/utils/seo"
+import { isNotAuthenticated } from "@/lib/auth/utils";
 
 export const metadata = generatePageMetadata({
   title: "Authentication",
@@ -11,11 +12,13 @@ export const metadata = generatePageMetadata({
   schemaType: "WebPage",
 });
 
-const AuthLayout = ({
+const AuthLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  await isNotAuthenticated();
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10 w-full h-full rounded-sm">

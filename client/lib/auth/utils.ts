@@ -17,5 +17,5 @@ export const isNotAuthenticated = async () => {
         headers: await headers()
     });
 
-    if(session) redirect("/dashboard");
+    if(session) redirect(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
 };
