@@ -6,6 +6,7 @@ export const { signIn, signUp, signOut, useSession, getSession } =
     baseURL: process.env.NEXT_PUBLIC_BASE_URL!,
     emailAndPassword: {
       enabled: true,
+      autoSignIn: true
     },
     plugins: [nextCookies()],
   });

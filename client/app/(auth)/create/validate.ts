@@ -5,23 +5,23 @@ import { z } from "zod";
 export const CreateSchema = z
   .object({
     email: z
-    .email({ message: "Invalid email address" })
-    .min(1, { message: "Email is required" }),
+      .email({ message: "Invalid email address" })
+      .min(1, { message: "Email is required" }),
     name: z
-    .string()
-    .min(4, { message: "Must be at least 4 characters" })
-    .regex(/^[a-zA-Z0-9]+$/, "Only letters and numbers allowed")
-    .refine(
-      (name) => {
-        for (const pattern of restrictedNames) {
-          if (name.toLowerCase().includes(pattern)) {
-            return false;
+      .string()
+      .min(4, { message: "Must be at least 4 characters" })
+      .regex(/^[a-zA-Z0-9\s]+$/, "Only letters, numbers, and spaces allowed")
+      .refine(
+        (name) => {
+          for (const pattern of restrictedNames) {
+            if (name.toLowerCase().includes(pattern)) {
+              return false;
+            }
           }
-        }
-        return true;
-      },
-      { message: "Name contains disallowed words" }
-    ),
+          return true;
+        },
+        { message: "Name contains disallowed words" }
+      ),
     password: passwordSchema,
   })
 

@@ -18,7 +18,8 @@ import Link from "next/link"
 import { toast } from "sonner";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { signUp } from "@/lib/auth/client";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +28,7 @@ import { LayoutDashboard, Mail, Lock, SquareUser } from "lucide-react"
 
 export function CreateForm({ className }: React.ComponentProps<"form">) {
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
   const form = useForm<CreateValues>({
     resolver: zodResolver(CreateSchema),
@@ -39,10 +41,20 @@ export function CreateForm({ className }: React.ComponentProps<"form">) {
 
   function onSubmit(data: CreateValues) {
     startTransition(async () => {
-      console.log("submit data:", data);
-      // const response = await signUp.email(data);
-      // if (response.error) toast.error(response.error.message);
-      // else redirect("/");
+      await signUp.email({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        callbackURL: "/dashboard",
+      }, {
+        onSuccess: () => {
+          toast.success("Credentials created successfully");
+          router.push("/dashboard");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      });
     });
   }
 
