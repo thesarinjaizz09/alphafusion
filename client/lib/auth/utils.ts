@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "./server";
+import { UserRole } from "../generated/prisma/enums";
 
 export const isAuthenticated = async () => {
     try {
@@ -12,7 +13,7 @@ export const isAuthenticated = async () => {
 
         if (!session) redirect("/auth");
 
-        if (session.user.role === "ADMIN") redirect(process.env.NEXT_PUBLIC_UNAUTHORIZED_REDIRECT_URL || "/unauth");
+        if (session.user.role === UserRole.ADMIN) redirect(process.env.NEXT_PUBLIC_UNAUTHORIZED_REDIRECT_URL || "/unauth");
 
         return session;
     } catch (error) {
@@ -27,7 +28,7 @@ export const isNotAuthenticated = async () => {
         });
 
         if (session) {
-            if (session.user.role === "ADMIN") redirect(process.env.NEXT_PUBLIC_UNAUTHORIZED_REDIRECT_URL || "/unauth");
+            if (session.user.role === UserRole.ADMIN) redirect(process.env.NEXT_PUBLIC_UNAUTHORIZED_REDIRECT_URL || "/unauth");
             redirect(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
         }
 

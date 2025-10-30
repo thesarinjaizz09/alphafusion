@@ -2,6 +2,7 @@ import { cache } from 'react';
 import { initTRPC, TRPCError } from '@trpc/server';
 import { auth } from '@/lib/auth/server';
 import { headers } from 'next/headers';
+import { UserRole } from '@/lib/generated/prisma/enums';
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -24,7 +25,8 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
     const session = await auth.api.getSession({ headers: await headers() });
 
     if (!session) throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied - Unauthorized", cause: "Authentication guard triggered: Session returned null. Possible expired, revoked, or malformed session token." });
-    if (session.user.role === "ADMIN") throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied - Unauthorized", cause: "Authentication guard triggered: Session returned admin role." });
+
+    if (session.user.role === UserRole.ADMIN) throw new TRPCError({ code: "UNAUTHORIZED", message: "Access denied - Unauthorized", cause: "Authentication guard triggered: Session returned ADMIN role. Possible malicious or tampered session." });
 
     return next({ ctx: { ...ctx, session: session } });
   } catch (error) {
