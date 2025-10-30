@@ -1,3 +1,5 @@
+'use server'
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "./server";
@@ -21,8 +23,10 @@ export const isNotAuthenticated = async () => {
         const session = await auth.api.getSession({
             headers: await headers()
         });
-    
-        if (session) redirect(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");        
+
+        if (typeof window === "undefined" && session) {
+            redirect(process.env.NEXT_PUBLIC_AUTH_SUCCESS_REDIRECT_URL || "/boards");
+        }
     } catch (error) {
         console.error(error);
     }
