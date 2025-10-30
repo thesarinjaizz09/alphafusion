@@ -23,9 +23,6 @@ export const CreateSchema = z
       { message: "Name contains disallowed words" }
     ),
     password: passwordSchema,
-    confirmPassword: z.string().min(8, {
-      message: "Must be at least 8 characters",
-    }),
   })
 
 export type CreateValues = z.infer<typeof CreateSchema>;
