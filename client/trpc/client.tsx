@@ -1,5 +1,5 @@
 'use client';
-// ^-- to make sure we can mount the Provider from a server component
+
 import { useState } from 'react';
 import { makeQueryClient } from './query-client';
 import type { AppRouter } from './routers/_app';
