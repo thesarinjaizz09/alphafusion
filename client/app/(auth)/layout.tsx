@@ -35,7 +35,7 @@ const AuthLayout = async ({
             {children}
           </div>
         </div>
-        <div className="flex justify-between text-xs text-muted-foreground border-t pt-4">
+        <div className="flex justify-between text-xs text-muted-foreground border-t pt-4 border-primary">
           <span>© {new Date().getFullYear()} AlphaFusion Corporation</span>
           <span>v1.0.0 • Secure Login</span>
         </div>
